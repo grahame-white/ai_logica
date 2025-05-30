@@ -12,7 +12,7 @@ Based on the application outline, AI Logica shall provide the following capabili
 - **FR-3**: The end user will be able to wire the inputs and outputs of the gates together
 
 ### 1.3 Simulation Capabilities
-- **FR-4**: The application will be able to simulate the behaviour of the connected logic gates
+- **FR-4**: The application will be able to simulate the behavior of the connected logic gates
 - **FR-5**: The end user will be able to step through updates incrementally
 
 ### 1.4 Hierarchical Design
