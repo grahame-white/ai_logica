@@ -8,7 +8,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 // Register ViewModels
-builder.Services.AddScoped<HomeViewModel>();
+builder.Services.AddSingleton<HomeViewModel>();
 
 var app = builder.Build();
 
