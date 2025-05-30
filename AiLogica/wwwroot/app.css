@@ -1,8 +1,25 @@
+:root {
+    --bg-color: #1a1a1a;
+    --text-color: #e0e0e0;
+    --link-color: #5eb3f5;
+    --link-hover-color: #7bc3ff;
+    --btn-primary-bg: #0d7377;
+    --btn-primary-border: #0a5a5e;
+    --btn-primary-hover-bg: #0f8a8f;
+    --btn-primary-hover-border: #0d7377;
+    --btn-secondary-bg: #404040;
+    --btn-secondary-border: #606060;
+    --btn-secondary-hover-bg: #505050;
+    --btn-secondary-hover-border: #707070;
+    --focus-shadow-color: #e0e0e0;
+    --focus-shadow-link-color: #5eb3f5;
+}
+
 /* Dark Theme Base Styles */
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background-color: #1a1a1a;
-    color: #e0e0e0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     margin: 0;
     padding: 0;
     height: 100%;
@@ -10,37 +27,37 @@ html, body {
 
 /* High Contrast Links and Buttons */
 a, .btn-link {
-    color: #5eb3f5;
+    color: var(--link-color);
 }
 
 a:hover, .btn-link:hover {
-    color: #7bc3ff;
+    color: var(--link-hover-color);
 }
 
 .btn-primary {
     color: #fff;
-    background-color: #0d7377;
-    border-color: #0a5a5e;
+    background-color: var(--btn-primary-bg);
+    border-color: var(--btn-primary-border);
 }
 
 .btn-primary:hover {
-    background-color: #0f8a8f;
-    border-color: #0d7377;
+    background-color: var(--btn-primary-hover-bg);
+    border-color: var(--btn-primary-hover-border);
 }
 
 .btn-secondary {
-    color: #e0e0e0;
-    background-color: #404040;
-    border-color: #606060;
+    color: var(--text-color);
+    background-color: var(--btn-secondary-bg);
+    border-color: var(--btn-secondary-border);
 }
 
 .btn-secondary:hover {
-    background-color: #505050;
-    border-color: #707070;
+    background-color: var(--btn-secondary-hover-bg);
+    border-color: var(--btn-secondary-hover-border);
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem #e0e0e0, 0 0 0 0.25rem #5eb3f5;
+    box-shadow: 0 0 0 0.1rem var(--focus-shadow-color), 0 0 0 0.25rem var(--focus-shadow-link-color);
 }
 
 .content {
@@ -59,13 +76,13 @@ h1:focus {
 .form-control {
     background-color: #2d2d2d;
     border-color: #555;
-    color: #e0e0e0;
+    color: var(--text-color);
 }
 
 .form-control:focus {
     background-color: #2d2d2d;
-    border-color: #5eb3f5;
-    color: #e0e0e0;
+    border-color: var(--link-color);
+    color: var(--text-color);
 }
 
 .valid.modified:not([type=checkbox]) {
@@ -174,7 +191,7 @@ h1:focus {
 
 .gate-item:hover {
     background-color: #30363d;
-    border-color: #5eb3f5;
+    border-color: var(--link-color);
     transform: translateY(-1px);
 }
 
@@ -207,6 +224,27 @@ h1:focus {
 .canvas-placeholder h2 {
     color: #6e7681;
     margin-bottom: 0.5rem;
+}
+
+.instruction-list {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #6e7681;
+    list-style: none;
+    padding-left: 0;
+}
+
+.instruction-list li {
+    margin-bottom: 0.5rem;
+    position: relative;
+    padding-left: 1.2rem;
+}
+
+.instruction-list li::before {
+    content: "•";
+    color: #6e7681;
+    position: absolute;
+    left: 0;
 }
 
 /* Right Sidebar - Properties & Controls */
