@@ -6,18 +6,7 @@ An exploration of using an AI agent to develop a logic gate simulator.
 
 AI Logica is a web-based application for designing and simulating digital logic circuits. The project serves as both an educational tool for digital logic concepts and an exploration of AI-assisted software development.
 
-## Vision
-
-The application aims to provide users with the ability to:
-- Graphically layout logic gates on a drawing area
-- Easily select and place gates from a palette
-- Wire gate inputs and outputs together  
-- Simulate the behavior of connected logic gates
-- Step through simulation updates incrementally
-- Save layouts as reusable black box components
-- Drill down into components to see internal structure
-- Drill up to see component usage context
-- View design hierarchy from abstract to primitive levels
+For detailed information about the application's goals and capabilities, see [VISION.md](VISION.md).
 
 ## Current Status
 
@@ -45,6 +34,8 @@ dotnet run
 
 Open your browser to `https://localhost:5001` to access the application.
 
+For detailed development setup and guidelines, see [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md).
+
 ## Documentation
 
 - [**VISION.md**](VISION.md) - Application vision, mission, and target audiences
@@ -58,6 +49,8 @@ Open your browser to `https://localhost:5001` to access the application.
 - **Backend**: .NET 8, ASP.NET Core  
 - **Testing**: xUnit
 - **Architecture**: MVVM pattern with clean separation of concerns
+
+For detailed technical architecture information, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Contributing
 

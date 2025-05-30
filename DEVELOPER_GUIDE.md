@@ -33,19 +33,7 @@ The application will be available at `https://localhost:5001` (or the port shown
 
 ## Current Project Structure
 
-### Solution Organization
-```
-AiLogica.sln
-├── AiLogica/                 # Main Blazor Server application
-│   ├── Components/
-│   │   ├── Layout/          # Standard Blazor layout components
-│   │   └── Pages/           # Standard template pages
-│   ├── ViewModels/          # (Future) Presentation layer view models
-│   └── wwwroot/             # Static web assets
-├── AiLogica.Core/           # Core business logic library
-│   └── ViewModels/          # Base ViewModel implementation
-└── AiLogica.Tests/          # Test project
-```
+For detailed information about the project structure and technical architecture, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ### Current Implementation
 - **ViewModelBase**: Foundation for MVVM pattern implementation

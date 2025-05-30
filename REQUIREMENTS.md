@@ -47,19 +47,19 @@ As requested in the documentation requirements, the following conflicting requir
 ### 3.1 Simplicity vs. Power
 **Conflict**: Easy gate selection and placement vs. comprehensive gate library
 - **Trade-off**: Start with basic gates (AND, OR, NOT) and expand based on user needs
-- **Decision Required**: Initial gate set scope and expansion timeline
+- **Decision**: Focus on the most primitive gates. When more complex gates are wanted they will be explicitly requested
 
 ### 3.2 Visual Feedback vs. Performance
 **Conflict**: Rich visual simulation feedback vs. real-time performance
 - **Trade-off**: Optimize rendering for small circuits, provide performance warnings for large ones
-- **Decision Required**: Maximum circuit size for guaranteed performance
+- **Decision**: Focus on visual simulation feedback, keep on top of developing performance issues as additional features are added
 
 ### 3.3 Educational Focus vs. Professional Use
 **Conflict**: Simple learning interface vs. advanced design capabilities
 - **Trade-off**: Progressive interface complexity based on user experience level
-- **Decision Required**: Primary target audience prioritization
+- **Decision**: Prefer a simple interface, if more advanced use is required it will be asked for explicitly
 
 ### 3.4 Cross-Platform vs. Feature Richness
 **Conflict**: Browser compatibility vs. advanced interactive features
 - **Trade-off**: Use standard web technologies with graceful feature degradation
-- **Decision Required**: Minimum browser support requirements
+- **Decision**: Prefer browser compatibility, however if there is a significant opportunity to gain performance then request a decision
