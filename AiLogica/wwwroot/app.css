@@ -202,6 +202,66 @@ h1:focus {
     color: #ffffff;
 }
 
+/* Interactive Gate Palette (floating on canvas) */
+.interactive-gate-palette {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 1rem;
+    z-index: 50;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    min-width: 200px;
+}
+
+.interactive-gate-palette h4 {
+    color: #ffffff;
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    border-bottom: 1px solid #30363d;
+    padding-bottom: 0.5rem;
+}
+
+.interactive-gate-palette h5 {
+    color: #e0e0e0;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.interactive-gate-palette .gate-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+}
+
+.interactive-gate-palette .gate-item {
+    background-color: #21262d;
+    border: 1px solid #30363d;
+    border-radius: 4px;
+    padding: 0.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #e0e0e0;
+    font-size: 0.75rem;
+}
+
+.interactive-gate-palette .gate-item:hover {
+    background-color: #30363d;
+    border-color: var(--link-color);
+    transform: translateY(-1px);
+}
+
+.interactive-gate-palette .gate-item.selected {
+    background-color: #0969da;
+    border-color: #0969da;
+    color: #ffffff;
+}
+
 /* Placed and Dragging Gates */
 .placed-gate, .dragging-gate {
     position: absolute;

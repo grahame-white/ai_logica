@@ -14,53 +14,10 @@
         </div>
     </header>
 
-    <!-- Left Sidebar - Gate Palette -->
+    <!-- Left Sidebar - Gate Palette (moved to Home page for interactivity) -->
     <aside class="gate-palette">
         <h3>Gate Palette</h3>
-        
-        <div class="gate-category">
-            <h4>Basic Gates</h4>
-            <div class="gate-list">
-                <div class="gate-item">AND</div>
-                <div class="gate-item @(ViewModel.SelectedGate == "OR" ? "selected" : "")" @onclick="() => SelectOrGate()">
-                    OR @(ViewModel.SelectedGate == "OR" ? "✓" : "")
-                </div>
-                <div class="gate-item">NOT</div>
-                <div class="gate-item">NAND</div>
-                <div class="gate-item">NOR</div>
-                <div class="gate-item">XOR</div>
-                <div class="gate-item">XNOR</div>
-                <div class="gate-item">BUFFER</div>
-            </div>
-        </div>
-
-        <div class="gate-category">
-            <h4>Input/Output</h4>
-            <div class="gate-list">
-                <div class="gate-item">INPUT</div>
-                <div class="gate-item">OUTPUT</div>
-                <div class="gate-item">CLOCK</div>
-                <div class="gate-item">CONST</div>
-            </div>
-        </div>
-
-        <div class="gate-category">
-            <h4>Complex</h4>
-            <div class="gate-list">
-                <div class="gate-item">MUX</div>
-                <div class="gate-item">DEMUX</div>
-                <div class="gate-item">DECODER</div>
-                <div class="gate-item">ENCODER</div>
-            </div>
-        </div>
-
-        <div class="gate-category">
-            <h4>Custom</h4>
-            <div class="gate-list">
-                <div class="gate-item">MY_IC1</div>
-                <div class="gate-item">MY_IC2</div>
-            </div>
-        </div>
+        <p style="color: #888; font-size: 0.8rem; padding: 10px;">Interactive palette moved to main canvas</p>
     </aside>
 
     <!-- Main Canvas Area -->
@@ -171,12 +128,6 @@
     private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         InvokeAsync(StateHasChanged);
-    }
-
-    private void SelectOrGate()
-    {
-        ViewModel.SelectGate("OR");
-        StateHasChanged(); // Force immediate re-render
     }
 
     public void Dispose()

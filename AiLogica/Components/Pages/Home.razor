@@ -7,13 +7,33 @@
 <PageTitle>AI Logica - Logic Gate Simulator</PageTitle>
 
 <div class="canvas-container" @onmousemove="OnMouseMove" @onclick="OnCanvasClick" @onmouseleave="OnMouseLeave">
+    <!-- Interactive Gate Palette -->
+    <div class="interactive-gate-palette">
+        <h4>Gate Palette</h4>
+        <div class="gate-category">
+            <h5>Basic Gates</h5>
+            <div class="gate-list">
+                <div class="gate-item">AND</div>
+                <div class="gate-item @(ViewModel.SelectedGate == "OR" ? "selected" : "")" @onclick="() => SelectOrGate()">
+                    OR @(ViewModel.SelectedGate == "OR" ? "✓" : "")
+                </div>
+                <div class="gate-item">NOT</div>
+                <div class="gate-item">NAND</div>
+                <div class="gate-item">NOR</div>
+                <div class="gate-item">XOR</div>
+                <div class="gate-item">XNOR</div>
+                <div class="gate-item">BUFFER</div>
+            </div>
+        </div>
+    </div>
+
     @if (ViewModel.PlacedGates.Count == 0 && !ViewModel.IsDragging)
     {
         <div class="canvas-placeholder">
             <h2>@ViewModel.WelcomeMessage</h2>
-            <p>Drag gates from the palette to start designing your logic circuit</p>
+            <p>Select gates from the floating palette to start designing your logic circuit</p>
             <ul class="instruction-list">
-                <li>Select gates from the left panel</li>
+                <li>Select gates from the palette above</li>
                 <li>Wire inputs and outputs together</li>
                 <li>Use simulation controls to test your design</li>
                 <li>Save designs as reusable components</li>
@@ -73,6 +93,12 @@
         {
             ViewModel.CancelDrag();
         }
+    }
+
+    private void SelectOrGate()
+    {
+        ViewModel.SelectGate("OR");
+        StateHasChanged(); // Force immediate re-render
     }
 
     public void Dispose()
