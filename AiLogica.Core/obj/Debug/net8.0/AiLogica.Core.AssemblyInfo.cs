@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AiLogica.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b88fe132c136939936847a38686273b8ce969f06")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9342bc22ef8ef8991494ef2ee0bc25548f5d43b9")]
 [assembly: System.Reflection.AssemblyProductAttribute("AiLogica.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AiLogica.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
