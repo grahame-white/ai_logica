@@ -357,6 +357,54 @@ dotnet test --filter "Name~Gate"
 - `bugfix/*`: Bug fix branches
 - `hotfix/*`: Critical production fixes
 
+```mermaid
+gitgraph:
+    options:
+        theme: dark
+    commit id: "Initial"
+    branch develop
+    checkout develop
+    commit id: "Setup"
+    
+    branch feature/gate-system
+    checkout feature/gate-system
+    commit id: "Add Gate Class"
+    commit id: "Add AND Gate"
+    commit id: "Add Tests"
+    
+    checkout develop
+    merge feature/gate-system
+    commit id: "Integration"
+    
+    branch feature/ui-components
+    checkout feature/ui-components
+    commit id: "Gate Palette"
+    commit id: "Design Canvas"
+    
+    checkout develop
+    branch bugfix/simulation-fix
+    checkout bugfix/simulation-fix
+    commit id: "Fix Bug"
+    
+    checkout develop
+    merge bugfix/simulation-fix
+    merge feature/ui-components
+    
+    checkout main
+    merge develop
+    commit id: "Release v1.0"
+    
+    checkout develop
+    branch hotfix/critical-fix
+    checkout hotfix/critical-fix
+    commit id: "Critical Fix"
+    
+    checkout main
+    merge hotfix/critical-fix
+    checkout develop
+    merge hotfix/critical-fix
+```
+
 ### Pull Request Process
 1. **Create Feature Branch**: `git checkout -b feature/new-gate-type`
 2. **Implement Changes**: Follow coding standards and add tests
@@ -387,6 +435,27 @@ Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
 5. **Update UI**: Add to gate palette
 6. **Document**: Update user documentation
 
+```mermaid
+flowchart TD
+    START[New Gate Request] --> DESIGN[Design Gate Logic]
+    DESIGN --> IMPLEMENT[Create Gate Class]
+    IMPLEMENT --> LOGIC[Implement Evaluation]
+    LOGIC --> FACTORY[Register in Factory]
+    FACTORY --> TESTS[Write Unit Tests]
+    TESTS --> UI[Add to Palette]
+    UI --> DOCS[Update Documentation]
+    DOCS --> REVIEW[Code Review]
+    REVIEW --> MERGE[Merge to Main]
+    
+    TESTS --> FAIL{Tests Pass?}
+    FAIL -->|No| LOGIC
+    FAIL -->|Yes| UI
+    
+    REVIEW --> FEEDBACK{Review OK?}
+    FEEDBACK -->|No| IMPLEMENT
+    FEEDBACK -->|Yes| MERGE
+```
+
 ### Adding New UI Components
 1. **Create Component**: Follow naming conventions
 2. **Define Parameters**: Use `[Parameter]` attributes
@@ -394,6 +463,44 @@ Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
 4. **Add Styling**: Create component-specific CSS
 5. **Create Tests**: Blazor component tests
 6. **Integration**: Wire into parent components
+
+```mermaid
+graph LR
+    subgraph "Component Development"
+        CREATE[Create .razor File]
+        PARAMS[Define Parameters]
+        LOGIC[Implement Logic]
+        STYLE[Add CSS Styles]
+        TEST[Write Tests]
+        INTEGRATE[Integration]
+    end
+    
+    subgraph "Testing Strategy"
+        UNIT[Unit Tests]
+        RENDER[Render Tests]
+        INTERACT[Interaction Tests]
+    end
+    
+    subgraph "Integration Points"
+        PARENT[Parent Components]
+        SERVICES[Inject Services]
+        EVENTS[Event Handling]
+    end
+    
+    CREATE --> PARAMS
+    PARAMS --> LOGIC
+    LOGIC --> STYLE
+    STYLE --> TEST
+    TEST --> INTEGRATE
+    
+    TEST --> UNIT
+    TEST --> RENDER
+    TEST --> INTERACT
+    
+    INTEGRATE --> PARENT
+    INTEGRATE --> SERVICES
+    INTEGRATE --> EVENTS
+```
 
 ### Debugging Tips
 

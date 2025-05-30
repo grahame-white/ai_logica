@@ -4,6 +4,46 @@
 
 AI Logica is built as a Blazor Server application using .NET 8, providing a rich interactive web interface for logic gate simulation. The architecture follows the Model-View-ViewModel (MVVM) pattern with clear separation of concerns.
 
+```mermaid
+graph TB
+    subgraph "Client Browser"
+        UI[Blazor UI Components]
+        JS[JavaScript Interop]
+    end
+    
+    subgraph "Server (.NET 8)"
+        subgraph "Presentation Layer"
+            VM[ViewModels]
+            COMP[Blazor Components]
+        end
+        
+        subgraph "Business Layer"
+            SVC[Services]
+            ENGINE[Simulation Engine]
+        end
+        
+        subgraph "Core Layer"
+            MODELS[Domain Models]
+            GATES[Gate Logic]
+        end
+    end
+    
+    subgraph "Storage"
+        FILES[File System]
+        CACHE[In-Memory Cache]
+    end
+    
+    UI --> COMP
+    COMP --> VM
+    VM --> SVC
+    SVC --> ENGINE
+    SVC --> MODELS
+    ENGINE --> GATES
+    SVC --> FILES
+    SVC --> CACHE
+    JS -.-> SVC
+```
+
 ### 1.1 Technology Stack
 - **Frontend**: Blazor Server Components, HTML5 Canvas, CSS3, JavaScript
 - **Backend**: .NET 8, ASP.NET Core
@@ -26,6 +66,41 @@ ai_logica/
 └── Documentation/        # Project documentation
 ```
 
+```mermaid
+graph LR
+    subgraph "AiLogica (Web App)"
+        PAGES[Pages]
+        LAYOUT[Layout]
+        COMP[Components]
+        VM1[ViewModels]
+        WWWROOT[wwwroot]
+    end
+    
+    subgraph "AiLogica.Core (Business Logic)"
+        MODELS[Models]
+        SERVICES[Services]
+        VM2[Base ViewModels]
+        INTERFACES[Interfaces]
+    end
+    
+    subgraph "AiLogica.Tests"
+        UNIT[Unit Tests]
+        INTEGRATION[Integration Tests]
+        UI[UI Tests]
+    end
+    
+    PAGES --> VM1
+    COMP --> VM1
+    VM1 --> VM2
+    VM1 --> SERVICES
+    SERVICES --> MODELS
+    SERVICES --> INTERFACES
+    
+    UNIT --> SERVICES
+    INTEGRATION --> VM1
+    UI --> PAGES
+```
+
 ## 2. Architectural Patterns
 
 ### 2.1 MVVM Pattern
@@ -33,6 +108,27 @@ The application implements the Model-View-ViewModel pattern:
 - **Models**: Core business entities (gates, wires, circuits)
 - **Views**: Blazor components and pages
 - **ViewModels**: Presentation logic and state management
+
+```mermaid
+graph TD
+    subgraph "MVVM Architecture"
+        MODEL[Models<br/>Domain Entities]
+        VIEW[Views<br/>Blazor Components]
+        VIEWMODEL[ViewModels<br/>Presentation Logic]
+        
+        VIEW -.->|Data Binding| VIEWMODEL
+        VIEWMODEL -.->|Property Changes| VIEW
+        VIEWMODEL -->|Business Logic| MODEL
+        MODEL -.->|Change Notifications| VIEWMODEL
+    end
+    
+    subgraph "Data Flow"
+        USER[User Interaction] --> VIEW
+        VIEW --> VIEWMODEL
+        VIEWMODEL --> SERVICE[Business Service]
+        SERVICE --> MODEL
+    end
+```
 
 ### 2.2 Component-Based Architecture
 - **Blazor Components**: Reusable UI elements
@@ -61,6 +157,56 @@ public abstract class Gate
     
     public abstract void Evaluate();
 }
+```
+
+```mermaid
+classDiagram
+    class Gate {
+        <<abstract>>
+        +string Id
+        +string Type
+        +List~InputPin~ Inputs
+        +List~OutputPin~ Outputs
+        +Point Position
+        +Evaluate() void*
+    }
+    
+    class BasicGate {
+        #EvaluateLogic(bool[]) bool*
+    }
+    
+    class IOGate {
+        +SetValue(bool) void
+        +GetValue() bool
+    }
+    
+    class ComplexGate {
+        +int InputCount
+        +int OutputCount
+        #EvaluateComplex() void*
+    }
+    
+    class CustomGate {
+        +Circuit InternalCircuit
+        +CreateFromCircuit(Circuit) CustomGate
+    }
+    
+    Gate <|-- BasicGate
+    Gate <|-- IOGate
+    Gate <|-- ComplexGate
+    Gate <|-- CustomGate
+    
+    BasicGate <|-- AndGate
+    BasicGate <|-- OrGate
+    BasicGate <|-- NotGate
+    BasicGate <|-- NandGate
+    
+    IOGate <|-- InputGate
+    IOGate <|-- OutputGate
+    IOGate <|-- ClockGate
+    
+    ComplexGate <|-- MuxGate
+    ComplexGate <|-- DecoderGate
 ```
 
 #### 3.1.2 Gate Types
@@ -133,6 +279,29 @@ public class Component
 └─────────────────────────────────────────────────────────┘
 ```
 
+```mermaid
+graph TB
+    subgraph "Main Application Layout"
+        HEADER[Application Header<br/>Navigation & Menu]
+        
+        subgraph "Main Content Area"
+            PALETTE[Gate Palette<br/>- Basic Gates<br/>- I/O Gates<br/>- Complex Gates<br/>- Custom Components]
+            CANVAS[Design Canvas<br/>- Interactive Drawing<br/>- Grid System<br/>- Zoom & Pan]
+            PROPS[Properties Panel<br/>- Gate Configuration<br/>- Simulation Controls<br/>- Hierarchy Navigation]
+        end
+        
+        STATUS[Status Bar<br/>Messages & Feedback]
+    end
+    
+    HEADER --> PALETTE
+    HEADER --> CANVAS
+    HEADER --> PROPS
+    PALETTE -.->|Drag & Drop| CANVAS
+    CANVAS -.->|Selection| PROPS
+    PROPS -.->|Updates| CANVAS
+    STATUS -.->|Feedback| CANVAS
+```
+
 ### 4.2 Component Hierarchy
 - **MainLayout**: Root layout component
 - **GatePalette**: Gate selection and categories
@@ -152,15 +321,80 @@ public class Component
 User Action → Component Event → ViewModel → Service → Model → Update → View
 ```
 
+```mermaid
+sequenceDiagram
+    participant User
+    participant Component as Blazor Component
+    participant ViewModel
+    participant Service
+    participant Model
+    participant StateManager
+    
+    User->>Component: Click/Drag Action
+    Component->>ViewModel: Event Handler
+    ViewModel->>Service: Business Logic Call
+    Service->>Model: Update Entity
+    Model->>StateManager: State Change
+    StateManager->>ViewModel: Notify Change
+    ViewModel->>Component: Property Update
+    Component->>User: UI Refresh
+```
+
 ### 5.2 Simulation Data Flow
 ```
 Input Change → Gate Evaluation → Signal Propagation → Output Update → Visual Refresh
+```
+
+```mermaid
+graph LR
+    INPUT[Input Change] --> EVAL[Gate Evaluation]
+    EVAL --> PROP[Signal Propagation]
+    PROP --> OUTPUT[Output Update]
+    OUTPUT --> VISUAL[Visual Refresh]
+    
+    subgraph "Simulation Engine"
+        EVAL --> QUEUE[Update Queue]
+        QUEUE --> TOPO[Topological Sort]
+        TOPO --> BATCH[Batch Process]
+        BATCH --> PROP
+    end
+    
+    subgraph "UI Update"
+        OUTPUT --> CANVAS[Canvas Redraw]
+        OUTPUT --> STATUS[Status Update]
+        CANVAS --> VISUAL
+        STATUS --> VISUAL
+    end
 ```
 
 ### 5.3 Persistence Flow
 ```
 User Save → Serialization → Storage → File System / Database
 User Load → File System / Database → Deserialization → Model Update → View Refresh
+```
+
+```mermaid
+graph TB
+    subgraph "Save Operation"
+        SAVE[User Save] --> SERIALIZE[Serialize Circuit]
+        SERIALIZE --> VALIDATE[Validate Data]
+        VALIDATE --> STORE[Store to File]
+        STORE --> CONFIRM[Confirm Success]
+    end
+    
+    subgraph "Load Operation"
+        LOAD[User Load] --> READ[Read from File]
+        READ --> DESERIALIZE[Deserialize Data]
+        DESERIALIZE --> VALIDATELOAD[Validate Circuit]
+        VALIDATELOAD --> UPDATE[Update Models]
+        UPDATE --> REFRESH[Refresh UI]
+    end
+    
+    subgraph "Storage Layer"
+        STORE --> FILESYSTEM[File System]
+        READ --> FILESYSTEM
+        FILESYSTEM -.-> CLOUD[Cloud Storage*]
+    end
 ```
 
 ## 6. Performance Considerations

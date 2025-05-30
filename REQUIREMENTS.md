@@ -88,7 +88,59 @@
 - **NFR-6.2**: The system shall be deployable in containerized environments
 - **NFR-6.3**: Component libraries shall support unlimited custom components
 
-## 3. Conflicting Requirements and Trade-offs
+## 3. User Journeys and Workflow
+
+### 3.1 Basic Circuit Design Workflow
+
+```mermaid
+flowchart TD
+    START[User Opens AI Logica] --> NEW[Create New Project]
+    NEW --> PALETTE[Browse Gate Palette]
+    PALETTE --> SELECT[Select Gate Type]
+    SELECT --> DRAG[Drag Gate to Canvas]
+    DRAG --> POSITION[Position Gate]
+    POSITION --> MORE{Add More Gates?}
+    MORE -->|Yes| PALETTE
+    MORE -->|No| CONNECT[Connect Gates with Wires]
+    CONNECT --> WIRE[Draw Wire Connections]
+    WIRE --> VALIDATE[Validate Connections]
+    VALIDATE --> SIM[Start Simulation]
+    SIM --> INPUT[Set Input Values]
+    INPUT --> OBSERVE[Observe Outputs]
+    OBSERVE --> ADJUST{Need Changes?}
+    ADJUST -->|Yes| PALETTE
+    ADJUST -->|No| SAVE[Save Project]
+    SAVE --> END[Project Complete]
+    
+    subgraph "Error Handling"
+        VALIDATE --> ERROR{Valid Circuit?}
+        ERROR -->|No| FEEDBACK[Show Error Message]
+        FEEDBACK --> CONNECT
+    end
+```
+
+### 3.2 Advanced User Journey - Hierarchical Design
+
+```mermaid
+journey
+    title Advanced User: Creating Hierarchical Components
+    section Design Phase
+      Create base circuit: 5: User
+      Add basic gates: 4: User
+      Test functionality: 5: User
+    section Component Creation
+      Select circuit area: 4: User
+      Create custom component: 5: User
+      Define interface pins: 4: User
+      Save as reusable component: 5: User
+    section Integration
+      Add component to palette: 3: System
+      Use in new design: 5: User
+      Drill down for editing: 4: User
+      Test hierarchical behavior: 5: User
+```
+
+## 4. Conflicting Requirements and Trade-offs
 
 ### 3.1 Performance vs. Feature Richness
 **Conflict**: Real-time simulation performance vs. support for complex gate types

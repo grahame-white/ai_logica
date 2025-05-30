@@ -14,6 +14,41 @@ To democratize digital logic education and prototyping by providing a visual, in
 - **Educational Focus**: Perfect for learning digital logic concepts
 - **Modern Web Technology**: No installation required, runs in any modern browser
 
+```mermaid
+graph TB
+    subgraph "AI Logica System Overview"
+        USER[👤 User] 
+        
+        subgraph "Web Interface"
+            PALETTE[🎨 Gate Palette<br/>Drag & Drop Gates]
+            CANVAS[📐 Design Canvas<br/>Visual Circuit Builder]
+            PROPS[⚙️ Properties Panel<br/>Configuration & Control]
+        end
+        
+        subgraph "Simulation Engine"
+            ENGINE[🔧 Logic Engine<br/>Real-time Evaluation]
+            GATES[🚪 Gate Library<br/>AND, OR, NOT, etc.]
+        end
+        
+        subgraph "Data Management"
+            SAVE[💾 Save/Load<br/>Project Persistence]
+            EXPORT[📤 Export<br/>Multiple Formats]
+        end
+    end
+    
+    USER --> PALETTE
+    USER --> CANVAS
+    USER --> PROPS
+    
+    PALETTE -.-> CANVAS
+    CANVAS --> ENGINE
+    ENGINE --> GATES
+    PROPS --> ENGINE
+    
+    CANVAS --> SAVE
+    CANVAS --> EXPORT
+```
+
 ## 🚀 Quick Start
 
 ### Prerequisites
