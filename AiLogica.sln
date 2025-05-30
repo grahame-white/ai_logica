@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AiLogica", "AiLogica\AiLogica.csproj", "{74BB9A56-DB3C-4DE5-AF97-C785971F9E3C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AiLogica.Core", "AiLogica.Core\AiLogica.Core.csproj", "{6E37EB86-9E73-40D9-A735-8FA59D414FDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AiLogica.Tests", "AiLogica.Tests\AiLogica.Tests.csproj", "{E30901B5-51CC-4ADD-AD9D-94A1B2C122A0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{74BB9A56-DB3C-4DE5-AF97-C785971F9E3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74BB9A56-DB3C-4DE5-AF97-C785971F9E3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74BB9A56-DB3C-4DE5-AF97-C785971F9E3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74BB9A56-DB3C-4DE5-AF97-C785971F9E3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E37EB86-9E73-40D9-A735-8FA59D414FDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E37EB86-9E73-40D9-A735-8FA59D414FDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E37EB86-9E73-40D9-A735-8FA59D414FDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E37EB86-9E73-40D9-A735-8FA59D414FDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E30901B5-51CC-4ADD-AD9D-94A1B2C122A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E30901B5-51CC-4ADD-AD9D-94A1B2C122A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E30901B5-51CC-4ADD-AD9D-94A1B2C122A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E30901B5-51CC-4ADD-AD9D-94A1B2C122A0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
