@@ -12,7 +12,7 @@ namespace AiLogica.Tests.ViewModels
             var viewModel = new HomeViewModel();
 
             // Act & Assert
-            Assert.Equal("Hello World", viewModel.WelcomeMessage);
+            Assert.Equal("Logic Gate Design Canvas", viewModel.WelcomeMessage);
         }
 
         [Fact]

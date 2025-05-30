@@ -2,8 +2,17 @@
 @using AiLogica.ViewModels
 @inject HomeViewModel ViewModel
 
-<PageTitle>Home</PageTitle>
+<PageTitle>AI Logica - Logic Gate Simulator</PageTitle>
 
-<h1>@ViewModel.WelcomeMessage</h1>
-
-Welcome to your new app.
+<div class="canvas-container">
+    <div class="canvas-placeholder">
+        <h2>@ViewModel.WelcomeMessage</h2>
+        <p>Drag gates from the palette to start designing your logic circuit</p>
+        <p style="margin-top: 1rem; font-size: 0.9rem; color: #6e7681;">
+            • Select gates from the left panel<br>
+            • Wire inputs and outputs together<br>
+            • Use simulation controls to test your design<br>
+            • Save designs as reusable components
+        </p>
+    </div>
+</div>

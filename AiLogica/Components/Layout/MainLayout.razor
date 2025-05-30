@@ -1,11 +1,143 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <main>
-        <article class="content px-4">
-            @Body
-        </article>
+<div class="app-layout">
+    <!-- Application Header -->
+    <header class="app-header">
+        <h1 class="app-title">AI Logica - Logic Gate Simulator</h1>
+        <div class="app-controls">
+            <button type="button" class="btn btn-secondary btn-sm">File</button>
+            <button type="button" class="btn btn-secondary btn-sm">Edit</button>
+            <button type="button" class="btn btn-secondary btn-sm">View</button>
+            <button type="button" class="btn btn-secondary btn-sm">Help</button>
+        </div>
+    </header>
+
+    <!-- Left Sidebar - Gate Palette -->
+    <aside class="gate-palette">
+        <h3>Gate Palette</h3>
+        
+        <div class="gate-category">
+            <h4>Basic Gates</h4>
+            <div class="gate-list">
+                <div class="gate-item">AND</div>
+                <div class="gate-item">OR</div>
+                <div class="gate-item">NOT</div>
+                <div class="gate-item">NAND</div>
+                <div class="gate-item">NOR</div>
+                <div class="gate-item">XOR</div>
+                <div class="gate-item">XNOR</div>
+                <div class="gate-item">BUFFER</div>
+            </div>
+        </div>
+
+        <div class="gate-category">
+            <h4>Input/Output</h4>
+            <div class="gate-list">
+                <div class="gate-item">INPUT</div>
+                <div class="gate-item">OUTPUT</div>
+                <div class="gate-item">CLOCK</div>
+                <div class="gate-item">CONST</div>
+            </div>
+        </div>
+
+        <div class="gate-category">
+            <h4>Complex</h4>
+            <div class="gate-list">
+                <div class="gate-item">MUX</div>
+                <div class="gate-item">DEMUX</div>
+                <div class="gate-item">DECODER</div>
+                <div class="gate-item">ENCODER</div>
+            </div>
+        </div>
+
+        <div class="gate-category">
+            <h4>Custom</h4>
+            <div class="gate-list">
+                <div class="gate-item">MY_IC1</div>
+                <div class="gate-item">MY_IC2</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Canvas Area -->
+    <main class="design-canvas">
+        @Body
     </main>
+
+    <!-- Right Sidebar - Properties & Controls -->
+    <aside class="properties-panel">
+        <!-- Hierarchical Navigation -->
+        <div class="panel-section">
+            <h3>Navigation</h3>
+            <nav class="breadcrumb-nav">
+                <ul>
+                    <li><a href="#">Top Level</a></li>
+                    <li><a href="#">CPU Module</a></li>
+                    <li>ALU</li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Selected Gate Properties -->
+        <div class="panel-section">
+            <h3>Properties</h3>
+            <div style="color: #6e7681; font-style: italic;">
+                No gate selected
+            </div>
+        </div>
+
+        <!-- Simulation Controls -->
+        <div class="panel-section">
+            <h3>Simulation</h3>
+            <div class="simulation-controls">
+                <div class="control-group">
+                    <button type="button" class="btn btn-primary btn-sm">▶ Run</button>
+                    <button type="button" class="btn btn-secondary btn-sm">⏸ Pause</button>
+                    <button type="button" class="btn btn-secondary btn-sm">⏹ Stop</button>
+                </div>
+                <div class="control-group">
+                    <button type="button" class="btn btn-secondary btn-sm">⏮ Step Back</button>
+                    <button type="button" class="btn btn-secondary btn-sm">⏭ Step Forward</button>
+                </div>
+                <div class="control-group">
+                    <label for="speed-slider" style="color: #e0e0e0; font-size: 0.85rem;">Speed:</label>
+                    <input type="range" id="speed-slider" class="form-range" min="1" max="10" value="5">
+                </div>
+            </div>
+        </div>
+
+        <!-- Design Hierarchy -->
+        <div class="panel-section">
+            <h3>Design Hierarchy</h3>
+            <div style="font-size: 0.85rem;">
+                <div style="margin-bottom: 0.5rem;">
+                    <span style="color: #5eb3f5;">📁 Top Level</span>
+                </div>
+                <div style="margin-left: 1rem; margin-bottom: 0.5rem;">
+                    <span style="color: #5eb3f5;">📁 CPU Module</span>
+                </div>
+                <div style="margin-left: 2rem; margin-bottom: 0.5rem;">
+                    <span style="color: #e0e0e0;">🔧 ALU (current)</span>
+                </div>
+                <div style="margin-left: 2rem; margin-bottom: 0.5rem;">
+                    <span style="color: #5eb3f5;">📁 Control Unit</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Status Bar -->
+    <footer class="status-bar">
+        <div class="status-left">
+            <span>Ready</span>
+            <span>Gates: 0</span>
+            <span>Connections: 0</span>
+        </div>
+        <div class="status-right">
+            <span>Zoom: 100%</span>
+            <span>Grid: On</span>
+        </div>
+    </footer>
 </div>
 
 <div id="blazor-error-ui">
