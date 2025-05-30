@@ -4,7 +4,7 @@ namespace AiLogica.ViewModels
 {
     public class HomeViewModel : ViewModelBase
     {
-        private string _welcomeMessage = "Hello World";
+        private string _welcomeMessage = "Logic Gate Design Canvas";
 
         public string WelcomeMessage
         {
