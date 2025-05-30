@@ -19,3 +19,36 @@
         right: 0.75rem;
         top: 0.5rem;
     }
+
+/* Properties panel styles */
+.no-gate-selected {
+    color: var(--placeholder-color);
+    font-style: italic;
+}
+
+/* Design hierarchy styles */
+.design-hierarchy {
+    font-size: 0.85rem;
+}
+
+.hierarchy-item {
+    margin-bottom: 0.5rem;
+}
+
+.hierarchy-item-level-1 {
+    margin-left: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.hierarchy-item-level-2 {
+    margin-left: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.hierarchy-folder {
+    color: var(--link-color);
+}
+
+.hierarchy-current {
+    color: var(--text-color);
+}

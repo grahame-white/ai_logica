@@ -13,6 +13,7 @@
     --btn-secondary-hover-border: #707070;
     --focus-shadow-color: #e0e0e0;
     --focus-shadow-link-color: #5eb3f5;
+    --placeholder-color: #6e7681;
 }
 
 /* Dark Theme Base Styles */
@@ -218,18 +219,18 @@ h1:focus {
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    color: #6e7681;
+    color: var(--placeholder-color);
 }
 
 .canvas-placeholder h2 {
-    color: #6e7681;
+    color: var(--placeholder-color);
     margin-bottom: 0.5rem;
 }
 
 .instruction-list {
     margin-top: 1rem;
     font-size: 0.9rem;
-    color: #6e7681;
+    color: var(--placeholder-color);
     list-style: none;
     padding-left: 0;
 }
