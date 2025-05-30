@@ -22,7 +22,9 @@
             <h4>Basic Gates</h4>
             <div class="gate-list">
                 <div class="gate-item">AND</div>
-                <div class="gate-item @(ViewModel.SelectedGate == "OR" ? "selected" : "")" @onclick="() => SelectOrGate()">OR</div>
+                <div class="gate-item @(ViewModel.SelectedGate == "OR" ? "selected" : "")" @onclick="() => SelectOrGate()">
+                    OR @(ViewModel.SelectedGate == "OR" ? "✓" : "")
+                </div>
                 <div class="gate-item">NOT</div>
                 <div class="gate-item">NAND</div>
                 <div class="gate-item">NOR</div>
@@ -174,6 +176,7 @@
     private void SelectOrGate()
     {
         ViewModel.SelectGate("OR");
+        StateHasChanged(); // Force immediate re-render
     }
 
     public void Dispose()
