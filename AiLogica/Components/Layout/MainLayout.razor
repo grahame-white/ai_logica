@@ -1,4 +1,6 @@
 ﻿@inherits LayoutComponentBase
+@using AiLogica.ViewModels
+@inject HomeViewModel ViewModel
 
 <div class="app-layout">
     <!-- Application Header -->
@@ -19,7 +21,7 @@
             <h4>Basic Gates</h4>
             <div class="gate-list">
                 <div class="gate-item">AND</div>
-                <div class="gate-item">OR</div>
+                <div class="gate-item @(ViewModel.SelectedGate == "OR" ? "selected" : "")" @onclick="() => SelectOrGate()">OR</div>
                 <div class="gate-item">NOT</div>
                 <div class="gate-item">NAND</div>
                 <div class="gate-item">NOR</div>
@@ -81,7 +83,15 @@
         <div class="panel-section">
             <h3>Properties</h3>
             <div class="no-gate-selected">
-                No gate selected
+                @if (ViewModel.SelectedGate != null)
+                {
+                    <div>Selected: @ViewModel.SelectedGate</div>
+                    <div>Status: @(ViewModel.IsDragging ? "Dragging" : "Selected")</div>
+                }
+                else
+                {
+                    <div>No gate selected</div>
+                }
             </div>
         </div>
 
@@ -129,7 +139,7 @@
     <footer class="status-bar">
         <div class="status-left">
             <span>Ready</span>
-            <span>Gates: 0</span>
+            <span>Gates: @ViewModel.PlacedGates.Count</span>
             <span>Connections: 0</span>
         </div>
         <div class="status-right">
@@ -144,3 +154,10 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+@code {
+    private void SelectOrGate()
+    {
+        ViewModel.SelectGate("OR");
+    }
+}
