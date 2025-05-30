@@ -27,7 +27,7 @@ namespace AiLogica.Tests.Integration
             // Assert
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
-            
+
             // Check that the main components are rendered
             Assert.Contains("Gate Palette", content);
             Assert.Contains("OR", content);
