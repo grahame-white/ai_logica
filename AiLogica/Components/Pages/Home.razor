@@ -47,7 +47,7 @@
     @foreach (var gate in ViewModel.PlacedGates)
     {
         <div class="placed-gate" style="left: @(gate.X)px; top: @(gate.Y)px;">
-            @RenderGateContent(gate.Type)
+            @RenderGateContent(gate.Type, false, true)
         </div>
     }
 
@@ -55,7 +55,7 @@
     @if (ViewModel.IsDragging && ViewModel.SelectedGate != null && (ViewModel.MouseX != 0 || ViewModel.MouseY != 0))
     {
         <div class="dragging-gate" style="left: @(ViewModel.MouseX - 30)px; top: @(ViewModel.MouseY - 15)px;">
-            @RenderGateContent(ViewModel.SelectedGate)
+            @RenderGateContent(ViewModel.SelectedGate, false, true)
         </div>
     }
 </div>
@@ -69,28 +69,59 @@
         base.OnInitialized();
     }
 
-    private RenderFragment RenderGateContent(string gateType, bool showSelectionIndicator = false)
+    private RenderFragment RenderGateContent(string gateType, bool showSelectionIndicator = false, bool isPlacedGate = false)
     {
         return gateType switch
         {
             "OR" => @<div style="display: flex; align-items: center; justify-content: center; gap: 0.25rem;">
-                <svg width="32" height="20" viewBox="0 0 32 20" style="display: block;">
-                    <!-- OR gate body - IEEE standard shape with curved back and pointed front -->
-                    <path d="M4 6 C4 4, 5 3, 7 3 L11 3 C13 4, 15 6, 18 10 C15 14, 13 16, 11 17 L7 17 C5 17, 4 16, 4 14 C5 12, 5 8, 4 6" 
-                          stroke="currentColor" 
-                          fill="none" 
-                          stroke-width="1.5" 
-                          stroke-linejoin="round"/>
-                    <!-- Input lines positioned to connect with the curved back -->
-                    <line x1="0" y1="7" x2="4.5" y2="7" stroke="currentColor" stroke-width="1.5"/>
-                    <line x1="0" y1="13" x2="4.5" y2="13" stroke="currentColor" stroke-width="1.5"/>
-                    <!-- Output line from the pointed front -->
-                    <line x1="18" y1="10" x2="22" y2="10" stroke="currentColor" stroke-width="1.5"/>
-                </svg>
+                @RenderOrGateSvg(isPlacedGate)
                 @if (showSelectionIndicator) { <span>✓</span> }
             </div>,
             _ => @<div>@gateType @if (showSelectionIndicator) { <span>✓</span> }</div>
         };
+    }
+
+    private RenderFragment RenderOrGateSvg(bool isPlacedGate)
+    {
+        // Use larger size for placed gates, smaller for palette
+        int width = isPlacedGate ? 48 : 32;
+        int height = isPlacedGate ? 30 : 20;
+        string strokeWidth = "1"; // Reduced from 1.5 to 1
+        
+        if (isPlacedGate)
+        {
+            // Larger placed gate with more pronounced curve
+            return @<svg width="@width" height="@height" viewBox="0 0 48 30" style="display: block;">
+                <!-- OR gate body - IEEE standard with more pronounced curved back -->
+                <path d="M6 9 C6 6, 7 4.5, 10 4.5 L16 4.5 C19 6, 22 9, 27 15 C22 21, 19 24, 16 25.5 L10 25.5 C7 25.5, 6 24, 6 21 C7.5 18, 7.5 12, 6 9" 
+                      stroke="currentColor" 
+                      fill="none" 
+                      stroke-width="@strokeWidth" 
+                      stroke-linejoin="round"/>
+                <!-- Input lines positioned to connect with the curved back -->
+                <line x1="0" y1="10.5" x2="6.5" y2="10.5" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <line x1="0" y1="19.5" x2="6.5" y2="19.5" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <!-- Output line from the pointed front -->
+                <line x1="27" y1="15" x2="33" y2="15" stroke="currentColor" stroke-width="@strokeWidth"/>
+            </svg>;
+        }
+        else
+        {
+            // Smaller palette gate with improved curve
+            return @<svg width="@width" height="@height" viewBox="0 0 32 20" style="display: block;">
+                <!-- OR gate body - IEEE standard with improved curved back -->
+                <path d="M4 6 C4 4, 5 3, 7 3 L11 3 C13 4, 15 6, 18 10 C15 14, 13 16, 11 17 L7 17 C5 17, 4 16, 4 14 C5 12, 5 8, 4 6" 
+                      stroke="currentColor" 
+                      fill="none" 
+                      stroke-width="@strokeWidth" 
+                      stroke-linejoin="round"/>
+                <!-- Input lines positioned to connect with the curved back -->
+                <line x1="0" y1="7" x2="4.5" y2="7" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <line x1="0" y1="13" x2="4.5" y2="13" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <!-- Output line from the pointed front -->
+                <line x1="18" y1="10" x2="22" y2="10" stroke="currentColor" stroke-width="@strokeWidth"/>
+            </svg>;
+        }
     }
 
     private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
