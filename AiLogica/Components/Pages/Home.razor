@@ -17,7 +17,7 @@
             <div class="gate-list">
                 <div class="gate-item non-functional">AND</div>
                 <div class="gate-item @(ViewModel.SelectedGate == "OR" ? "selected" : "")" @onclick="() => SelectOrGate()" @onclick:stopPropagation="true">
-                    OR @(ViewModel.SelectedGate == "OR" ? "✓" : "")
+                    @RenderGateContent("OR", ViewModel.SelectedGate == "OR")
                 </div>
                 <div class="gate-item non-functional">NOT</div>
                 <div class="gate-item non-functional">NAND</div>
@@ -47,7 +47,7 @@
     @foreach (var gate in ViewModel.PlacedGates)
     {
         <div class="placed-gate" style="left: @(gate.X)px; top: @(gate.Y)px;">
-            @gate.Type
+            @RenderGateContent(gate.Type)
         </div>
     }
 
@@ -55,7 +55,7 @@
     @if (ViewModel.IsDragging && ViewModel.SelectedGate != null && (ViewModel.MouseX != 0 || ViewModel.MouseY != 0))
     {
         <div class="dragging-gate" style="left: @(ViewModel.MouseX - 30)px; top: @(ViewModel.MouseY - 15)px;">
-            @ViewModel.SelectedGate
+            @RenderGateContent(ViewModel.SelectedGate)
         </div>
     }
 </div>
@@ -67,6 +67,24 @@
     {
         ViewModel.PropertyChanged += OnViewModelPropertyChanged;
         base.OnInitialized();
+    }
+
+    private RenderFragment RenderGateContent(string gateType, bool showSelectionIndicator = false)
+    {
+        return gateType switch
+        {
+            "OR" => @<div style="display: flex; align-items: center; justify-content: center; gap: 0.25rem;">
+                <svg width="24" height="16" viewBox="0 0 24 16" style="display: block;">
+                    <path d="M2 2 C2 2, 8 2, 12 8 C8 14, 2 14, 2 14 L2 2 Z M12 8 L20 8" 
+                          stroke="currentColor" 
+                          fill="none" 
+                          stroke-width="1.5" 
+                          stroke-linejoin="round"/>
+                </svg>
+                @if (showSelectionIndicator) { <span>✓</span> }
+            </div>,
+            _ => @<div>@gateType @if (showSelectionIndicator) { <span>✓</span> }</div>
+        };
     }
 
     private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
