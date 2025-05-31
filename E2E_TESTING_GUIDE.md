@@ -15,9 +15,10 @@ The end-to-end testing infrastructure validates complete user workflows by autom
 
 ### Technology Stack
 - **Playwright**: Browser automation framework
-- **Firefox**: Primary browser for E2E tests
+- **System Firefox**: Uses system-installed Firefox browser (with Playwright fallback)
 - **xUnit**: Test framework with trait-based categorization
 - **ASP.NET Core Testing**: Integration with WebApplicationFactory
+- **Virtual Display (Xvfb)**: For headless testing in CI environments
 
 ## Running End-to-End Tests
 
@@ -25,7 +26,8 @@ The end-to-end testing infrastructure validates complete user workflows by autom
 
 #### Prerequisites
 - .NET 8 SDK
-- PowerShell (optional - for browser installation, alternative methods available)
+- Firefox browser (installed automatically by setup script)
+- Xvfb (for headless environments - installed automatically on Linux)
 
 #### Quick Start
 ```bash

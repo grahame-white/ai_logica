@@ -88,27 +88,32 @@ jobs:
       - name: Build
         run: dotnet build --no-restore --configuration Release
 
-      - name: Install Playwright browsers
-        id: browser-install
+      - name: Install system Firefox and setup virtual display
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y firefox xvfb
+          
+      - name: Start virtual display
+        run: |
+          export DISPLAY=:99
+          Xvfb :99 -screen 0 1280x720x24 &
+          sleep 2
+
+      - name: Install Playwright dependencies (fallback support)
         continue-on-error: true
         run: >
           pwsh AiLogica.Tests/bin/Release/net8.0/playwright.ps1
           install firefox
 
       - name: Run end-to-end tests
-        if: steps.browser-install.outcome == 'success'
+        env:
+          DISPLAY: :99
         run: >
           dotnet test --no-build --no-restore --configuration Release
           --verbosity normal --filter "Category=EndToEnd"
 
-      - name: Skip E2E tests notification
-        if: steps.browser-install.outcome == 'failure'
-        run: |
-          echo "::warning::E2E tests skipped due to browser installation failure."
-          echo "This is likely due to network restrictions on Playwright downloads."
-
       - name: Run E2E infrastructure tests (fallback)
-        if: steps.browser-install.outcome == 'failure'
+        if: failure()
         run: >
           dotnet test --no-build --no-restore --configuration Release
           --verbosity normal --filter "EndToEndInfrastructureTests"

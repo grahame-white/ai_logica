@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Playwright;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -43,13 +44,37 @@ namespace AiLogica.Tests.EndToEnd
             // Initialize Playwright
             Playwright = await Microsoft.Playwright.Playwright.CreateAsync();
 
-            // Launch browser - use Firefox for consistency
-            // Don't try to use system Firefox for now, just use Playwright's version
-            Browser = await Playwright.Firefox.LaunchAsync(new BrowserTypeLaunchOptions
+            // Launch browser - try system Firefox first, fallback to Playwright's version
+            var firefoxPath = FindSystemFirefox();
+            
+            try
             {
-                Headless = true, // Set to false for debugging
-                Args = new[] { "--no-sandbox" } // Minimal CI-friendly options for Firefox
-            });
+                // Try system Firefox first
+                Browser = await Playwright.Firefox.LaunchAsync(new BrowserTypeLaunchOptions
+                {
+                    Headless = true,
+                    ExecutablePath = firefoxPath,
+                    Args = new[] { 
+                        "--no-sandbox", 
+                        "--disable-dev-shm-usage",
+                        "--disable-gpu",
+                        "--disable-extensions",
+                        "--disable-plugins",
+                        "--no-first-run",
+                        "--disable-default-apps"
+                    }
+                });
+            }
+            catch (Exception ex) when (firefoxPath != null)
+            {
+                // System Firefox failed, fall back to Playwright's Firefox
+                Console.WriteLine($"System Firefox failed: {ex.Message}. Falling back to Playwright's Firefox.");
+                Browser = await Playwright.Firefox.LaunchAsync(new BrowserTypeLaunchOptions
+                {
+                    Headless = true,
+                    Args = new[] { "--no-sandbox", "--disable-dev-shm-usage" }
+                });
+            }
 
             // Create browser context with reasonable viewport
             BrowserContext = await Browser.NewContextAsync(new BrowserNewContextOptions
@@ -74,6 +99,34 @@ namespace AiLogica.Tests.EndToEnd
 
             Playwright?.Dispose();
             Factory?.Dispose();
+        }
+
+        /// <summary>
+        /// Find system Firefox installation path
+        /// </summary>
+        private static string? FindSystemFirefox()
+        {
+            var commonPaths = new[]
+            {
+                "/usr/bin/firefox",           // Ubuntu/Debian
+                "/usr/lib/firefox/firefox",   // Some Ubuntu installations
+                "/snap/bin/firefox",          // Snap package
+                "/usr/bin/firefox-esr",       // Extended Support Release
+                "/opt/firefox/firefox",       // Manual installation
+                "/Applications/Firefox.app/Contents/MacOS/firefox", // macOS
+                @"C:\Program Files\Mozilla Firefox\firefox.exe",    // Windows
+                @"C:\Program Files (x86)\Mozilla Firefox\firefox.exe" // Windows 32-bit
+            };
+
+            foreach (var path in commonPaths)
+            {
+                if (File.Exists(path))
+                {
+                    return path;
+                }
+            }
+
+            return null; // Let Playwright use its own Firefox
         }
 
         /// <summary>

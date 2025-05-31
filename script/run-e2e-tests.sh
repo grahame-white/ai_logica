@@ -31,8 +31,66 @@ dotnet build --configuration Release
 echo "✅ Build completed"
 echo ""
 
-# Install Playwright browsers
-echo "🌐 Installing Playwright browsers..."
+# Install system Firefox and Playwright dependencies
+echo "🌐 Setting up Firefox for end-to-end testing..."
+
+# Check if Firefox is already installed
+if command_exists firefox; then
+    echo "✅ System Firefox already installed: $(firefox --version)"
+else
+    echo "📦 Installing system Firefox..."
+    if command_exists apt-get; then
+        # Ubuntu/Debian
+        sudo apt-get update && sudo apt-get install -y firefox
+    elif command_exists dnf; then
+        # Fedora
+        sudo dnf install -y firefox
+    elif command_exists yum; then
+        # CentOS/RHEL
+        sudo yum install -y firefox
+    elif command_exists pacman; then
+        # Arch Linux
+        sudo pacman -S --noconfirm firefox
+    elif command_exists brew; then
+        # macOS
+        brew install --cask firefox
+    else
+        echo "⚠️  Cannot automatically install Firefox on this system."
+        echo "    Please install Firefox manually and ensure it's in your PATH."
+        echo "    Then re-run this script."
+        exit 1
+    fi
+    
+    if command_exists firefox; then
+        echo "✅ System Firefox installed: $(firefox --version)"
+    else
+        echo "❌ Firefox installation failed."
+        exit 1
+    fi
+fi
+
+# Setup virtual display for headless testing
+echo "🖥️  Setting up virtual display for headless testing..."
+if command_exists Xvfb; then
+    echo "✅ Xvfb already available"
+elif command_exists apt-get; then
+    echo "📦 Installing Xvfb..."
+    sudo apt-get install -y xvfb
+else
+    echo "⚠️  Cannot install Xvfb automatically. Tests may fail in headless environments."
+fi
+
+# Start virtual display if needed
+if [ -z "$DISPLAY" ] && command_exists Xvfb; then
+    echo "🖥️  Starting virtual display..."
+    export DISPLAY=:99
+    Xvfb :99 -screen 0 1280x720x24 &
+    sleep 2
+    echo "✅ Virtual display started on $DISPLAY"
+fi
+
+# Install Playwright dependencies (fallback support)
+echo "🎭 Installing Playwright dependencies..."
 PLAYWRIGHT_SCRIPT="./AiLogica.Tests/bin/Release/net8.0/playwright.ps1"
 
 if [ ! -f "$PLAYWRIGHT_SCRIPT" ]; then
@@ -40,33 +98,18 @@ if [ ! -f "$PLAYWRIGHT_SCRIPT" ]; then
     exit 1
 fi
 
-# Try to install Firefox via Playwright
-echo "ℹ️  Attempting to install Firefox via Playwright..."
 if command_exists pwsh; then
-    # Use PowerShell if available
+    # Try to install Playwright Firefox as fallback
+    echo "ℹ️  Attempting to install Playwright Firefox as fallback..."
     if pwsh "$PLAYWRIGHT_SCRIPT" install firefox; then
-        echo "✅ Playwright Firefox installed successfully"
+        echo "✅ Playwright Firefox installed as fallback"
     else
-        echo "⚠️  Failed to install Firefox via Playwright (likely due to firewall restrictions)"
-        echo "    The E2E tests require Playwright's Firefox browser to be available."
-        echo "    In CI environments, this may require adding playwright.azureedge.net to the firewall allow list."
-        echo ""
-        echo "    For now, you can run the infrastructure tests that don't require a browser:"
-        echo "    dotnet test --filter \"EndToEndInfrastructureTests\""
-        exit 1
+        echo "⚠️  Playwright Firefox installation failed, but system Firefox should work"
+        echo "    (This is expected if network restrictions block downloads)"
     fi
 else
-    # Try to use the .NET CLI approach
-    echo "⚠️  PowerShell not found, attempting alternative browser installation..."
-    if dotnet build --configuration Release; then
-        echo "✅ Build completed. Playwright will download browsers on first test run."
-        echo "⚠️  Note: This may fail if firewall restrictions block browser downloads."
-    else
-        echo "❌ Build failed. Cannot proceed with E2E tests."
-        exit 1
-    fi
+    echo "⚠️  PowerShell not found. Using system Firefox only."
 fi
-echo "✅ Playwright browsers installed"
 echo ""
 
 # Run infrastructure tests first
@@ -77,6 +120,10 @@ echo ""
 
 # Run end-to-end tests
 echo "🧪 Running end-to-end tests..."
+if [ -n "$DISPLAY" ]; then
+    echo "ℹ️  Using display: $DISPLAY"
+fi
+
 dotnet test --no-build --configuration Release --filter "Category=EndToEnd" --verbosity normal
 
 EXIT_CODE=$?
