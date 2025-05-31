@@ -73,7 +73,7 @@ namespace AiLogica.Tests.Components
             Assert.NotNull(svgElement);
             Assert.Equal("32", svgElement.GetAttribute("width"));
             Assert.Equal("24", svgElement.GetAttribute("height"));
-            
+
             // Verify that it doesn't contain the raw text "OR"
             Assert.DoesNotContain("OR", orGateElement.TextContent.Trim());
         }
@@ -94,7 +94,7 @@ namespace AiLogica.Tests.Components
             var placedGateElement = component.Find(".placed-gate");
             var svgElement = placedGateElement.QuerySelector("svg");
             Assert.NotNull(svgElement);
-            
+
             // Verify that it doesn't contain the raw text "OR"
             Assert.DoesNotContain("OR", placedGateElement.TextContent.Trim());
         }
@@ -104,7 +104,7 @@ namespace AiLogica.Tests.Components
         {
             // Test that the fallback behavior for non-OR gates still displays text
             // (This is tested by manually creating a gate through ViewModel since other gates aren't functional in UI)
-            
+
             // Arrange
             var viewModel = new HomeViewModel();
             viewModel.PlacedGates.Add(new PlacedGate { Type = "AND", X = 50, Y = 50, Id = Guid.NewGuid() });
@@ -116,7 +116,7 @@ namespace AiLogica.Tests.Components
             // Assert - Check that non-OR gate displays as text
             var placedGateElement = component.Find(".placed-gate");
             Assert.Contains("AND", placedGateElement.TextContent);
-            
+
             // Should not contain SVG for non-OR gates
             var svgElement = placedGateElement.QuerySelector("svg");
             Assert.Null(svgElement);
