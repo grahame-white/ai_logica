@@ -2,17 +2,130 @@
 
 # script/test: Run test suite for application. Optionally pass in a path to a
 #              specific test project or directory to run specific tests.
+#              Supports filtering test categories.
 
 set -e
 
 cd "$(dirname "$0")/.."
 
+# Function to show usage
+show_usage() {
+    echo "Usage: script/test [options] [test-path]"
+    echo ""
+    echo "Options:"
+    echo "  --unit              Run only unit tests (excludes E2E tests)"
+    echo "  --integration       Run only integration tests"
+    echo "  --e2e              Run only end-to-end tests (requires browser setup)"
+    echo "  --infrastructure   Run only infrastructure tests (no browser required)"
+    echo "  --all              Run all tests including E2E (default without options)"
+    echo "  --help             Show this help message"
+    echo ""
+    echo "Examples:"
+    echo "  script/test                          # Run all tests except E2E"
+    echo "  script/test --all                    # Run all tests including E2E"
+    echo "  script/test --unit                   # Run only unit tests"
+    echo "  script/test --e2e                    # Run only E2E tests"
+    echo "  script/test AiLogica.Tests          # Run specific test project"
+}
+
+# Parse arguments
+RUN_UNIT=false
+RUN_INTEGRATION=false
+RUN_E2E=false
+RUN_INFRASTRUCTURE=false
+RUN_ALL=false
+TEST_PATH=""
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --unit)
+            RUN_UNIT=true
+            shift
+            ;;
+        --integration)
+            RUN_INTEGRATION=true
+            shift
+            ;;
+        --e2e)
+            RUN_E2E=true
+            shift
+            ;;
+        --infrastructure)
+            RUN_INFRASTRUCTURE=true
+            shift
+            ;;
+        --all)
+            RUN_ALL=true
+            shift
+            ;;
+        --help)
+            show_usage
+            exit 0
+            ;;
+        *)
+            if [[ "$1" =~ ^-- ]]; then
+                echo "❌ Unknown option: $1"
+                echo "Use --help to see available options."
+                exit 1
+            elif [[ -z "$TEST_PATH" ]]; then
+                TEST_PATH="$1"
+            else
+                echo "❌ Multiple test paths specified. Please specify only one."
+                exit 1
+            fi
+            shift
+            ;;
+    esac
+done
+
 echo "==> Running test suite..."
 
-if [ -n "$1" ]; then
-  # Run specific test project if provided
-  dotnet test "$1"
-else
-  # Run all tests
-  dotnet test
+# If a specific test path is provided, run it directly
+if [ -n "$TEST_PATH" ]; then
+    echo "Running tests for specific path: $TEST_PATH"
+    dotnet test "$TEST_PATH"
+    exit $?
 fi
+
+# If no specific category flags are set, run default (all except E2E)
+if [ "$RUN_UNIT" = false ] && [ "$RUN_INTEGRATION" = false ] && [ "$RUN_E2E" = false ] && [ "$RUN_INFRASTRUCTURE" = false ] && [ "$RUN_ALL" = false ]; then
+    echo "Running default test suite (all tests except E2E)..."
+    dotnet test --filter "Category!=EndToEnd"
+    exit $?
+fi
+
+# Run tests based on specified categories
+EXIT_CODE=0
+
+if [ "$RUN_ALL" = true ]; then
+    echo "Running complete test suite including E2E tests..."
+    echo "⚠️  This requires browser setup. Use --infrastructure to test setup without browsers."
+    dotnet test
+    EXIT_CODE=$?
+elif [ "$RUN_UNIT" = true ]; then
+    echo "Running unit tests..."
+    dotnet test --filter "TestCategory=Unit|(!TestCategory=Integration&!Category=EndToEnd)"
+    EXIT_CODE=$?
+elif [ "$RUN_INTEGRATION" = true ]; then
+    echo "Running integration tests..."
+    dotnet test --filter "TestCategory=Integration"
+    EXIT_CODE=$?
+elif [ "$RUN_E2E" = true ]; then
+    echo "Running end-to-end tests..."
+    echo "⚠️  This requires Playwright browser setup. Run 'script/run-e2e-tests.sh' for full setup."
+    dotnet test --filter "Category=EndToEnd"
+    EXIT_CODE=$?
+elif [ "$RUN_INFRASTRUCTURE" = true ]; then
+    echo "Running infrastructure tests (no browser required)..."
+    dotnet test --filter "EndToEndInfrastructureTests"
+    EXIT_CODE=$?
+fi
+
+if [ $EXIT_CODE -eq 0 ]; then
+    echo "✅ Tests completed successfully"
+else
+    echo "❌ Some tests failed (exit code: $EXIT_CODE)"
+    echo "💡 For E2E test issues, try: script/run-e2e-tests.sh"
+fi
+
+exit $EXIT_CODE

@@ -25,12 +25,30 @@ The end-to-end testing infrastructure validates complete user workflows by autom
 
 #### Prerequisites
 - .NET 8 SDK
-- PowerShell (for browser installation)
+- PowerShell (optional - for browser installation, alternative methods available)
 
 #### Quick Start
 ```bash
+# Check E2E testing readiness (quick status check)
+./script/check-e2e-status
+
 # Run the automated E2E setup script
 ./script/run-e2e-tests.sh
+```
+
+#### Using the Main Test Script
+```bash
+# Run all tests except E2E (fast feedback - default)
+./script/test
+
+# Run only infrastructure tests (no browser required)
+./script/test --infrastructure
+
+# Run only E2E tests (requires browser setup)
+./script/test --e2e
+
+# Run complete test suite including E2E
+./script/test --all
 ```
 
 #### Manual Setup
@@ -47,13 +65,21 @@ dotnet test --filter "Category=EndToEnd" --configuration Release
 
 #### Running Specific Test Categories
 ```bash
+# Fast feedback during development (excludes E2E)
+./script/test
+
 # Run only infrastructure tests (no browser required)
+./script/test --infrastructure
+
+# Run only E2E tests (requires browser setup)
+./script/test --e2e
+
+# Run complete test suite including E2E
+./script/test --all
+
+# Legacy dotnet commands (also work)
 dotnet test --filter "EndToEndInfrastructureTests"
-
-# Run only browser-based E2E tests
 dotnet test --filter "Category=EndToEnd"
-
-# Run all tests except E2E (for fast feedback)
 dotnet test --filter "Category!=EndToEnd"
 ```
 
@@ -176,12 +202,21 @@ The test environment uses:
 ## Integration with Development Workflow
 
 ### Pre-commit Validation
-Developers can run E2E tests before committing:
+Developers can run different test suites before committing:
 ```bash
-# Quick validation (no browser required)
-dotnet test --filter "Category!=EndToEnd"
+# Quick status check (validates readiness without running tests)
+./script/check-e2e-status
 
-# Full validation with E2E tests
+# Quick validation (excludes E2E - recommended for most commits)
+./script/test
+
+# Infrastructure validation (checks E2E setup without browser)
+./script/test --infrastructure  
+
+# Full validation with E2E tests (thorough but slower)
+./script/test --all
+
+# Legacy approach using the dedicated E2E script
 ./script/run-e2e-tests.sh
 ```
 

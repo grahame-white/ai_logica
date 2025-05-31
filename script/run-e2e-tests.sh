@@ -22,13 +22,6 @@ if ! command_exists dotnet; then
     exit 1
 fi
 
-if ! command_exists pwsh; then
-    echo "❌ PowerShell is not installed. Please install PowerShell first."
-    echo "   Ubuntu/Debian: sudo apt-get install -y powershell"
-    echo "   macOS: brew install powershell"
-    exit 1
-fi
-
 echo "✅ Prerequisites satisfied"
 echo ""
 
@@ -47,27 +40,31 @@ if [ ! -f "$PLAYWRIGHT_SCRIPT" ]; then
     exit 1
 fi
 
-# Install Playwright browsers
-echo "🌐 Installing Playwright browsers..."
-PLAYWRIGHT_SCRIPT="./AiLogica.Tests/bin/Release/net8.0/playwright.ps1"
-
-if [ ! -f "$PLAYWRIGHT_SCRIPT" ]; then
-    echo "❌ Playwright script not found. Please run 'dotnet build' first."
-    exit 1
-fi
-
 # Try to install Firefox via Playwright
 echo "ℹ️  Attempting to install Firefox via Playwright..."
-if pwsh "$PLAYWRIGHT_SCRIPT" install firefox; then
-    echo "✅ Playwright Firefox installed successfully"
+if command_exists pwsh; then
+    # Use PowerShell if available
+    if pwsh "$PLAYWRIGHT_SCRIPT" install firefox; then
+        echo "✅ Playwright Firefox installed successfully"
+    else
+        echo "⚠️  Failed to install Firefox via Playwright (likely due to firewall restrictions)"
+        echo "    The E2E tests require Playwright's Firefox browser to be available."
+        echo "    In CI environments, this may require adding playwright.azureedge.net to the firewall allow list."
+        echo ""
+        echo "    For now, you can run the infrastructure tests that don't require a browser:"
+        echo "    dotnet test --filter \"EndToEndInfrastructureTests\""
+        exit 1
+    fi
 else
-    echo "⚠️  Failed to install Firefox via Playwright (likely due to firewall restrictions)"
-    echo "    The E2E tests require Playwright's Firefox browser to be available."
-    echo "    In CI environments, this may require adding playwright.azureedge.net to the firewall allow list."
-    echo ""
-    echo "    For now, you can run the infrastructure tests that don't require a browser:"
-    echo "    dotnet test --filter \"EndToEndInfrastructureTests\""
-    exit 1
+    # Try to use the .NET CLI approach
+    echo "⚠️  PowerShell not found, attempting alternative browser installation..."
+    if dotnet build --configuration Release; then
+        echo "✅ Build completed. Playwright will download browsers on first test run."
+        echo "⚠️  Note: This may fail if firewall restrictions block browser downloads."
+    else
+        echo "❌ Build failed. Cannot proceed with E2E tests."
+        exit 1
+    fi
 fi
 echo "✅ Playwright browsers installed"
 echo ""

@@ -1,0 +1,113 @@
+#!/bin/bash
+
+# script/check-e2e-status: Check the status of end-to-end testing setup
+#                         without attempting to run tests or install browsers
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+echo "🔍 AI Logica - End-to-End Testing Status Check"
+echo "============================================="
+echo ""
+
+# Check if solution builds
+echo "📋 Checking project build status..."
+if dotnet build --configuration Release > /dev/null 2>&1; then
+    echo "✅ Project builds successfully"
+else
+    echo "❌ Project build failed"
+    echo "💡 Run 'dotnet build' to see build errors"
+    exit 1
+fi
+
+# Check if Playwright package is available
+echo "📦 Checking Playwright package availability..."
+if dotnet test --filter "PlaywrightPackage_ShouldBeAvailable" --verbosity quiet > /dev/null 2>&1; then
+    echo "✅ Playwright package is correctly installed"
+else
+    echo "❌ Playwright package issues detected"
+    echo "💡 Check package references in AiLogica.Tests.csproj"
+fi
+
+# Check if infrastructure tests pass
+echo "🏗️ Checking E2E infrastructure..."
+if dotnet test --filter "EndToEndInfrastructureTests" --verbosity quiet > /dev/null 2>&1; then
+    echo "✅ E2E infrastructure tests pass"
+else
+    echo "❌ E2E infrastructure tests fail"
+    echo "💡 Run './script/test --infrastructure' for details"
+fi
+
+# Check for Playwright script
+PLAYWRIGHT_SCRIPT="./AiLogica.Tests/bin/Release/net8.0/playwright.ps1"
+if [ -f "$PLAYWRIGHT_SCRIPT" ]; then
+    echo "✅ Playwright installation script found"
+else
+    echo "⚠️  Playwright installation script not found"
+    echo "💡 Run 'dotnet build --configuration Release' first"
+fi
+
+# Check for PowerShell (optional)
+echo "🔧 Checking optional tools..."
+if command -v pwsh >/dev/null 2>&1; then
+    echo "✅ PowerShell available (preferred for browser installation)"
+else
+    echo "⚠️  PowerShell not available (alternative browser installation will be used)"
+fi
+
+# Check for unit tests status
+echo "🧪 Checking unit test status..."
+if dotnet test --filter "Category!=EndToEnd" --verbosity quiet > /dev/null 2>&1; then
+    echo "✅ Unit tests pass"
+else
+    echo "❌ Unit tests fail"
+    echo "💡 Fix unit tests before running E2E tests"
+fi
+
+echo ""
+echo "📊 Status Summary:"
+echo "=================="
+
+# Determine overall readiness
+BUILD_OK=true
+INFRA_OK=true
+UNIT_OK=true
+
+if ! dotnet build --configuration Release > /dev/null 2>&1; then
+    BUILD_OK=false
+fi
+
+if ! dotnet test --filter "EndToEndInfrastructureTests" --verbosity quiet > /dev/null 2>&1; then
+    INFRA_OK=false
+fi
+
+if ! dotnet test --filter "Category!=EndToEnd" --verbosity quiet > /dev/null 2>&1; then
+    UNIT_OK=false
+fi
+
+if [ "$BUILD_OK" = true ] && [ "$INFRA_OK" = true ] && [ "$UNIT_OK" = true ]; then
+    echo "🎉 E2E testing infrastructure is ready!"
+    echo ""
+    echo "📋 Next steps:"
+    echo "   • Run infrastructure tests: ./script/test --infrastructure"
+    echo "   • Run unit tests: ./script/test"
+    echo "   • Attempt E2E setup: ./script/run-e2e-tests.sh"
+    echo "   • Run full test suite: ./script/test --all"
+else
+    echo "⚠️  E2E testing infrastructure needs attention"
+    echo ""
+    echo "🔧 Required fixes:"
+    if [ "$BUILD_OK" = false ]; then
+        echo "   • Fix build errors: dotnet build"
+    fi
+    if [ "$UNIT_OK" = false ]; then
+        echo "   • Fix unit tests: ./script/test"
+    fi
+    if [ "$INFRA_OK" = false ]; then
+        echo "   • Fix infrastructure: ./script/test --infrastructure"
+    fi
+fi
+
+echo ""
+echo "💡 For detailed troubleshooting, see: E2E_TESTING_GUIDE.md"
