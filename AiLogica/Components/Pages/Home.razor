@@ -52,7 +52,7 @@
     }
 
     <!-- Dragging Gate (follows mouse) -->
-    @if (ViewModel.IsDragging && ViewModel.SelectedGate != null)
+    @if (ViewModel.IsDragging && ViewModel.SelectedGate != null && (ViewModel.MouseX != 0 || ViewModel.MouseY != 0))
     {
         <div class="dragging-gate" style="left: @(ViewModel.MouseX - 30)px; top: @(ViewModel.MouseY - 15)px;">
             @ViewModel.SelectedGate

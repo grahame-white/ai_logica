@@ -51,6 +51,9 @@ namespace AiLogica.ViewModels
         {
             SelectedGate = gateType;
             IsDragging = true;
+            // Reset mouse position to avoid showing gate at stale coordinates
+            MouseX = 0;
+            MouseY = 0;
         }
 
         public void UpdateMousePosition(double x, double y)
