@@ -62,7 +62,43 @@
     {
         <div class="placed-gate" style="left: @(gate.X)px; top: @(gate.Y)px;">
             @RenderGateContent(gate.Type, false, true)
+            
+            <!-- Connection points -->
+            @foreach (var connection in gate.Connections)
+            {
+                <div class="connection-point @(connection.Type.ToString().ToLower())" 
+                     style="left: @(connection.X - gate.X - 4)px; top: @(connection.Y - gate.Y - 4)px;"
+                     @onclick="() => OnConnectionClick(connection)"
+                     @onclick:stopPropagation="true">
+                </div>
+            }
         </div>
+    }
+
+    <!-- Wires -->
+    @foreach (var wire in ViewModel.Wires)
+    {
+        <svg class="wire-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5;">
+            @foreach (var segment in wire.Segments)
+            {
+                <line x1="@segment.StartX" y1="@segment.StartY" 
+                      x2="@segment.EndX" y2="@segment.EndY"
+                      stroke="@(wire.IsConnected ? "#5eb3f5" : "#f44336")" 
+                      stroke-width="2"/>
+            }
+        </svg>
+    }
+
+    <!-- Active wiring preview -->
+    @if (ViewModel.IsWiring && ViewModel.ActiveConnection != null)
+    {
+        <svg class="wire-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 6;">
+            <line x1="@ViewModel.ActiveConnection.X" y1="@ViewModel.ActiveConnection.Y" 
+                  x2="@ViewModel.MouseX" y2="@ViewModel.MouseY"
+                  stroke="#6e7681" 
+                  stroke-width="2" 
+                  stroke-dasharray="5,5"/>
+        </svg>
     }
 
     <!-- Dragging Gate (follows mouse) -->
@@ -167,7 +203,7 @@
 
     private async void OnMouseMove(MouseEventArgs e)
     {
-        if (ViewModel.IsDragging)
+        if (ViewModel.IsDragging || ViewModel.IsWiring)
         {
             // Get canvas-relative coordinates by calculating from client coordinates
             var rect = await JSRuntime.InvokeAsync<BoundingClientRect>("getBoundingClientRect", canvasContainer);
@@ -175,7 +211,7 @@
             var canvasY = e.ClientY - rect.Top;
             
             ViewModel.UpdateMousePosition(canvasX, canvasY);
-            StateHasChanged(); // Force immediate re-render for smoother dragging
+            StateHasChanged(); // Force immediate re-render for smoother dragging/wiring
         }
     }
 
@@ -190,15 +226,39 @@
             
             ViewModel.PlaceGate(canvasX, canvasY);
         }
+        else if (ViewModel.IsWiring)
+        {
+            // Cancel wiring if clicking on empty space
+            ViewModel.CancelWiring();
+        }
     }
 
     private void OnMouseLeave(MouseEventArgs e)
     {
-        // Cancel drag if mouse leaves canvas
+        // Cancel drag or wiring if mouse leaves canvas
         if (ViewModel.IsDragging)
         {
             ViewModel.CancelDrag();
         }
+        else if (ViewModel.IsWiring)
+        {
+            ViewModel.CancelWiring();
+        }
+    }
+
+    private void OnConnectionClick(Connection connection)
+    {
+        if (ViewModel.IsWiring && ViewModel.ActiveConnection != null)
+        {
+            // Complete wiring to this connection
+            ViewModel.CompleteWiring(connection);
+        }
+        else
+        {
+            // Start wiring from this connection
+            ViewModel.StartWiring(connection);
+        }
+        StateHasChanged();
     }
 
     private void SelectOrGate()
