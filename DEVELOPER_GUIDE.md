@@ -193,6 +193,9 @@ For detailed information about the project structure and technical architecture,
 - Use camelCase for private fields and local variables
 - Follow standard .NET naming conventions
 - Add XML documentation for public APIs
+- Each file shall include at most one class, interface or enum
+- Use file level namespaces
+- Source files must be logically organised
 
 ### Project Conventions
 - Namespaces should follow the folder structure
