@@ -65,6 +65,36 @@
         </div>
     }
 
+    <!-- Connection Points -->
+    @foreach (var gate in ViewModel.PlacedGates)
+    {
+        @foreach (var connection in gate.GetConnectionPoints())
+        {
+            var isConnected = ViewModel.Wires.Any(w => w.StartConnectionId == connection.Id || w.EndConnectionId == connection.Id);
+            <div class="connection-point @(connection.Type == AiLogica.ViewModels.ConnectionType.Input ? "input" : "output") @(isConnected ? "connected" : "disconnected")"
+                 style="left: @(connection.X - 4)px; top: @(connection.Y - 4)px;"
+                 @onclick="() => HandleConnectionClick(connection.Id)"
+                 @onclick:stopPropagation="true">
+                @if (!isConnected)
+                {
+                    <span class="disconnected-marker">×</span>
+                }
+            </div>
+        }
+    }
+
+    <!-- Wires -->
+    @foreach (var wire in ViewModel.Wires)
+    {
+        @if (wire.Path.Count > 1)
+        {
+            <svg class="wire-svg" style="position: absolute; left: 0; top: 0; pointer-events: none; z-index: 1;">
+                <polyline points="@string.Join(" ", wire.Path.Select(p => $"{p.X},{p.Y}"))"
+                          stroke="#007acc" stroke-width="2" fill="none" />
+            </svg>
+        }
+    }
+
     <!-- Dragging Gate (follows mouse) -->
     @if (ViewModel.IsDragging && ViewModel.SelectedGate != null && (ViewModel.MouseX != 0 || ViewModel.MouseY != 0))
     {
@@ -204,6 +234,19 @@
     {
         ViewModel.SelectGate("OR");
         StateHasChanged(); // Force immediate re-render
+    }
+
+    private void HandleConnectionClick(Guid connectionId)
+    {
+        if (ViewModel.IsWiring)
+        {
+            ViewModel.CompleteWiring(connectionId);
+        }
+        else
+        {
+            ViewModel.StartWiring(connectionId);
+        }
+        StateHasChanged();
     }
 
     public void Dispose()

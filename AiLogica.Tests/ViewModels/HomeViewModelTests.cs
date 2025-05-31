@@ -160,5 +160,109 @@ namespace AiLogica.Tests.ViewModels
             // Assert
             Assert.True(propertyChangedRaised);
         }
+
+        [Fact]
+        public void StartWiring_ShouldSetWiringState()
+        {
+            // Arrange
+            var viewModel = new HomeViewModel();
+            var connectionId = Guid.NewGuid();
+
+            // Act
+            viewModel.StartWiring(connectionId);
+
+            // Assert
+            Assert.True(viewModel.IsWiring);
+        }
+
+        [Fact]
+        public void CompleteWiring_WithValidConnections_ShouldCreateWire()
+        {
+            // Arrange
+            var viewModel = new HomeViewModel();
+            var startConnectionId = Guid.NewGuid();
+            var endConnectionId = Guid.NewGuid();
+
+            // Act
+            viewModel.StartWiring(startConnectionId);
+            viewModel.CompleteWiring(endConnectionId);
+
+            // Assert
+            Assert.Single(viewModel.Wires);
+            Assert.Equal(startConnectionId, viewModel.Wires[0].StartConnectionId);
+            Assert.Equal(endConnectionId, viewModel.Wires[0].EndConnectionId);
+            Assert.False(viewModel.IsWiring);
+        }
+
+        [Fact]
+        public void CompleteWiring_WithSameConnection_ShouldNotCreateWire()
+        {
+            // Arrange
+            var viewModel = new HomeViewModel();
+            var connectionId = Guid.NewGuid();
+
+            // Act
+            viewModel.StartWiring(connectionId);
+            viewModel.CompleteWiring(connectionId);
+
+            // Assert
+            Assert.Empty(viewModel.Wires);
+            Assert.False(viewModel.IsWiring);
+        }
+
+        [Fact]
+        public void GetConnectionPoints_OrGate_ShouldReturnCorrectPoints()
+        {
+            // Arrange
+            var viewModel = new HomeViewModel();
+            viewModel.SelectGate("OR");
+            viewModel.PlaceGate(100, 100);
+            var gate = viewModel.PlacedGates[0];
+
+            // Act
+            var connectionPoints = gate.GetConnectionPoints();
+
+            // Assert
+            Assert.Equal(3, connectionPoints.Count);
+            Assert.Equal(2, connectionPoints.Count(p => p.Type == ConnectionType.Input));
+            Assert.Equal(1, connectionPoints.Count(p => p.Type == ConnectionType.Output));
+        }
+
+        [Fact]
+        public void GetUnconnectedConnectionPoints_WithoutWires_ShouldReturnAllPoints()
+        {
+            // Arrange
+            var viewModel = new HomeViewModel();
+            viewModel.SelectGate("OR");
+            viewModel.PlaceGate(100, 100);
+
+            // Act
+            var unconnectedPoints = viewModel.GetUnconnectedConnectionPoints();
+
+            // Assert
+            Assert.Equal(3, unconnectedPoints.Count);
+        }
+
+        [Fact]
+        public void GetUnconnectedConnectionPoints_WithWires_ShouldReturnOnlyUnconnectedPoints()
+        {
+            // Arrange
+            var viewModel = new HomeViewModel();
+            viewModel.SelectGate("OR");
+            viewModel.PlaceGate(100, 100);
+            viewModel.PlaceGate(200, 100);
+
+            var allPoints = viewModel.GetAllConnectionPoints();
+            var startConnection = allPoints.First(p => p.Type == ConnectionType.Output);
+            var endConnection = allPoints.First(p => p.Type == ConnectionType.Input && p.GateId != startConnection.GateId);
+
+            // Act
+            viewModel.StartWiring(startConnection.Id);
+            viewModel.CompleteWiring(endConnection.Id);
+            var unconnectedPoints = viewModel.GetUnconnectedConnectionPoints();
+
+            // Assert
+            Assert.Equal(4, unconnectedPoints.Count); // 6 total - 2 connected = 4 unconnected
+        }
     }
 }

@@ -418,3 +418,47 @@ h1:focus {
         max-height: 200px;
     }
 }
+
+/* Wire Connection Styles */
+.connection-point {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #21262d;
+}
+
+.connection-point.input {
+    background-color: #dc3545;
+}
+
+.connection-point.output {
+    background-color: #20c997;
+}
+
+.connection-point.connected {
+    border: 2px solid #ffffff;
+}
+
+.connection-point.disconnected .disconnected-marker {
+    color: #ffffff;
+    font-size: 6px;
+    font-weight: bold;
+}
+
+.connection-point:hover {
+    transform: scale(1.2);
+    border-color: #007acc;
+}
+
+.wire-svg {
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
