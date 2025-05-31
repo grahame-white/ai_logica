@@ -15,8 +15,8 @@
         <div class="gate-category">
             <h5>Basic Gates</h5>
             <div class="gate-list">
-                <div class="gate-item @(ViewModel.SelectedGate == "AND" ? "selected" : "")" data-gate-type="AND" @onclick="() => SelectAndGate()" @onclick:stopPropagation="true">
-                    @RenderGateContent("AND", ViewModel.SelectedGate == "AND")
+                <div class="gate-item non-functional">
+                    @RenderGateContent("AND", false)
                 </div>
                 <div class="gate-item @(ViewModel.SelectedGate == "OR" ? "selected" : "")" data-gate-type="OR" @onclick="() => SelectOrGate()" @onclick:stopPropagation="true">
                     @RenderGateContent("OR", ViewModel.SelectedGate == "OR")
@@ -71,8 +71,9 @@
         @foreach (var connection in gate.GetConnectionPoints())
         {
             var isConnected = ViewModel.Wires.Any(w => w.StartConnectionId == connection.Id || w.EndConnectionId == connection.Id);
-            <div class="connection-point @(connection.Type == AiLogica.ViewModels.ConnectionType.Input ? "input" : "output") @(isConnected ? "connected" : "disconnected")"
-                 style="left: @(connection.X - 4)px; top: @(connection.Y - 4)px;"
+            var isSelected = ViewModel.SelectedConnectionId == connection.Id;
+            <div class="connection-point @(connection.Type == AiLogica.ViewModels.ConnectionType.Input ? "input" : "output") @(isConnected ? "connected" : "disconnected") @(isSelected ? "selected" : "")"
+                 style="left: @(connection.X - 6)px; top: @(connection.Y - 6)px;"
                  @onclick="() => HandleConnectionClick(connection.Id)"
                  @onclick:stopPropagation="true">
                 @if (!isConnected)
@@ -135,34 +136,34 @@
     private RenderFragment RenderOrGateSvg(bool isPlacedGate)
     {
         // Use IEEE standard proportions - width:height ratio of 4:3 for proper OR gate shape
-        int width = isPlacedGate ? 48 : 32;
-        int height = isPlacedGate ? 36 : 24;
+        int width = isPlacedGate ? 72 : 32;  // Increased by 50% from 48 to 72
+        int height = isPlacedGate ? 54 : 24; // Increased by 50% from 36 to 54
         string strokeWidth = "1";
         
         if (isPlacedGate)
         {
-            // Larger placed gate with IEEE standard OR gate geometry
-            return @<svg width="@width" height="@height" viewBox="0 0 48 36" style="display: block;">
+            // Larger placed gate with IEEE standard OR gate geometry (50% larger for easier interaction)
+            return @<svg width="@width" height="@height" viewBox="0 0 72 54" style="display: block;">
                 <!-- OR gate curved back (input side) - more pronounced curve -->
-                <path d="M8 10 Q12 18 8 26" 
+                <path d="M12 15 Q18 27 12 39" 
                       stroke="currentColor" 
                       fill="none" 
                       stroke-width="@strokeWidth"/>
                 <!-- OR gate top curve - smooth arc to output point -->
-                <path d="M8 10 Q24 6 38 18" 
+                <path d="M12 15 Q36 9 57 27" 
                       stroke="currentColor" 
                       fill="none" 
                       stroke-width="@strokeWidth"/>
                 <!-- OR gate bottom curve - smooth arc to output point -->
-                <path d="M8 26 Q24 30 38 18" 
+                <path d="M12 39 Q36 45 57 27" 
                       stroke="currentColor" 
                       fill="none" 
                       stroke-width="@strokeWidth"/>
                 <!-- Input lines positioned to connect with curved back -->
-                <line x1="2" y1="14" x2="9" y2="14" stroke="currentColor" stroke-width="@strokeWidth"/>
-                <line x1="2" y1="22" x2="9" y2="22" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <line x1="3" y1="21" x2="13.5" y2="21" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <line x1="3" y1="33" x2="13.5" y2="33" stroke="currentColor" stroke-width="@strokeWidth"/>
                 <!-- Output line -->
-                <line x1="38" y1="18" x2="44" y2="18" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <line x1="57" y1="27" x2="66" y2="27" stroke="currentColor" stroke-width="@strokeWidth"/>
             </svg>;
         }
         else
@@ -278,12 +279,6 @@
     private void SelectOrGate()
     {
         ViewModel.SelectGate("OR");
-        StateHasChanged(); // Force immediate re-render
-    }
-
-    private void SelectAndGate()
-    {
-        ViewModel.SelectGate("AND");
         StateHasChanged(); // Force immediate re-render
     }
 

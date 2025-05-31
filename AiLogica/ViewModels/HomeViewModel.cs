@@ -62,6 +62,8 @@ namespace AiLogica.ViewModels
             set => SetProperty(ref _isWiring, value);
         }
 
+        public Guid? SelectedConnectionId => _wireStartConnectionId;
+
         public void SelectGate(string gateType)
         {
             SelectedGate = gateType;
@@ -108,6 +110,7 @@ namespace AiLogica.ViewModels
         {
             _wireStartConnectionId = connectionId;
             IsWiring = true;
+            OnPropertyChanged(nameof(SelectedConnectionId));
         }
 
         public void CompleteWiring(Guid endConnectionId)
@@ -130,12 +133,14 @@ namespace AiLogica.ViewModels
 
             _wireStartConnectionId = null;
             IsWiring = false;
+            OnPropertyChanged(nameof(SelectedConnectionId));
         }
 
         public void CancelWiring()
         {
             _wireStartConnectionId = null;
             IsWiring = false;
+            OnPropertyChanged(nameof(SelectedConnectionId));
         }
 
         public List<ConnectionPoint> GetAllConnectionPoints()
@@ -173,24 +178,93 @@ namespace AiLogica.ViewModels
             var path = new List<Point>();
             path.Add(new Point { X = start.X, Y = start.Y });
 
-            // Simple orthogonal routing
-            if (Math.Abs(start.X - end.X) > Math.Abs(start.Y - end.Y))
+            // Improved orthogonal routing that avoids gate collisions
+            var startGate = PlacedGates.FirstOrDefault(g => g.Id == start.GateId);
+            var endGate = PlacedGates.FirstOrDefault(g => g.Id == end.GateId);
+
+            if (startGate != null && endGate != null)
             {
-                // Route horizontally first
-                var midX = start.X + (end.X - start.X) * 0.5;
-                path.Add(new Point { X = midX, Y = start.Y });
-                path.Add(new Point { X = midX, Y = end.Y });
+                // Calculate safe routing points that avoid gate bodies
+                var routingPoints = CalculateSafeRoutingPoints(start, end, startGate, endGate);
+                path.AddRange(routingPoints);
             }
             else
             {
-                // Route vertically first
-                var midY = start.Y + (end.Y - start.Y) * 0.5;
-                path.Add(new Point { X = start.X, Y = midY });
-                path.Add(new Point { X = end.X, Y = midY });
+                // Fallback to simple routing if gate information is missing
+                if (Math.Abs(start.X - end.X) > Math.Abs(start.Y - end.Y))
+                {
+                    var midX = start.X + (end.X - start.X) * 0.5;
+                    path.Add(new Point { X = midX, Y = start.Y });
+                    path.Add(new Point { X = midX, Y = end.Y });
+                }
+                else
+                {
+                    var midY = start.Y + (end.Y - start.Y) * 0.5;
+                    path.Add(new Point { X = start.X, Y = midY });
+                    path.Add(new Point { X = end.X, Y = midY });
+                }
             }
 
             path.Add(new Point { X = end.X, Y = end.Y });
             return path;
+        }
+
+        private List<Point> CalculateSafeRoutingPoints(ConnectionPoint start, ConnectionPoint end, PlacedGate startGate, PlacedGate endGate)
+        {
+            var points = new List<Point>();
+
+            // Define gate boundaries (using larger 50% scaled gate size: 72x54)
+            var startBounds = new { Left = startGate.X, Right = startGate.X + 72, Top = startGate.Y, Bottom = startGate.Y + 54 };
+            var endBounds = new { Left = endGate.X, Right = endGate.X + 72, Top = endGate.Y, Bottom = endGate.Y + 54 };
+
+            // Add some margin around gates for cleaner routing
+            var margin = 10;
+
+            if (start.Type == ConnectionType.Output)
+            {
+                // Route from output: go right from gate, then route to input
+                var clearanceX = startBounds.Right + margin;
+                points.Add(new Point { X = clearanceX, Y = start.Y });
+
+                if (end.Type == ConnectionType.Input)
+                {
+                    // Output to Input: route around end gate if necessary
+                    var targetX = endBounds.Left - margin;
+
+                    if (Math.Abs(start.Y - end.Y) < 20) // Similar Y levels
+                    {
+                        points.Add(new Point { X = targetX, Y = start.Y });
+                        points.Add(new Point { X = targetX, Y = end.Y });
+                    }
+                    else
+                    {
+                        // Route around gates vertically
+                        var routeY = start.Y < end.Y ? Math.Max(startBounds.Bottom, endBounds.Bottom) + margin : Math.Min(startBounds.Top, endBounds.Top) - margin;
+                        points.Add(new Point { X = clearanceX, Y = routeY });
+                        points.Add(new Point { X = targetX, Y = routeY });
+                        points.Add(new Point { X = targetX, Y = end.Y });
+                    }
+                }
+            }
+            else
+            {
+                // Route from input: this shouldn't normally happen in proper logic design, but handle it
+                var clearanceX = startBounds.Left - margin;
+                points.Add(new Point { X = clearanceX, Y = start.Y });
+
+                if (end.Type == ConnectionType.Input)
+                {
+                    // Input to Input: route to the left, then to target
+                    var targetX = endBounds.Left - margin;
+                    var routeY = Math.Min(start.Y, end.Y) - margin;
+
+                    points.Add(new Point { X = clearanceX, Y = routeY });
+                    points.Add(new Point { X = targetX, Y = routeY });
+                    points.Add(new Point { X = targetX, Y = end.Y });
+                }
+            }
+
+            return points;
         }
     }
 
@@ -209,34 +283,34 @@ namespace AiLogica.ViewModels
             {
                 _connectionPoints = new List<ConnectionPoint>();
 
-                // OR gate connection points based on SVG coordinates from Home.razor
+                // OR gate connection points based on updated larger SVG coordinates
                 if (Type == "OR")
                 {
-                    // Input connections (left side)
+                    // Input connections (left side) - scaled for 50% larger gate
                     _connectionPoints.Add(new ConnectionPoint
                     {
                         Id = Guid.NewGuid(),
                         Type = ConnectionType.Input,
-                        X = X + 2,
-                        Y = Y + 14,
+                        X = X + 3,  // Scaled from 2 to 3
+                        Y = Y + 21, // Scaled from 14 to 21  
                         GateId = Id
                     });
                     _connectionPoints.Add(new ConnectionPoint
                     {
                         Id = Guid.NewGuid(),
                         Type = ConnectionType.Input,
-                        X = X + 2,
-                        Y = Y + 22,
+                        X = X + 3,  // Scaled from 2 to 3
+                        Y = Y + 33, // Scaled from 22 to 33
                         GateId = Id
                     });
 
-                    // Output connection (right side)
+                    // Output connection (right side) - scaled for 50% larger gate
                     _connectionPoints.Add(new ConnectionPoint
                     {
                         Id = Guid.NewGuid(),
                         Type = ConnectionType.Output,
-                        X = X + 44,
-                        Y = Y + 18,
+                        X = X + 66, // Scaled from 44 to 66
+                        Y = Y + 27, // Scaled from 18 to 27
                         GateId = Id
                     });
                 }

@@ -422,8 +422,8 @@ h1:focus {
 /* Wire Connection Styles */
 .connection-point {
     position: absolute;
-    width: 8px;
-    height: 8px;
+    width: 12px;  /* Increased from 8px for easier clicking */
+    height: 12px; /* Increased from 8px for easier clicking */
     border-radius: 50%;
     cursor: pointer;
     z-index: 10;
@@ -443,6 +443,12 @@ h1:focus {
 
 .connection-point.connected {
     border: 2px solid #ffffff;
+}
+
+.connection-point.selected {
+    border: 2px solid #007acc;
+    background-color: #007acc !important;
+    transform: scale(1.3);
 }
 
 .connection-point.disconnected .disconnected-marker {
