@@ -43,11 +43,12 @@ namespace AiLogica.Tests.EndToEnd
             // Initialize Playwright
             Playwright = await Microsoft.Playwright.Playwright.CreateAsync();
 
-            // Launch browser - use Chromium for consistency
-            Browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+            // Launch browser - use Firefox for consistency
+            // Don't try to use system Firefox for now, just use Playwright's version
+            Browser = await Playwright.Firefox.LaunchAsync(new BrowserTypeLaunchOptions
             {
                 Headless = true, // Set to false for debugging
-                Args = new[] { "--no-sandbox", "--disable-dev-shm-usage" } // CI-friendly options
+                Args = new[] { "--no-sandbox" } // Minimal CI-friendly options for Firefox
             });
 
             // Create browser context with reasonable viewport

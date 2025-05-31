@@ -47,7 +47,28 @@ if [ ! -f "$PLAYWRIGHT_SCRIPT" ]; then
     exit 1
 fi
 
-pwsh "$PLAYWRIGHT_SCRIPT" install chromium
+# Install Playwright browsers
+echo "🌐 Installing Playwright browsers..."
+PLAYWRIGHT_SCRIPT="./AiLogica.Tests/bin/Release/net8.0/playwright.ps1"
+
+if [ ! -f "$PLAYWRIGHT_SCRIPT" ]; then
+    echo "❌ Playwright script not found. Please run 'dotnet build' first."
+    exit 1
+fi
+
+# Try to install Firefox via Playwright
+echo "ℹ️  Attempting to install Firefox via Playwright..."
+if pwsh "$PLAYWRIGHT_SCRIPT" install firefox; then
+    echo "✅ Playwright Firefox installed successfully"
+else
+    echo "⚠️  Failed to install Firefox via Playwright (likely due to firewall restrictions)"
+    echo "    The E2E tests require Playwright's Firefox browser to be available."
+    echo "    In CI environments, this may require adding playwright.azureedge.net to the firewall allow list."
+    echo ""
+    echo "    For now, you can run the infrastructure tests that don't require a browser:"
+    echo "    dotnet test --filter \"EndToEndInfrastructureTests\""
+    exit 1
+fi
 echo "✅ Playwright browsers installed"
 echo ""
 

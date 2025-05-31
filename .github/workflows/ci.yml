@@ -76,7 +76,7 @@ jobs:
       run: dotnet build --no-restore --configuration Release
       
     - name: Install Playwright browsers
-      run: pwsh AiLogica.Tests/bin/Release/net8.0/playwright.ps1 install chromium
+      run: pwsh AiLogica.Tests/bin/Release/net8.0/playwright.ps1 install firefox
       
     - name: Run end-to-end tests
       run: dotnet test --no-build --no-restore --configuration Release --verbosity normal --filter "Category=EndToEnd"
