@@ -219,7 +219,6 @@ h1:focus {
 .placed-gate, .dragging-gate {
     position: absolute;
     background-color: #21262d;
-    border: 2px solid #0969da;
     border-radius: 8px;
     padding: 0.5rem 1rem;
     color: #e0e0e0;
@@ -234,7 +233,6 @@ h1:focus {
 .dragging-gate {
     opacity: 0.8;
     pointer-events: none;
-    border-color: #58a6ff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     z-index: 100;
 }
@@ -245,7 +243,6 @@ h1:focus {
 }
 
 .placed-gate:hover {
-    border-color: #58a6ff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
