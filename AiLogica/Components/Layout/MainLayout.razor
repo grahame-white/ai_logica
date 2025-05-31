@@ -1,4 +1,7 @@
 ﻿@inherits LayoutComponentBase
+@implements IDisposable
+@using AiLogica.ViewModels
+@inject HomeViewModel ViewModel
 
 <div class="app-layout">
     <!-- Application Header -->
@@ -11,52 +14,7 @@
         </div>
     </header>
 
-    <!-- Left Sidebar - Gate Palette -->
-    <aside class="gate-palette">
-        <h3>Gate Palette</h3>
-        
-        <div class="gate-category">
-            <h4>Basic Gates</h4>
-            <div class="gate-list">
-                <div class="gate-item">AND</div>
-                <div class="gate-item">OR</div>
-                <div class="gate-item">NOT</div>
-                <div class="gate-item">NAND</div>
-                <div class="gate-item">NOR</div>
-                <div class="gate-item">XOR</div>
-                <div class="gate-item">XNOR</div>
-                <div class="gate-item">BUFFER</div>
-            </div>
-        </div>
 
-        <div class="gate-category">
-            <h4>Input/Output</h4>
-            <div class="gate-list">
-                <div class="gate-item">INPUT</div>
-                <div class="gate-item">OUTPUT</div>
-                <div class="gate-item">CLOCK</div>
-                <div class="gate-item">CONST</div>
-            </div>
-        </div>
-
-        <div class="gate-category">
-            <h4>Complex</h4>
-            <div class="gate-list">
-                <div class="gate-item">MUX</div>
-                <div class="gate-item">DEMUX</div>
-                <div class="gate-item">DECODER</div>
-                <div class="gate-item">ENCODER</div>
-            </div>
-        </div>
-
-        <div class="gate-category">
-            <h4>Custom</h4>
-            <div class="gate-list">
-                <div class="gate-item">MY_IC1</div>
-                <div class="gate-item">MY_IC2</div>
-            </div>
-        </div>
-    </aside>
 
     <!-- Main Canvas Area -->
     <main class="design-canvas">
@@ -81,7 +39,18 @@
         <div class="panel-section">
             <h3>Properties</h3>
             <div class="no-gate-selected">
-                No gate selected
+                @if (ViewModel.SelectedGate != null)
+                {
+                    <div>Selected: @ViewModel.SelectedGate</div>
+                    <div>Status: @(ViewModel.IsDragging ? "Dragging" : "Selected")</div>
+                }
+                else
+                {
+                    <div>No gate selected</div>
+                }
+                <div style="margin-top: 10px; font-size: 0.75rem; color: #6e7681;">
+                    Debug: SelectedGate=@(ViewModel.SelectedGate ?? "null"), IsDragging=@ViewModel.IsDragging
+                </div>
             </div>
         </div>
 
@@ -129,7 +98,7 @@
     <footer class="status-bar">
         <div class="status-left">
             <span>Ready</span>
-            <span>Gates: 0</span>
+            <span>Gates: @ViewModel.PlacedGates.Count</span>
             <span>Connections: 0</span>
         </div>
         <div class="status-right">
@@ -144,3 +113,21 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        ViewModel.PropertyChanged += OnViewModelPropertyChanged;
+        base.OnInitialized();
+    }
+
+    private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        ViewModel.PropertyChanged -= OnViewModelPropertyChanged;
+    }
+}

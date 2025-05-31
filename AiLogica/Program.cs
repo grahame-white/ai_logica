@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-// Register ViewModels
+// Register ViewModels - using scoped to ensure per-session state isolation
 builder.Services.AddScoped<HomeViewModel>();
 
 var app = builder.Build();
@@ -29,3 +29,6 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
 app.Run();
+
+// Make Program accessible for testing
+public partial class Program { }

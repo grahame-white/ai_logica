@@ -82,6 +82,27 @@ dotnet build AiLogica.Core
 dotnet build -c Release
 ```
 
+### Code Formatting
+
+**Important**: Always ensure code is properly formatted before committing to avoid CI failures.
+
+```bash
+# Check if formatting is correct (simulates CI check)
+./scripts/check-format.sh
+
+# Format code and verify it's correct
+./scripts/format-code.sh
+
+# Or manually format code
+dotnet format
+```
+
+#### Automatic Formatting Check
+A pre-commit git hook is installed that automatically checks formatting before each commit. If formatting issues are detected, the commit will be rejected with instructions on how to fix them.
+
+#### CI Integration
+The CI pipeline includes a formatting verification step that will fail if code is not properly formatted. Use the scripts above to prevent CI failures.
+
 ### Running Tests
 ```bash
 # Run all tests

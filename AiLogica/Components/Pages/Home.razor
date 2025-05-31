@@ -1,18 +1,133 @@
 ﻿@page "/"
+@implements IDisposable
 @using AiLogica.ViewModels
+@using Microsoft.JSInterop
 @inject HomeViewModel ViewModel
+@inject IJSRuntime JSRuntime
+@rendermode InteractiveServer
 
 <PageTitle>AI Logica - Logic Gate Simulator</PageTitle>
 
-<div class="canvas-container">
-    <div class="canvas-placeholder">
-        <h2>@ViewModel.WelcomeMessage</h2>
-        <p>Drag gates from the palette to start designing your logic circuit</p>
-        <ul class="instruction-list">
-            <li>Select gates from the left panel</li>
-            <li>Wire inputs and outputs together</li>
-            <li>Use simulation controls to test your design</li>
-            <li>Save designs as reusable components</li>
-        </ul>
+<div class="canvas-container" @ref="canvasContainer" @onmousemove="OnMouseMove" @onclick="OnCanvasClick" @onmouseleave="OnMouseLeave">
+    <!-- Interactive Gate Palette -->
+    <div class="interactive-gate-palette">
+        <h4>Gate Palette</h4>
+        <div class="gate-category">
+            <h5>Basic Gates</h5>
+            <div class="gate-list">
+                <div class="gate-item non-functional">AND</div>
+                <div class="gate-item @(ViewModel.SelectedGate == "OR" ? "selected" : "")" @onclick="() => SelectOrGate()" @onclick:stopPropagation="true">
+                    OR @(ViewModel.SelectedGate == "OR" ? "✓" : "")
+                </div>
+                <div class="gate-item non-functional">NOT</div>
+                <div class="gate-item non-functional">NAND</div>
+                <div class="gate-item non-functional">NOR</div>
+                <div class="gate-item non-functional">XOR</div>
+                <div class="gate-item non-functional">XNOR</div>
+                <div class="gate-item non-functional">BUFFER</div>
+            </div>
+        </div>
     </div>
+
+    @if (ViewModel.PlacedGates.Count == 0 && !ViewModel.IsDragging)
+    {
+        <div class="canvas-placeholder">
+            <h2>@ViewModel.WelcomeMessage</h2>
+            <p>Select gates from the floating palette to start designing your logic circuit</p>
+            <ul class="instruction-list">
+                <li>Select gates from the palette above</li>
+                <li>Wire inputs and outputs together</li>
+                <li>Use simulation controls to test your design</li>
+                <li>Save designs as reusable components</li>
+            </ul>
+        </div>
+    }
+
+    <!-- Placed Gates -->
+    @foreach (var gate in ViewModel.PlacedGates)
+    {
+        <div class="placed-gate" style="left: @(gate.X)px; top: @(gate.Y)px;">
+            @gate.Type
+        </div>
+    }
+
+    <!-- Dragging Gate (follows mouse) -->
+    @if (ViewModel.IsDragging && ViewModel.SelectedGate != null && (ViewModel.MouseX != 0 || ViewModel.MouseY != 0))
+    {
+        <div class="dragging-gate" style="left: @(ViewModel.MouseX - 30)px; top: @(ViewModel.MouseY - 15)px;">
+            @ViewModel.SelectedGate
+        </div>
+    }
 </div>
+
+@code {
+    private ElementReference canvasContainer;
+
+    protected override void OnInitialized()
+    {
+        ViewModel.PropertyChanged += OnViewModelPropertyChanged;
+        base.OnInitialized();
+    }
+
+    private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    private async void OnMouseMove(MouseEventArgs e)
+    {
+        if (ViewModel.IsDragging)
+        {
+            // Get canvas-relative coordinates by calculating from client coordinates
+            var rect = await JSRuntime.InvokeAsync<BoundingClientRect>("getBoundingClientRect", canvasContainer);
+            var canvasX = e.ClientX - rect.Left;
+            var canvasY = e.ClientY - rect.Top;
+            
+            ViewModel.UpdateMousePosition(canvasX, canvasY);
+            StateHasChanged(); // Force immediate re-render for smoother dragging
+        }
+    }
+
+    private async void OnCanvasClick(MouseEventArgs e)
+    {
+        if (ViewModel.IsDragging && ViewModel.SelectedGate != null)
+        {
+            // Get canvas-relative coordinates for placement
+            var rect = await JSRuntime.InvokeAsync<BoundingClientRect>("getBoundingClientRect", canvasContainer);
+            var canvasX = e.ClientX - rect.Left;
+            var canvasY = e.ClientY - rect.Top;
+            
+            ViewModel.PlaceGate(canvasX, canvasY);
+        }
+    }
+
+    private void OnMouseLeave(MouseEventArgs e)
+    {
+        // Cancel drag if mouse leaves canvas
+        if (ViewModel.IsDragging)
+        {
+            ViewModel.CancelDrag();
+        }
+    }
+
+    private void SelectOrGate()
+    {
+        ViewModel.SelectGate("OR");
+        StateHasChanged(); // Force immediate re-render
+    }
+
+    public void Dispose()
+    {
+        ViewModel.PropertyChanged -= OnViewModelPropertyChanged;
+    }
+
+    public class BoundingClientRect
+    {
+        public double Left { get; set; }
+        public double Top { get; set; }
+        public double Right { get; set; }
+        public double Bottom { get; set; }
+        public double Width { get; set; }
+        public double Height { get; set; }
+    }
+}
