@@ -15,16 +15,30 @@
         <div class="gate-category">
             <h5>Basic Gates</h5>
             <div class="gate-list">
-                <div class="gate-item non-functional">AND</div>
+                <div class="gate-item non-functional">
+                    @RenderGateContent("AND", false)
+                </div>
                 <div class="gate-item @(ViewModel.SelectedGate == "OR" ? "selected" : "")" @onclick="() => SelectOrGate()" @onclick:stopPropagation="true">
                     @RenderGateContent("OR", ViewModel.SelectedGate == "OR")
                 </div>
-                <div class="gate-item non-functional">NOT</div>
-                <div class="gate-item non-functional">NAND</div>
-                <div class="gate-item non-functional">NOR</div>
-                <div class="gate-item non-functional">XOR</div>
-                <div class="gate-item non-functional">XNOR</div>
-                <div class="gate-item non-functional">BUFFER</div>
+                <div class="gate-item non-functional">
+                    @RenderGateContent("NOT", false)
+                </div>
+                <div class="gate-item non-functional">
+                    @RenderGateContent("NAND", false)
+                </div>
+                <div class="gate-item non-functional">
+                    @RenderGateContent("NOR", false)
+                </div>
+                <div class="gate-item non-functional">
+                    @RenderGateContent("XOR", false)
+                </div>
+                <div class="gate-item non-functional">
+                    @RenderGateContent("XNOR", false)
+                </div>
+                <div class="gate-item non-functional">
+                    @RenderGateContent("BUFFER", false)
+                </div>
             </div>
         </div>
     </div>
@@ -77,7 +91,10 @@
                 @RenderOrGateSvg(isPlacedGate)
                 @if (showSelectionIndicator) { <span>✓</span> }
             </div>,
-            _ => @<div>@gateType @if (showSelectionIndicator) { <span>✓</span> }</div>
+            _ => @<div style="display: flex; align-items: center; justify-content: center; gap: 0.25rem;">
+                <span>@gateType</span>
+                @if (showSelectionIndicator) { <span>✓</span> }
+            </div>
         };
     }
 
