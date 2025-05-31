@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# script/cibuild: Setup environment for CI to run tests. This is primarily
+#                 designed to run on the continuous integration server.
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+echo "==> Running CI build..."
+
+# Install dependencies
+script/bootstrap
+
+# Check code formatting (simulates CI check)
+echo "==> Checking code formatting..."
+script/format --check
+
+# Build the application
+echo "==> Building application..."
+dotnet build --configuration Release
+
+# Run tests
+echo "==> Running tests..."
+dotnet test --configuration Release --no-build --no-restore
+
+echo "==> CI build completed successfully!"

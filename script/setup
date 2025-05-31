@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# script/setup: Set up application for the first time after cloning, or set it
+#               back to the initial first unused state.
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+echo "==> Setting up AI Logica..."
+
+# Install dependencies
+script/bootstrap
+
+# Set up git hooks for code formatting
+echo "==> Installing git hooks..."
+script/setup-git-hooks
+
+# Build the application
+echo "==> Building application..."
+dotnet build
+
+# Run tests to ensure everything is working
+echo "==> Running tests..."
+dotnet test
+
+echo ""
+echo "==> AI Logica is now ready to go!"
+echo ""
+echo "Next steps:"
+echo "  - Run 'script/server' to start the development server"
+echo "  - Run 'script/test' to run the test suite"
+echo "  - See DEVELOPER_GUIDE.md for more information"

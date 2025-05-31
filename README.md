@@ -25,13 +25,21 @@ This project is in early development. The current implementation includes:
 
 ### For Contributors (Human and AI Developers)
 
-**⚠️ IMPORTANT: Install git hooks first to prevent CI failures**
 ```bash
 git clone https://github.com/grahame-white/ai_logica.git
 cd ai_logica
 
+# Complete setup (installs dependencies, git hooks, builds, and tests)
+script/setup
+
+# Start the development server
+script/server
+```
+
+**Alternative manual setup:**
+```bash
 # REQUIRED: Install git hooks to prevent formatting issues
-./scripts/setup-git-hooks.sh
+script/setup-git-hooks
 
 dotnet build
 cd AiLogica
@@ -41,6 +49,17 @@ dotnet run
 Open your browser to `https://localhost:5001` to access the application.
 
 For detailed development setup and guidelines, see [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md).
+
+## Development Standards
+
+AI Logica follows GitHub's ["scripts to rule them all"](https://github.com/github/scripts-to-rule-them-all) pattern to provide a consistent and standardized interface for common development tasks. This ensures that:
+
+- **New contributors** can quickly get started with `script/setup`
+- **Development workflows** are consistent across different environments
+- **CI/CD integration** matches local development experience
+- **Technology changes** don't break established workflows
+
+All development scripts are located in the `script/` directory and provide a technology-agnostic interface. See [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) for complete script documentation and usage guidelines.
 
 ## Documentation
 

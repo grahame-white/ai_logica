@@ -30,7 +30,7 @@ if [ "$hooks_installed" = false ]; then
     echo "This means formatting issues could slip through and cause CI failures."
     echo "Please install the git hooks immediately:"
     echo ""
-    echo "  ./scripts/setup-git-hooks.sh"
+    echo "  script/setup-git-hooks"
     echo ""
     echo "This is especially important for AI developers who should install"
     echo "hooks proactively at the start of any development session."

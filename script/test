@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# script/test: Run test suite for application. Optionally pass in a path to a
+#              specific test project or directory to run specific tests.
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+echo "==> Running test suite..."
+
+if [ -n "$1" ]; then
+  # Run specific test project if provided
+  dotnet test "$1"
+else
+  # Run all tests
+  dotnet test
+fi

@@ -8,6 +8,7 @@ on:
       - '**/*.csproj'
       - '**/*.sln'
       - '.github/workflows/**'
+      - 'script/**'
   pull_request:
     branches: [ main ]
     paths:
@@ -15,6 +16,7 @@ on:
       - '**/*.csproj'
       - '**/*.sln'
       - '.github/workflows/**'
+      - 'script/**'
 
 # Cancel superseded workflow runs
 concurrency:
@@ -45,14 +47,5 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nuget-
     
-    - name: Restore dependencies
-      run: dotnet restore
-      
-    - name: Check code formatting
-      run: dotnet format --verify-no-changes --verbosity normal
-      
-    - name: Build
-      run: dotnet build --no-restore --configuration Release
-      
-    - name: Run tests
-      run: dotnet test --no-build --no-restore --configuration Release --verbosity normal
+    - name: Run CI build
+      run: script/cibuild

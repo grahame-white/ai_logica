@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# script/update: Update application to run for its current checkout.
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+echo "==> Updating AI Logica..."
+
+# Install any new dependencies
+script/bootstrap
+
+# Rebuild the application to pick up any changes
+echo "==> Rebuilding application..."
+dotnet build
+
+echo "==> AI Logica updated!"
