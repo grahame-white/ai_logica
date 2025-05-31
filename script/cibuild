@@ -22,6 +22,6 @@ dotnet build --configuration Release
 
 # Run tests
 echo "==> Running tests..."
-dotnet test --configuration Release
+dotnet test --configuration Release --no-build --no-restore
 
 echo "==> CI build completed successfully!"
