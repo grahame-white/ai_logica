@@ -189,10 +189,10 @@ namespace AiLogica.ViewModels
         private List<Point> CalculateCollisionFreeRoute(ConnectionPoint start, ConnectionPoint end)
         {
             var points = new List<Point>();
-            var margin = 15; // Safety margin around gates
+            var margin = 20; // Increased safety margin around gates
 
             // Get all gate boundaries to avoid
-            var gateBounds = PlacedGates.Select(g => new
+            var gateBounds = PlacedGates.Select(g => new GateBound
             {
                 Left = g.X - margin,
                 Right = g.X + 72 + margin, // 72 is the scaled gate width
@@ -201,21 +201,34 @@ namespace AiLogica.ViewModels
                 Gate = g
             }).ToList();
 
-            // Strategy: Route orthogonally with collision avoidance
-            // Try horizontal-first, then vertical-first routing and pick the best
+            // Special handling for same-gate connections - always route around the gate
+            if (start.GateId == end.GateId)
+            {
+                return RouteSameGateConnection(start, end, gateBounds);
+            }
 
-            var route1 = TryHorizontalFirstRoute(start, end, gateBounds);
-            var route2 = TryVerticalFirstRoute(start, end, gateBounds);
+            // Try multiple routing strategies and pick collision-free one
+            var routes = new List<List<Point>>
+            {
+                TryHorizontalFirstRoute(start, end, gateBounds),
+                TryVerticalFirstRoute(start, end, gateBounds),
+                TryAdvancedRoute(start, end, gateBounds)
+            };
 
-            // Choose the route with fewer collision issues (prefer horizontal-first)
-            var chosenRoute = !HasCollisions(route1, gateBounds) ? route1 :
-                             !HasCollisions(route2, gateBounds) ? route2 :
-                             route1; // Fallback to route1 if both have issues
+            // Return the first collision-free route
+            foreach (var route in routes)
+            {
+                if (!HasCollisions(start, end, route, gateBounds))
+                {
+                    return route;
+                }
+            }
 
-            return chosenRoute;
+            // If all routes have collisions, force a safe route around all gates
+            return ForceCollisionFreeRoute(start, end, gateBounds);
         }
 
-        private List<Point> TryHorizontalFirstRoute(ConnectionPoint start, ConnectionPoint end, dynamic gateBounds)
+        private List<Point> TryHorizontalFirstRoute(ConnectionPoint start, ConnectionPoint end, List<GateBound> gateBounds)
         {
             var points = new List<Point>();
 
@@ -260,7 +273,7 @@ namespace AiLogica.ViewModels
             return points;
         }
 
-        private List<Point> TryVerticalFirstRoute(ConnectionPoint start, ConnectionPoint end, dynamic gateBounds)
+        private List<Point> TryVerticalFirstRoute(ConnectionPoint start, ConnectionPoint end, List<GateBound> gateBounds)
         {
             var points = new List<Point>();
 
@@ -332,16 +345,220 @@ namespace AiLogica.ViewModels
             return false;
         }
 
-        private bool LineIntersectsRectangle(Point p1, Point p2, dynamic rect)
+        private bool HasCollisions(ConnectionPoint start, ConnectionPoint end, List<Point> routePoints, List<GateBound> gateBounds)
         {
-            // Check if line segment from p1 to p2 intersects with rectangle
-            var minX = Math.Min(p1.X, p2.X);
-            var maxX = Math.Max(p1.X, p2.X);
-            var minY = Math.Min(p1.Y, p2.Y);
-            var maxY = Math.Max(p1.Y, p2.Y);
+            if (routePoints.Count == 0) return false;
 
-            // Check if line bounding box intersects with rectangle
-            return !(maxX < rect.Left || minX > rect.Right || maxY < rect.Top || minY > rect.Bottom);
+            // Create full path with actual start and end points
+            var fullPath = new List<Point> { new Point { X = start.X, Y = start.Y } };
+            fullPath.AddRange(routePoints);
+            fullPath.Add(new Point { X = end.X, Y = end.Y });
+
+            // Check each line segment for collisions
+            for (int i = 0; i < fullPath.Count - 1; i++)
+            {
+                var p1 = fullPath[i];
+                var p2 = fullPath[i + 1];
+
+                foreach (var bounds in gateBounds)
+                {
+                    if (LineIntersectsRectangle(p1, p2, bounds))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private List<Point> RouteSameGateConnection(ConnectionPoint start, ConnectionPoint end, List<GateBound> gateBounds)
+        {
+            var points = new List<Point>();
+            var gateId = start.GateId;
+            var gate = PlacedGates.FirstOrDefault(g => g.Id == gateId);
+            if (gate == null) return points;
+
+            // Find the gate bounds
+            var gateBound = gateBounds.FirstOrDefault(b => b.Gate.Id == gateId);
+            if (gateBound == null) return points;
+
+            // Route around the gate - always go below the gate for same-gate connections
+            var routeY = gateBound.Bottom + 15;
+
+            points.Add(new Point { X = start.X, Y = routeY });
+            points.Add(new Point { X = end.X, Y = routeY });
+
+            return points;
+        }
+
+        private List<Point> TryAdvancedRoute(ConnectionPoint start, ConnectionPoint end, List<GateBound> gateBounds)
+        {
+            var points = new List<Point>();
+
+            // Calculate a path that goes around all gates by finding clear corridors
+            var midX = (start.X + end.X) / 2;
+            var midY = (start.Y + end.Y) / 2;
+
+            // Check if a straight path through the middle would work
+            var straightPath = new List<Point> { new Point { X = midX, Y = start.Y }, new Point { X = midX, Y = end.Y } };
+            if (!HasCollisions(start, end, straightPath, gateBounds))
+            {
+                return straightPath;
+            }
+
+            // Find a clear vertical corridor
+            var clearX = FindClearVerticalCorridor(start.X, end.X, gateBounds);
+            points.Add(new Point { X = clearX, Y = start.Y });
+            points.Add(new Point { X = clearX, Y = end.Y });
+
+            return points;
+        }
+
+        private double FindClearVerticalCorridor(double startX, double endX, List<GateBound> gateBounds)
+        {
+            var minX = Math.Min(startX, endX);
+            var maxX = Math.Max(startX, endX);
+
+            // Try positions between start and end
+            for (var x = minX; x <= maxX; x += 10)
+            {
+                var isClear = true;
+                foreach (var bounds in gateBounds)
+                {
+                    if (x >= bounds.Left && x <= bounds.Right)
+                    {
+                        isClear = false;
+                        break;
+                    }
+                }
+                if (isClear) return x;
+            }
+
+            // Try positions to the left of the leftmost point
+            for (var x = minX - 20; x >= 0; x -= 10)
+            {
+                var isClear = true;
+                foreach (var bounds in gateBounds)
+                {
+                    if (x >= bounds.Left && x <= bounds.Right)
+                    {
+                        isClear = false;
+                        break;
+                    }
+                }
+                if (isClear) return x;
+            }
+
+            // Try positions to the right of the rightmost point
+            for (var x = maxX + 20; x <= 1000; x += 10)
+            {
+                var isClear = true;
+                foreach (var bounds in gateBounds)
+                {
+                    if (x >= bounds.Left && x <= bounds.Right)
+                    {
+                        isClear = false;
+                        break;
+                    }
+                }
+                if (isClear) return x;
+            }
+
+            // Fallback - return the midpoint
+            return (startX + endX) / 2;
+        }
+
+        private List<Point> ForceCollisionFreeRoute(ConnectionPoint start, ConnectionPoint end, List<GateBound> gateBounds)
+        {
+            var points = new List<Point>();
+
+            // Find the bounds of all gates
+            var minLeft = gateBounds.Min(b => b.Left);
+            var maxRight = gateBounds.Max(b => b.Right);
+            var minTop = gateBounds.Min(b => b.Top);
+            var maxBottom = gateBounds.Max(b => b.Bottom);
+
+            // Route around all gates by going to a clear area
+            var safeX = maxRight + 30; // Go to the right of all gates
+            var safeY = minTop - 30;   // Go above all gates
+
+            // Choose the routing strategy based on relative positions
+            if (start.X > end.X)
+            {
+                // Going from right to left - route above
+                points.Add(new Point { X = start.X, Y = safeY });
+                points.Add(new Point { X = end.X, Y = safeY });
+            }
+            else
+            {
+                // Going from left to right - route to the right
+                points.Add(new Point { X = safeX, Y = start.Y });
+                points.Add(new Point { X = safeX, Y = end.Y });
+            }
+
+            return points;
+        }
+
+        private bool LineIntersectsRectangle(Point p1, Point p2, GateBound rect)
+        {
+            // Proper line-rectangle intersection test
+            var left = rect.Left;
+            var right = rect.Right;
+            var top = rect.Top;
+            var bottom = rect.Bottom;
+
+            // Check if either endpoint is inside the rectangle
+            if (IsPointInRectangle(p1, left, right, top, bottom) ||
+                IsPointInRectangle(p2, left, right, top, bottom))
+            {
+                return true;
+            }
+
+            // Check if line intersects any of the four rectangle edges
+            return LineIntersectsLine(p1, p2, new Point { X = left, Y = top }, new Point { X = right, Y = top }) ||     // Top edge
+                   LineIntersectsLine(p1, p2, new Point { X = right, Y = top }, new Point { X = right, Y = bottom }) || // Right edge
+                   LineIntersectsLine(p1, p2, new Point { X = right, Y = bottom }, new Point { X = left, Y = bottom }) || // Bottom edge
+                   LineIntersectsLine(p1, p2, new Point { X = left, Y = bottom }, new Point { X = left, Y = top });      // Left edge
+        }
+
+        private bool IsPointInRectangle(Point point, double left, double right, double top, double bottom)
+        {
+            return point.X >= left && point.X <= right && point.Y >= top && point.Y <= bottom;
+        }
+
+        private bool LineIntersectsLine(Point p1, Point p2, Point p3, Point p4)
+        {
+            // Line segment intersection using cross products
+            var d1 = CrossProduct(p3, p4, p1);
+            var d2 = CrossProduct(p3, p4, p2);
+            var d3 = CrossProduct(p1, p2, p3);
+            var d4 = CrossProduct(p1, p2, p4);
+
+            if (((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) &&
+                ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0)))
+            {
+                return true;
+            }
+
+            // Check for collinear points on segment
+            if (d1 == 0 && OnSegment(p3, p1, p4)) return true;
+            if (d2 == 0 && OnSegment(p3, p2, p4)) return true;
+            if (d3 == 0 && OnSegment(p1, p3, p2)) return true;
+            if (d4 == 0 && OnSegment(p1, p4, p2)) return true;
+
+            return false;
+        }
+
+        private double CrossProduct(Point a, Point b, Point c)
+        {
+            return (c.Y - a.Y) * (b.X - a.X) - (c.X - a.X) * (b.Y - a.Y);
+        }
+
+        private bool OnSegment(Point p, Point q, Point r)
+        {
+            return q.X <= Math.Max(p.X, r.X) && q.X >= Math.Min(p.X, r.X) &&
+                   q.Y <= Math.Max(p.Y, r.Y) && q.Y >= Math.Min(p.Y, r.Y);
         }
     }
 
@@ -456,5 +673,14 @@ namespace AiLogica.ViewModels
     {
         public double X { get; set; }
         public double Y { get; set; }
+    }
+
+    public class GateBound
+    {
+        public double Left { get; set; }
+        public double Right { get; set; }
+        public double Top { get; set; }
+        public double Bottom { get; set; }
+        public PlacedGate Gate { get; set; } = null!;
     }
 }
