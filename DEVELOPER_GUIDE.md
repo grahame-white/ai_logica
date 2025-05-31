@@ -9,7 +9,7 @@ This guide provides information for both human and AI developers contributing to
 **Before making any commits or changes, you MUST install the git hooks to prevent formatting issues that cause CI failures:**
 
 ```bash
-./scripts/setup-git-hooks.sh
+script/setup-git-hooks
 ```
 
 This is especially important for AI developers who should install these hooks proactively at the start of any new conversation thread or development session.
@@ -44,10 +44,10 @@ git clone https://github.com/grahame-white/ai_logica.git
 cd ai_logica
 
 # Set up git hooks to prevent formatting issues (REQUIRED)
-./scripts/setup-git-hooks.sh
+script/setup-git-hooks
 
 # Verify git hooks are installed (optional check)
-./scripts/check-git-hooks.sh
+script/check-git-hooks
 
 # Build the solution
 dotnet build
@@ -80,7 +80,7 @@ For detailed information about the project structure and technical architecture,
 - Follow the established project structure
 
 ### For AI Developers
-- **FIRST**: Install git hooks with `./scripts/setup-git-hooks.sh` at the start of every new conversation thread
+- **FIRST**: Install git hooks with `script/setup-git-hooks` at the start of every new conversation thread
 - Focus on implementing the features outlined in REQUIREMENTS.md
 - Build upon the existing MVVM foundation
 - Ensure all new code includes appropriate tests
@@ -168,6 +168,16 @@ This script replicates CI environment checks:
 
 These scripts provide a consistent interface regardless of the underlying technology stack and are the recommended way to interact with the project.
 
+### Additional Utility Scripts
+The `script/` directory also contains utility scripts for specific tasks:
+
+- **`script/setup-git-hooks`** - Install git hooks for automatic formatting checks
+- **`script/check-git-hooks`** - Verify git hooks are properly installed  
+- **`script/check-format`** - Check code formatting without making changes
+- **`script/format-code`** - Format code and verify formatting is correct
+
+These utilities are called by the main standardized scripts but can also be used independently when needed.
+
 ## Building and Testing
 
 ### Building the Solution
@@ -191,10 +201,10 @@ dotnet build -c Release
 
 ```bash
 # Check if formatting is correct (simulates CI check)
-./scripts/check-format.sh
+script/check-format
 
 # Format code and verify it's correct
-./scripts/format-code.sh
+script/format-code
 
 # Or manually format code
 dotnet format
@@ -205,7 +215,7 @@ To prevent formatting issues from ever being committed or pushed:
 
 ```bash
 # Install git hooks that check formatting automatically
-./scripts/setup-git-hooks.sh
+script/setup-git-hooks
 ```
 
 This installs:
@@ -217,7 +227,7 @@ To check if git hooks are properly installed:
 
 ```bash
 # Verify hooks are installed and configured correctly
-./scripts/check-git-hooks.sh
+script/check-git-hooks
 ```
 
 This is particularly useful for AI developers to verify their environment is properly configured at the start of a development session.
@@ -227,10 +237,10 @@ If git hooks are not installed, always run formatting checks manually:
 
 ```bash
 # Before committing
-./scripts/check-format.sh
+script/check-format
 
 # Fix formatting issues
-./scripts/format-code.sh
+script/format-code
 ```
 
 #### CI Integration

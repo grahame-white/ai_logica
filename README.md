@@ -39,7 +39,7 @@ script/server
 **Alternative manual setup:**
 ```bash
 # REQUIRED: Install git hooks to prevent formatting issues
-./scripts/setup-git-hooks.sh
+script/setup-git-hooks
 
 dotnet build
 cd AiLogica

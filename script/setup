@@ -14,7 +14,7 @@ script/bootstrap
 
 # Set up git hooks for code formatting
 echo "==> Installing git hooks..."
-./scripts/setup-git-hooks.sh
+script/setup-git-hooks
 
 # Build the application
 echo "==> Building application..."
