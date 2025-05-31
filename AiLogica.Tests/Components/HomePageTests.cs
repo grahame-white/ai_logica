@@ -34,8 +34,8 @@ namespace AiLogica.Tests.Components
             var component = RenderComponent<Home>();
 
             // Assert - Check that the component renders the gate palette
-            // Find the OR gate which is the only gate-item that is not non-functional
-            var orGateElement = component.Find(".gate-item:not(.non-functional)");
+            // Find the OR gate using its specific data attribute
+            var orGateElement = component.Find("[data-gate-type='OR']");
             Assert.NotNull(orGateElement);
             Assert.DoesNotContain("selected", orGateElement.GetAttribute("class") ?? "");
         }
@@ -52,8 +52,8 @@ namespace AiLogica.Tests.Components
             var component = RenderComponent<Home>();
 
             // Assert - Check that the selected class is applied
-            // Find the OR gate which is the only gate-item that is not non-functional
-            var orGateElement = component.Find(".gate-item:not(.non-functional)");
+            // Find the OR gate using its specific data attribute
+            var orGateElement = component.Find("[data-gate-type='OR']");
             Assert.Contains("selected", orGateElement.GetAttribute("class"));
         }
 
@@ -68,7 +68,7 @@ namespace AiLogica.Tests.Components
             var component = RenderComponent<Home>();
 
             // Assert - Check that the OR gate contains an SVG symbol instead of text
-            var orGateElement = component.Find(".gate-item:not(.non-functional)");
+            var orGateElement = component.Find("[data-gate-type='OR']");
             var svgElement = orGateElement.QuerySelector("svg");
             Assert.NotNull(svgElement);
             Assert.Equal("32", svgElement.GetAttribute("width"));

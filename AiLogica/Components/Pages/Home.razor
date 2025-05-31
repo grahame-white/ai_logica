@@ -18,7 +18,7 @@
                 <div class="gate-item non-functional">
                     @RenderGateContent("AND", false)
                 </div>
-                <div class="gate-item @(ViewModel.SelectedGate == "OR" ? "selected" : "")" @onclick="() => SelectOrGate()" @onclick:stopPropagation="true">
+                <div class="gate-item @(ViewModel.SelectedGate == "OR" ? "selected" : "")" data-gate-type="OR" @onclick="() => SelectOrGate()" @onclick:stopPropagation="true">
                     @RenderGateContent("OR", ViewModel.SelectedGate == "OR")
                 </div>
                 <div class="gate-item non-functional">
@@ -87,11 +87,11 @@
     {
         return gateType switch
         {
-            "OR" => @<div style="display: flex; align-items: center; justify-content: center; gap: 0.25rem;">
+            "OR" => @<div class="gate-content">
                 @RenderOrGateSvg(isPlacedGate)
                 @if (showSelectionIndicator) { <span>✓</span> }
             </div>,
-            _ => @<div style="display: flex; align-items: center; justify-content: center; gap: 0.25rem;">
+            _ => @<div class="gate-content">
                 <span>@gateType</span>
                 @if (showSelectionIndicator) { <span>✓</span> }
             </div>

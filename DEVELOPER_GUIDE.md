@@ -68,6 +68,13 @@ For detailed information about the project structure and technical architecture,
 - Implement proper disposal patterns where needed
 - Follow the established separation between presentation and business logic
 
+### Testing Best Practices
+- Use specific element selectors in tests rather than generic ones to avoid ambiguity as the application grows
+- Add data attributes (e.g., `data-testid`, `data-gate-type`) to elements that need to be tested for reliable selection
+- Extract repeated inline styles to CSS classes for better maintainability
+- Ensure tests target the specific functionality being tested rather than relying on implementation details
+- Write descriptive test names that clearly indicate what is being tested
+
 ## Building and Testing
 
 ### Building the Solution

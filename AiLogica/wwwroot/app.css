@@ -112,6 +112,14 @@ h1:focus {
     border-color: #929292;
 }
 
+/* Gate Content Styling */
+.gate-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
 /* Logic Gate Simulator Specific Styles */
 
 /* Application Header */
