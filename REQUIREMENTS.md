@@ -31,6 +31,9 @@ Based on the application outline, AI Logica shall provide the following capabili
 
 ### 1.2 Gate Wiring
 - **FR-3**: The end user will be able to wire the inputs and outputs of the gates together
+- **FR-3.1**: Wires shall never pass through the body of any gate - all wire routing must go around gates
+- **FR-3.2**: Wire routing shall use orthogonal (horizontal and vertical) segments for clean, professional appearance
+- **FR-3.3**: Wires shall automatically route around gate obstacles with appropriate clearance margins
 
 ### 1.3 Simulation Capabilities
 - **FR-4**: The application will be able to simulate the behavior of the connected logic gates
