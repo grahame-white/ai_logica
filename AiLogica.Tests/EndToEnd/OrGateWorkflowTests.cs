@@ -21,7 +21,10 @@ namespace AiLogica.Tests.EndToEnd
             await AssertElementContainsTextAsync("h2", "Logic Gate Design Canvas");
             await AssertElementContainsTextAsync("body", "Gate Palette");
             await AssertElementContainsTextAsync("body", "Properties");
-            await AssertElementContainsTextAsync("body", "OR");
+
+            // Check OR gate exists by data attribute (since it's now SVG)
+            var orGate = Page.Locator("[data-gate-type='OR']");
+            await orGate.WaitForAsync(new LocatorWaitForOptions { Timeout = 2000 });
         }
 
         [Fact]
@@ -30,12 +33,12 @@ namespace AiLogica.Tests.EndToEnd
             // Arrange
             await NavigateToHomePageAsync();
 
-            // Act - Click the OR gate in the palette
-            var orGateButton = await WaitForElementAsync(".gate-item:has-text('OR')");
+            // Act - Click the OR gate in the palette using data attribute
+            var orGateButton = await WaitForElementAsync("[data-gate-type='OR']");
             await orGateButton.ClickAsync();
 
             // Assert - Check that OR gate is selected and highlighted
-            var selectedGate = Page.Locator(".gate-item.selected:has-text('OR')");
+            var selectedGate = Page.Locator(".gate-item.selected[data-gate-type='OR']");
             await selectedGate.WaitForAsync(new LocatorWaitForOptions { Timeout = 2000 });
 
             // Check properties panel shows selection
@@ -48,7 +51,7 @@ namespace AiLogica.Tests.EndToEnd
         {
             // Arrange
             await NavigateToHomePageAsync();
-            var orGateButton = await WaitForElementAsync(".gate-item:has-text('OR')");
+            var orGateButton = await WaitForElementAsync("[data-gate-type='OR']");
             await orGateButton.ClickAsync();
 
             // Act - Move mouse over the canvas area
@@ -66,8 +69,9 @@ namespace AiLogica.Tests.EndToEnd
                 Timeout = 2000
             });
 
-            // Verify the dragging gate contains OR text
-            await AssertElementContainsTextAsync(".dragging-gate", "OR");
+            // Verify the dragging gate contains SVG (since OR gate is now SVG-based)
+            var svgInDraggingGate = draggingGate.Locator("svg");
+            await svgInDraggingGate.WaitForAsync(new LocatorWaitForOptions { Timeout = 2000 });
         }
 
         [Fact]
@@ -75,7 +79,7 @@ namespace AiLogica.Tests.EndToEnd
         {
             // Arrange
             await NavigateToHomePageAsync();
-            var orGateButton = await WaitForElementAsync(".gate-item:has-text('OR')");
+            var orGateButton = await WaitForElementAsync("[data-gate-type='OR']");
             await orGateButton.ClickAsync();
 
             // Act - Click on the canvas to place the gate
@@ -85,7 +89,10 @@ namespace AiLogica.Tests.EndToEnd
             // Assert - Check that gate is placed
             var placedGate = Page.Locator(".placed-gate");
             await placedGate.WaitForAsync(new LocatorWaitForOptions { Timeout = 2000 });
-            await AssertElementContainsTextAsync(".placed-gate", "OR");
+
+            // Verify the placed gate contains SVG (since OR gate is now SVG-based)
+            var svgInPlacedGate = placedGate.Locator("svg");
+            await svgInPlacedGate.WaitForAsync(new LocatorWaitForOptions { Timeout = 2000 });
 
             // Check that status bar shows gate count
             await AssertElementContainsTextAsync(".status-bar", "Gates: 1");
@@ -99,7 +106,7 @@ namespace AiLogica.Tests.EndToEnd
         {
             // Arrange
             await NavigateToHomePageAsync();
-            var orGateButton = await WaitForElementAsync(".gate-item:has-text('OR')");
+            var orGateButton = await WaitForElementAsync("[data-gate-type='OR']");
             await orGateButton.ClickAsync();
 
             // Verify gate is selected
@@ -125,7 +132,7 @@ namespace AiLogica.Tests.EndToEnd
         {
             // Arrange
             await NavigateToHomePageAsync();
-            var orGateButton = await WaitForElementAsync(".gate-item:has-text('OR')");
+            var orGateButton = await WaitForElementAsync("[data-gate-type='OR']");
             await orGateButton.ClickAsync();
 
             // Act - Place first gate
@@ -158,19 +165,25 @@ namespace AiLogica.Tests.EndToEnd
             // 1. Verify initial state
             await AssertElementContainsTextAsync(".properties-panel", "No gate selected");
 
-            // 2. Select OR gate
-            var orGateButton = await WaitForElementAsync(".gate-item:has-text('OR')");
+            // 2. Select OR gate using data attribute
+            var orGateButton = await WaitForElementAsync("[data-gate-type='OR']");
             await orGateButton.ClickAsync();
             await AssertElementContainsTextAsync(".properties-panel", "Selected: OR");
 
-            // 3. Verify dragging state
+            // 3. Verify dragging state - check for SVG in dragging gate
             var canvas = await WaitForElementAsync(".canvas-container");
             await canvas.HoverAsync(new LocatorHoverOptions { Position = new Position { X = 250, Y = 175 } });
-            await AssertElementContainsTextAsync(".dragging-gate", "OR");
+            var draggingGate = Page.Locator(".dragging-gate");
+            await draggingGate.WaitForAsync(new LocatorWaitForOptions { Timeout = 2000 });
+            var svgInDraggingGate = draggingGate.Locator("svg");
+            await svgInDraggingGate.WaitForAsync(new LocatorWaitForOptions { Timeout = 2000 });
 
             // 4. Place gate
             await canvas.ClickAsync(new LocatorClickOptions { Position = new Position { X = 250, Y = 175 } });
-            await AssertElementContainsTextAsync(".placed-gate", "OR");
+            var placedGate = Page.Locator(".placed-gate");
+            await placedGate.WaitForAsync(new LocatorWaitForOptions { Timeout = 2000 });
+            var svgInPlacedGate = placedGate.Locator("svg");
+            await svgInPlacedGate.WaitForAsync(new LocatorWaitForOptions { Timeout = 2000 });
             await AssertElementContainsTextAsync(".status-bar", "Gates: 1");
 
             // 5. Verify selection persists for additional placements
