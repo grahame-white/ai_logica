@@ -198,6 +198,12 @@ h1:focus {
     pointer-events: auto; /* Re-enable pointer events for clickable gate items */
 }
 
+.interactive-gate-palette .gate-item.non-functional {
+    pointer-events: none; /* Disable pointer events for non-functional gate items */
+    cursor: default;
+    opacity: 0.6;
+}
+
 .interactive-gate-palette .gate-item:hover {
     background-color: #30363d;
     border-color: var(--link-color);

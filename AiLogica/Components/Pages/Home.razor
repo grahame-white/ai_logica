@@ -13,16 +13,16 @@
         <div class="gate-category">
             <h5>Basic Gates</h5>
             <div class="gate-list">
-                <div class="gate-item">AND</div>
+                <div class="gate-item non-functional">AND</div>
                 <div class="gate-item @(ViewModel.SelectedGate == "OR" ? "selected" : "")" @onclick="() => SelectOrGate()" @onclick:stopPropagation="true">
                     OR @(ViewModel.SelectedGate == "OR" ? "✓" : "")
                 </div>
-                <div class="gate-item">NOT</div>
-                <div class="gate-item">NAND</div>
-                <div class="gate-item">NOR</div>
-                <div class="gate-item">XOR</div>
-                <div class="gate-item">XNOR</div>
-                <div class="gate-item">BUFFER</div>
+                <div class="gate-item non-functional">NOT</div>
+                <div class="gate-item non-functional">NAND</div>
+                <div class="gate-item non-functional">NOR</div>
+                <div class="gate-item non-functional">XOR</div>
+                <div class="gate-item non-functional">XNOR</div>
+                <div class="gate-item non-functional">BUFFER</div>
             </div>
         </div>
     </div>
