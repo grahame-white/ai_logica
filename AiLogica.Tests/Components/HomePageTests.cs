@@ -100,10 +100,9 @@ namespace AiLogica.Tests.Components
         }
 
         [Fact]
-        public void HomePage_NonOrGates_ShouldDisplayAsText()
+        public void HomePage_AndGates_ShouldDisplayAsSvg()
         {
-            // Test that the fallback behavior for non-OR gates still displays text
-            // (This is tested by manually creating a gate through ViewModel since other gates aren't functional in UI)
+            // Test that AND gates now render as SVG (no longer just text)
 
             // Arrange
             var viewModel = new HomeViewModel();
@@ -113,13 +112,15 @@ namespace AiLogica.Tests.Components
             // Act
             var component = RenderComponent<Home>();
 
-            // Assert - Check that non-OR gate displays as text
+            // Assert - Check that AND gate displays as SVG
             var placedGateElement = component.Find(".placed-gate");
-            Assert.Contains("AND", placedGateElement.TextContent);
 
-            // Should not contain SVG for non-OR gates
+            // Should contain SVG for AND gates
             var svgElement = placedGateElement.QuerySelector("svg");
-            Assert.Null(svgElement);
+            Assert.NotNull(svgElement);
+
+            // Should not contain raw text "AND" since it's now rendered as SVG
+            Assert.DoesNotContain("AND", placedGateElement.TextContent);
         }
     }
 }

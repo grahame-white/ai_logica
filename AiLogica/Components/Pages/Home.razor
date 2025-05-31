@@ -15,8 +15,8 @@
         <div class="gate-category">
             <h5>Basic Gates</h5>
             <div class="gate-list">
-                <div class="gate-item non-functional">
-                    @RenderGateContent("AND", false)
+                <div class="gate-item @(ViewModel.SelectedGate == "AND" ? "selected" : "")" data-gate-type="AND" @onclick="() => SelectAndGate()" @onclick:stopPropagation="true">
+                    @RenderGateContent("AND", ViewModel.SelectedGate == "AND")
                 </div>
                 <div class="gate-item @(ViewModel.SelectedGate == "OR" ? "selected" : "")" data-gate-type="OR" @onclick="() => SelectOrGate()" @onclick:stopPropagation="true">
                     @RenderGateContent("OR", ViewModel.SelectedGate == "OR")
@@ -121,6 +121,10 @@
                 @RenderOrGateSvg(isPlacedGate)
                 @if (showSelectionIndicator) { <span>✓</span> }
             </div>,
+            "AND" => @<div class="gate-content">
+                @RenderAndGateSvg(isPlacedGate)
+                @if (showSelectionIndicator) { <span>✓</span> }
+            </div>,
             _ => @<div class="gate-content">
                 <span>@gateType</span>
                 @if (showSelectionIndicator) { <span>✓</span> }
@@ -189,6 +193,47 @@
         }
     }
 
+    private RenderFragment RenderAndGateSvg(bool isPlacedGate)
+    {
+        // Use IEEE standard proportions for AND gate
+        int width = isPlacedGate ? 48 : 32;
+        int height = isPlacedGate ? 36 : 24;
+        string strokeWidth = "1";
+        
+        if (isPlacedGate)
+        {
+            // Larger placed gate with IEEE standard AND gate geometry
+            return @<svg width="@width" height="@height" viewBox="0 0 48 36" style="display: block;">
+                <!-- AND gate body - straight left side and semicircular right side -->
+                <path d="M8 10 L26 10 A 8 8 0 0 1 26 26 L8 26 Z" 
+                      stroke="currentColor" 
+                      fill="none" 
+                      stroke-width="@strokeWidth"/>
+                <!-- Input lines -->
+                <line x1="2" y1="14" x2="8" y2="14" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <line x1="2" y1="22" x2="8" y2="22" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <!-- Output line -->
+                <line x1="34" y1="18" x2="44" y2="18" stroke="currentColor" stroke-width="@strokeWidth"/>
+            </svg>;
+        }
+        else
+        {
+            // Smaller palette gate with IEEE standard AND gate geometry
+            return @<svg width="@width" height="@height" viewBox="0 0 32 24" style="display: block;">
+                <!-- AND gate body - straight left side and semicircular right side -->
+                <path d="M5 7 L17 7 A 5 5 0 0 1 17 17 L5 17 Z" 
+                      stroke="currentColor" 
+                      fill="none" 
+                      stroke-width="@strokeWidth"/>
+                <!-- Input lines -->
+                <line x1="1" y1="9" x2="5" y2="9" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <line x1="1" y1="15" x2="5" y2="15" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <!-- Output line -->
+                <line x1="22" y1="12" x2="29" y2="12" stroke="currentColor" stroke-width="@strokeWidth"/>
+            </svg>;
+        }
+    }
+
     private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         InvokeAsync(StateHasChanged);
@@ -233,6 +278,12 @@
     private void SelectOrGate()
     {
         ViewModel.SelectGate("OR");
+        StateHasChanged(); // Force immediate re-render
+    }
+
+    private void SelectAndGate()
+    {
+        ViewModel.SelectGate("AND");
         StateHasChanged(); // Force immediate re-render
     }
 
