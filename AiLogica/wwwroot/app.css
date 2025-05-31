@@ -157,6 +157,7 @@ h1:focus {
     z-index: 50;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     min-width: 200px;
+    pointer-events: none; /* Prevent mouse tracking interference */
 }
 
 .interactive-gate-palette h4 {
@@ -165,6 +166,7 @@ h1:focus {
     margin-bottom: 0.75rem;
     border-bottom: 1px solid #30363d;
     padding-bottom: 0.5rem;
+    pointer-events: none; /* Prevent mouse tracking interference */
 }
 
 .interactive-gate-palette h5 {
@@ -173,12 +175,14 @@ h1:focus {
     margin-bottom: 0.5rem;
     text-transform: uppercase;
     font-weight: 500;
+    pointer-events: none; /* Prevent mouse tracking interference */
 }
 
 .interactive-gate-palette .gate-list {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.4rem;
+    pointer-events: none; /* Prevent mouse tracking interference */
 }
 
 .interactive-gate-palette .gate-item {
@@ -191,6 +195,7 @@ h1:focus {
     transition: all 0.2s ease;
     color: #e0e0e0;
     font-size: 0.75rem;
+    pointer-events: auto; /* Re-enable pointer events for clickable gate items */
 }
 
 .interactive-gate-palette .gate-item:hover {
