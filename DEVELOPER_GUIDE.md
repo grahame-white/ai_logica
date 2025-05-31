@@ -18,6 +18,9 @@ This guide provides information for both human and AI developers contributing to
 git clone https://github.com/grahame-white/ai_logica.git
 cd ai_logica
 
+# Set up git hooks to prevent formatting issues (recommended)
+./scripts/setup-git-hooks.sh
+
 # Build the solution
 dotnet build
 
@@ -104,11 +107,31 @@ dotnet build -c Release
 dotnet format
 ```
 
-#### Automatic Formatting Check
-A pre-commit git hook is installed that automatically checks formatting before each commit. If formatting issues are detected, the commit will be rejected with instructions on how to fix them.
+#### Automatic Formatting Prevention
+To prevent formatting issues from ever being committed or pushed:
+
+```bash
+# Install git hooks that check formatting automatically
+./scripts/setup-git-hooks.sh
+```
+
+This installs:
+- **Pre-commit hook**: Checks formatting before each commit and rejects commits with formatting issues
+- **Pre-push hook**: Provides a final formatting check before pushing to remote
+
+#### Manual Formatting Check
+If git hooks are not installed, always run formatting checks manually:
+
+```bash
+# Before committing
+./scripts/check-format.sh
+
+# Fix formatting issues
+./scripts/format-code.sh
+```
 
 #### CI Integration
-The CI pipeline includes a formatting verification step that will fail if code is not properly formatted. Use the scripts above to prevent CI failures.
+The CI pipeline includes a formatting verification step that will fail if code is not properly formatted. The git hooks prevent this from happening by catching issues locally.
 
 ### Running Tests
 ```bash

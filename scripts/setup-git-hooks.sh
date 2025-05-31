@@ -1,0 +1,88 @@
+#!/bin/bash
+
+# Setup git hooks for formatting checks
+# Run this script to install formatting checks that prevent commits/pushes with formatting issues
+
+echo "🔧 Setting up git hooks for automatic formatting checks..."
+
+# Create hooks directory if it doesn't exist
+mkdir -p .git/hooks
+
+# Install pre-commit hook
+cat > .git/hooks/pre-commit << 'EOF'
+#!/bin/bash
+
+# Pre-commit hook to check code formatting
+# This prevents commits with formatting issues
+
+echo "🔍 Checking code formatting before commit..."
+
+# Run the formatting check
+dotnet format --verify-no-changes --verbosity minimal
+
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "❌ Commit rejected: Code formatting issues detected!"
+    echo ""
+    echo "Your code has formatting issues that would cause CI to fail."
+    echo "Please fix these issues before committing:"
+    echo ""
+    echo "  ./scripts/format-code.sh"
+    echo "or:"
+    echo "  dotnet format"
+    echo ""
+    echo "Then try your commit again."
+    exit 1
+fi
+
+echo "✅ Code formatting check passed!"
+exit 0
+EOF
+
+# Install pre-push hook
+cat > .git/hooks/pre-push << 'EOF'
+#!/bin/bash
+
+# Pre-push hook to check code formatting
+# This provides a final safety check before pushing to remote
+
+echo "🔍 Pre-push formatting check..."
+
+# Run the formatting check
+dotnet format --verify-no-changes --verbosity minimal
+
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "❌ Push rejected: Code formatting issues detected!"
+    echo ""
+    echo "Your code has formatting issues that would cause CI to fail."
+    echo "Please fix these issues before pushing:"
+    echo ""
+    echo "  ./scripts/format-code.sh"
+    echo "or:"
+    echo "  dotnet format"
+    echo ""
+    echo "Then try your push again."
+    exit 1
+fi
+
+echo "✅ Pre-push formatting check passed!"
+exit 0
+EOF
+
+# Make hooks executable
+chmod +x .git/hooks/pre-commit
+chmod +x .git/hooks/pre-push
+
+echo "✅ Git hooks installed successfully!"
+echo ""
+echo "The following hooks are now active:"
+echo "  • pre-commit: Checks formatting before each commit"
+echo "  • pre-push: Checks formatting before each push"
+echo ""
+echo "These hooks will prevent commits and pushes with formatting issues,"
+echo "ensuring CI will never fail due to formatting problems."
+echo ""
+echo "To bypass hooks temporarily (not recommended):"
+echo "  git commit --no-verify"
+echo "  git push --no-verify"
