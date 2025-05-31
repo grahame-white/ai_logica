@@ -207,7 +207,6 @@ h1:focus {
 .interactive-gate-palette .gate-item:hover {
     background-color: #30363d;
     border-color: var(--link-color);
-    transform: translateY(-1px);
 }
 
 .interactive-gate-palette .gate-item.selected {
