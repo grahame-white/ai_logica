@@ -231,6 +231,7 @@ h1:focus {
 
 .placed-gate {
     cursor: move;
+    pointer-events: none;
 }
 
 .placed-gate:hover {
