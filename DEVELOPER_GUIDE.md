@@ -62,6 +62,106 @@ dotnet run
 
 The application will be available at `https://localhost:5001` (or the port shown in console output).
 
+## Development Standards and Scripts
+
+AI Logica follows GitHub's ["scripts to rule them all"](https://github.com/github/scripts-to-rule-them-all) pattern as a core development standard. This pattern provides a consistent, technology-agnostic interface for common development tasks, ensuring that developers can onboard quickly and workflows remain stable as the technology stack evolves.
+
+### Why "Scripts to Rule Them All"?
+
+- **Consistency**: Same commands work regardless of underlying technology
+- **Onboarding**: New developers run `script/setup` and are ready to contribute  
+- **CI/CD Alignment**: Local development mirrors production environment
+- **Future-Proofing**: Interface remains stable even as tools change
+
+### Core Standardized Scripts
+
+AI Logica implements the following standardized scripts in the `script/` directory:
+
+#### script/setup
+Complete setup for first-time development:
+```bash
+script/setup
+```
+This script:
+- Installs all dependencies
+- Sets up git hooks for code formatting
+- Builds the application
+- Runs tests to verify everything works
+
+#### script/server
+Start the development server:
+```bash
+script/server
+```
+This starts the Blazor application server for local development.
+
+#### script/test
+Run the test suite:
+```bash
+# Run all tests
+script/test
+
+# Run specific test project
+script/test AiLogica.Tests
+```
+
+#### script/update
+Update the application after pulling changes:
+```bash
+script/update
+```
+This script:
+- Installs any new dependencies
+- Rebuilds the application
+
+#### script/bootstrap
+Install dependencies only:
+```bash
+script/bootstrap
+```
+This script only installs .NET dependencies without building or testing.
+
+#### script/cibuild
+Run continuous integration checks:
+```bash
+script/cibuild
+```
+This script replicates CI environment checks:
+- Installs dependencies
+- Checks code formatting
+- Builds in Release configuration
+- Runs all tests
+
+These scripts provide a consistent interface regardless of the underlying technology stack and are the recommended way to interact with the project.
+
+### Additional Utility Scripts
+The `script/` directory also contains utility scripts for specific tasks:
+
+- **`script/setup-git-hooks`** - Install git hooks for automatic formatting checks
+- **`script/check-git-hooks`** - Verify git hooks are properly installed  
+- **`script/format`** - Format code and check formatting (use `--check` for CI mode)
+
+These utilities are called by the main standardized scripts but can also be used independently when needed.
+
+### Guidelines for Future Script Development
+
+**All future development tools and workflows must align with the "scripts to rule them all" pattern:**
+
+- **New standardized scripts** should be added to the core set only when they represent common, cross-cutting development tasks
+- **Technology-specific tools** should be abstracted behind the standardized interface  
+- **Script naming** must follow the established conventions (`script/verb` format)
+- **Documentation** must be updated to reflect any new scripts or changes to existing ones
+- **Backward compatibility** should be maintained unless there's a compelling reason for breaking changes
+
+When adding new development capabilities:
+1. **First** determine if it fits an existing standardized script (setup, server, test, etc.)
+2. **If new script needed**, follow the pattern naming and ensure it serves a general development need
+3. **Add utility scripts** for specific tasks that support the main standardized scripts
+4. **Update documentation** in both README.md and this guide
+5. **Ensure CI integration** aligns with local development experience
+
+This ensures the development experience remains consistent and discoverable as the project evolves.
+
 ## Current Project Structure
 
 For detailed information about the project structure and technical architecture, see [ARCHITECTURE.md](ARCHITECTURE.md).
@@ -106,76 +206,6 @@ For detailed information about the project structure and technical architecture,
 - Extract repeated inline styles to CSS classes for better maintainability
 - Ensure tests target the specific functionality being tested rather than relying on implementation details
 - Write descriptive test names that clearly indicate what is being tested
-
-## Standardized Development Scripts
-
-AI Logica follows GitHub's ["scripts to rule them all"](https://github.com/github/scripts-to-rule-them-all) pattern for consistent development workflows:
-
-### script/setup
-Complete setup for first-time development:
-```bash
-script/setup
-```
-This script:
-- Installs all dependencies
-- Sets up git hooks for code formatting
-- Builds the application
-- Runs tests to verify everything works
-
-### script/server
-Start the development server:
-```bash
-script/server
-```
-This starts the Blazor application server for local development.
-
-### script/test
-Run the test suite:
-```bash
-# Run all tests
-script/test
-
-# Run specific test project
-script/test AiLogica.Tests
-```
-
-### script/update
-Update the application after pulling changes:
-```bash
-script/update
-```
-This script:
-- Installs any new dependencies
-- Rebuilds the application
-
-### script/bootstrap
-Install dependencies only:
-```bash
-script/bootstrap
-```
-This script only installs .NET dependencies without building or testing.
-
-### script/cibuild
-Run continuous integration checks:
-```bash
-script/cibuild
-```
-This script replicates CI environment checks:
-- Installs dependencies
-- Checks code formatting
-- Builds in Release configuration
-- Runs all tests
-
-These scripts provide a consistent interface regardless of the underlying technology stack and are the recommended way to interact with the project.
-
-### Additional Utility Scripts
-The `script/` directory also contains utility scripts for specific tasks:
-
-- **`script/setup-git-hooks`** - Install git hooks for automatic formatting checks
-- **`script/check-git-hooks`** - Verify git hooks are properly installed  
-- **`script/format`** - Format code and check formatting (use `--check` for CI mode)
-
-These utilities are called by the main standardized scripts but can also be used independently when needed.
 
 ## Building and Testing
 
