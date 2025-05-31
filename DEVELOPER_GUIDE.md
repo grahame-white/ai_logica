@@ -4,6 +4,16 @@
 
 This guide provides information for both human and AI developers contributing to the AI Logica project. The project is currently in early development, focused on building a logic gate simulator using AI-assisted development practices.
 
+## ⚠️ Critical First Step for All Developers
+
+**Before making any commits or changes, you MUST install the git hooks to prevent formatting issues that cause CI failures:**
+
+```bash
+./scripts/setup-git-hooks.sh
+```
+
+This is especially important for AI developers who should install these hooks proactively at the start of any new conversation thread or development session.
+
 ## Getting Started
 
 ### Prerequisites
@@ -18,8 +28,11 @@ This guide provides information for both human and AI developers contributing to
 git clone https://github.com/grahame-white/ai_logica.git
 cd ai_logica
 
-# Set up git hooks to prevent formatting issues (recommended)
+# Set up git hooks to prevent formatting issues (REQUIRED)
 ./scripts/setup-git-hooks.sh
+
+# Verify git hooks are installed (optional check)
+./scripts/check-git-hooks.sh
 
 # Build the solution
 dotnet build
@@ -52,6 +65,7 @@ For detailed information about the project structure and technical architecture,
 - Follow the established project structure
 
 ### For AI Developers
+- **FIRST**: Install git hooks with `./scripts/setup-git-hooks.sh` at the start of every new conversation thread
 - Focus on implementing the features outlined in REQUIREMENTS.md
 - Build upon the existing MVVM foundation
 - Ensure all new code includes appropriate tests
@@ -118,6 +132,16 @@ To prevent formatting issues from ever being committed or pushed:
 This installs:
 - **Pre-commit hook**: Checks formatting before each commit and rejects commits with formatting issues
 - **Pre-push hook**: Provides a final formatting check before pushing to remote
+
+#### Verify Git Hooks Installation
+To check if git hooks are properly installed:
+
+```bash
+# Verify hooks are installed and configured correctly
+./scripts/check-git-hooks.sh
+```
+
+This is particularly useful for AI developers to verify their environment is properly configured at the start of a development session.
 
 #### Manual Formatting Check
 If git hooks are not installed, always run formatting checks manually:

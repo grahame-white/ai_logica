@@ -23,10 +23,16 @@ This project is in early development. The current implementation includes:
 - .NET 8 SDK
 - Modern web browser
 
-### Running the Application
+### For Contributors (Human and AI Developers)
+
+**⚠️ IMPORTANT: Install git hooks first to prevent CI failures**
 ```bash
 git clone https://github.com/grahame-white/ai_logica.git
 cd ai_logica
+
+# REQUIRED: Install git hooks to prevent formatting issues
+./scripts/setup-git-hooks.sh
+
 dotnet build
 cd AiLogica
 dotnet run
