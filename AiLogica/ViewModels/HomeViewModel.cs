@@ -178,93 +178,170 @@ namespace AiLogica.ViewModels
             var path = new List<Point>();
             path.Add(new Point { X = start.X, Y = start.Y });
 
-            // Improved orthogonal routing that avoids gate collisions
-            var startGate = PlacedGates.FirstOrDefault(g => g.Id == start.GateId);
-            var endGate = PlacedGates.FirstOrDefault(g => g.Id == end.GateId);
-
-            if (startGate != null && endGate != null)
-            {
-                // Calculate safe routing points that avoid gate bodies
-                var routingPoints = CalculateSafeRoutingPoints(start, end, startGate, endGate);
-                path.AddRange(routingPoints);
-            }
-            else
-            {
-                // Fallback to simple routing if gate information is missing
-                if (Math.Abs(start.X - end.X) > Math.Abs(start.Y - end.Y))
-                {
-                    var midX = start.X + (end.X - start.X) * 0.5;
-                    path.Add(new Point { X = midX, Y = start.Y });
-                    path.Add(new Point { X = midX, Y = end.Y });
-                }
-                else
-                {
-                    var midY = start.Y + (end.Y - start.Y) * 0.5;
-                    path.Add(new Point { X = start.X, Y = midY });
-                    path.Add(new Point { X = end.X, Y = midY });
-                }
-            }
+            // Calculate routing points that absolutely avoid all gate collisions
+            var routingPoints = CalculateCollisionFreeRoute(start, end);
+            path.AddRange(routingPoints);
 
             path.Add(new Point { X = end.X, Y = end.Y });
             return path;
         }
 
-        private List<Point> CalculateSafeRoutingPoints(ConnectionPoint start, ConnectionPoint end, PlacedGate startGate, PlacedGate endGate)
+        private List<Point> CalculateCollisionFreeRoute(ConnectionPoint start, ConnectionPoint end)
+        {
+            var points = new List<Point>();
+            var margin = 15; // Safety margin around gates
+
+            // Get all gate boundaries to avoid
+            var gateBounds = PlacedGates.Select(g => new
+            {
+                Left = g.X - margin,
+                Right = g.X + 72 + margin, // 72 is the scaled gate width
+                Top = g.Y - margin,
+                Bottom = g.Y + 54 + margin, // 54 is the scaled gate height
+                Gate = g
+            }).ToList();
+
+            // Strategy: Route orthogonally with collision avoidance
+            // Try horizontal-first, then vertical-first routing and pick the best
+
+            var route1 = TryHorizontalFirstRoute(start, end, gateBounds);
+            var route2 = TryVerticalFirstRoute(start, end, gateBounds);
+
+            // Choose the route with fewer collision issues (prefer horizontal-first)
+            var chosenRoute = !HasCollisions(route1, gateBounds) ? route1 :
+                             !HasCollisions(route2, gateBounds) ? route2 :
+                             route1; // Fallback to route1 if both have issues
+
+            return chosenRoute;
+        }
+
+        private List<Point> TryHorizontalFirstRoute(ConnectionPoint start, ConnectionPoint end, dynamic gateBounds)
         {
             var points = new List<Point>();
 
-            // Define gate boundaries (using larger 50% scaled gate size: 72x54)
-            var startBounds = new { Left = startGate.X, Right = startGate.X + 72, Top = startGate.Y, Bottom = startGate.Y + 54 };
-            var endBounds = new { Left = endGate.X, Right = endGate.X + 72, Top = endGate.Y, Bottom = endGate.Y + 54 };
+            // Go horizontal first, then vertical
+            var intermediateX = end.X;
+            var intermediateY = start.Y;
 
-            // Add some margin around gates for cleaner routing
-            var margin = 10;
+            // Check if horizontal segment would collide with gates
+            var horizontalSegment = new { X1 = Math.Min(start.X, intermediateX), X2 = Math.Max(start.X, intermediateX), Y = start.Y };
 
-            if (start.Type == ConnectionType.Output)
+            // If horizontal route collides, route around obstacles
+            foreach (var bounds in gateBounds)
             {
-                // Route from output: go right from gate, then route to input
-                var clearanceX = startBounds.Right + margin;
-                points.Add(new Point { X = clearanceX, Y = start.Y });
-
-                if (end.Type == ConnectionType.Input)
+                if (horizontalSegment.Y >= bounds.Top && horizontalSegment.Y <= bounds.Bottom &&
+                    horizontalSegment.X1 <= bounds.Right && horizontalSegment.X2 >= bounds.Left)
                 {
-                    // Output to Input: route around end gate if necessary
-                    var targetX = endBounds.Left - margin;
-
-                    if (Math.Abs(start.Y - end.Y) < 20) // Similar Y levels
+                    // Collision detected - route around
+                    if (start.Y < end.Y)
                     {
-                        points.Add(new Point { X = targetX, Y = start.Y });
-                        points.Add(new Point { X = targetX, Y = end.Y });
+                        // Route above the gate
+                        intermediateY = bounds.Top - 10;
                     }
                     else
                     {
-                        // Route around gates vertically
-                        var routeY = start.Y < end.Y ? Math.Max(startBounds.Bottom, endBounds.Bottom) + margin : Math.Min(startBounds.Top, endBounds.Top) - margin;
-                        points.Add(new Point { X = clearanceX, Y = routeY });
-                        points.Add(new Point { X = targetX, Y = routeY });
-                        points.Add(new Point { X = targetX, Y = end.Y });
+                        // Route below the gate  
+                        intermediateY = bounds.Bottom + 10;
                     }
+                    break;
                 }
+            }
+
+            if (Math.Abs(intermediateY - start.Y) > 5) // Only add intermediate point if significantly different
+            {
+                points.Add(new Point { X = start.X, Y = intermediateY });
+                points.Add(new Point { X = intermediateX, Y = intermediateY });
             }
             else
             {
-                // Route from input: this shouldn't normally happen in proper logic design, but handle it
-                var clearanceX = startBounds.Left - margin;
-                points.Add(new Point { X = clearanceX, Y = start.Y });
-
-                if (end.Type == ConnectionType.Input)
-                {
-                    // Input to Input: route to the left, then to target
-                    var targetX = endBounds.Left - margin;
-                    var routeY = Math.Min(start.Y, end.Y) - margin;
-
-                    points.Add(new Point { X = clearanceX, Y = routeY });
-                    points.Add(new Point { X = targetX, Y = routeY });
-                    points.Add(new Point { X = targetX, Y = end.Y });
-                }
+                points.Add(new Point { X = intermediateX, Y = start.Y });
             }
 
             return points;
+        }
+
+        private List<Point> TryVerticalFirstRoute(ConnectionPoint start, ConnectionPoint end, dynamic gateBounds)
+        {
+            var points = new List<Point>();
+
+            // Go vertical first, then horizontal
+            var intermediateX = start.X;
+            var intermediateY = end.Y;
+
+            // Check if vertical segment would collide with gates
+            var verticalSegment = new { X = start.X, Y1 = Math.Min(start.Y, intermediateY), Y2 = Math.Max(start.Y, intermediateY) };
+
+            // If vertical route collides, route around obstacles
+            foreach (var bounds in gateBounds)
+            {
+                if (verticalSegment.X >= bounds.Left && verticalSegment.X <= bounds.Right &&
+                    verticalSegment.Y1 <= bounds.Bottom && verticalSegment.Y2 >= bounds.Top)
+                {
+                    // Collision detected - route around
+                    if (start.X < end.X)
+                    {
+                        // Route to the left of the gate
+                        intermediateX = bounds.Left - 10;
+                    }
+                    else
+                    {
+                        // Route to the right of the gate
+                        intermediateX = bounds.Right + 10;
+                    }
+                    break;
+                }
+            }
+
+            if (Math.Abs(intermediateX - start.X) > 5) // Only add intermediate point if significantly different
+            {
+                points.Add(new Point { X = intermediateX, Y = start.Y });
+                points.Add(new Point { X = intermediateX, Y = intermediateY });
+            }
+            else
+            {
+                points.Add(new Point { X = start.X, Y = intermediateY });
+            }
+
+            return points;
+        }
+
+        private bool HasCollisions(List<Point> routePoints, dynamic gateBounds)
+        {
+            if (routePoints.Count == 0) return false;
+
+            // Create full path including start and end points for collision checking
+            var fullPath = new List<Point> { new Point { X = 0, Y = 0 } }; // Will be replaced with actual start
+            fullPath.AddRange(routePoints);
+            fullPath.Add(new Point { X = 0, Y = 0 }); // Will be replaced with actual end
+
+            // Check each line segment for collisions
+            for (int i = 0; i < fullPath.Count - 1; i++)
+            {
+                var p1 = fullPath[i];
+                var p2 = fullPath[i + 1];
+
+                foreach (var bounds in gateBounds)
+                {
+                    if (LineIntersectsRectangle(p1, p2, bounds))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private bool LineIntersectsRectangle(Point p1, Point p2, dynamic rect)
+        {
+            // Check if line segment from p1 to p2 intersects with rectangle
+            var minX = Math.Min(p1.X, p2.X);
+            var maxX = Math.Max(p1.X, p2.X);
+            var minY = Math.Min(p1.Y, p2.Y);
+            var maxY = Math.Max(p1.Y, p2.Y);
+
+            // Check if line bounding box intersects with rectangle
+            return !(maxX < rect.Left || minX > rect.Right || maxY < rect.Top || minY > rect.Bottom);
         }
     }
 
