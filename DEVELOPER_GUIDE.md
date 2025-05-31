@@ -23,6 +23,21 @@ This is especially important for AI developers who should install these hooks pr
 - Modern web browser for testing
 
 ### Quick Start
+
+#### Using Standard Scripts (Recommended)
+```bash
+# Clone the repository
+git clone https://github.com/grahame-white/ai_logica.git
+cd ai_logica
+
+# Complete setup for first-time development
+script/setup
+
+# Start the development server
+script/server
+```
+
+#### Manual Setup (Alternative)
 ```bash
 # Clone the repository
 git clone https://github.com/grahame-white/ai_logica.git
@@ -92,11 +107,75 @@ For detailed information about the project structure and technical architecture,
 - Ensure tests target the specific functionality being tested rather than relying on implementation details
 - Write descriptive test names that clearly indicate what is being tested
 
+## Standardized Development Scripts
+
+AI Logica follows GitHub's ["scripts to rule them all"](https://github.com/github/scripts-to-rule-them-all) pattern for consistent development workflows:
+
+### script/setup
+Complete setup for first-time development:
+```bash
+script/setup
+```
+This script:
+- Installs all dependencies
+- Sets up git hooks for code formatting
+- Builds the application
+- Runs tests to verify everything works
+
+### script/server
+Start the development server:
+```bash
+script/server
+```
+This starts the Blazor application server for local development.
+
+### script/test
+Run the test suite:
+```bash
+# Run all tests
+script/test
+
+# Run specific test project
+script/test AiLogica.Tests
+```
+
+### script/update
+Update the application after pulling changes:
+```bash
+script/update
+```
+This script:
+- Installs any new dependencies
+- Rebuilds the application
+
+### script/bootstrap
+Install dependencies only:
+```bash
+script/bootstrap
+```
+This script only installs .NET dependencies without building or testing.
+
+### script/cibuild
+Run continuous integration checks:
+```bash
+script/cibuild
+```
+This script replicates CI environment checks:
+- Installs dependencies
+- Checks code formatting
+- Builds in Release configuration
+- Runs all tests
+
+These scripts provide a consistent interface regardless of the underlying technology stack and are the recommended way to interact with the project.
+
 ## Building and Testing
 
 ### Building the Solution
 ```bash
-# Build all projects
+# Using standard scripts (recommended)
+script/update  # Install dependencies and build
+
+# Or manually using dotnet
 dotnet build
 
 # Build specific project
@@ -159,7 +238,13 @@ The CI pipeline includes a formatting verification step that will fail if code i
 
 ### Running Tests
 ```bash
-# Run all tests
+# Using standard scripts (recommended)
+script/test
+
+# Run specific test project
+script/test AiLogica.Tests
+
+# Or manually using dotnet
 dotnet test
 
 # Run tests with coverage
@@ -171,6 +256,10 @@ dotnet test AiLogica.Tests
 
 ### Running the Application
 ```bash
+# Using standard scripts (recommended)
+script/server
+
+# Or manually using dotnet
 # Development mode
 cd AiLogica
 dotnet run

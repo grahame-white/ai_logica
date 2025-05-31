@@ -25,11 +25,19 @@ This project is in early development. The current implementation includes:
 
 ### For Contributors (Human and AI Developers)
 
-**⚠️ IMPORTANT: Install git hooks first to prevent CI failures**
 ```bash
 git clone https://github.com/grahame-white/ai_logica.git
 cd ai_logica
 
+# Complete setup (installs dependencies, git hooks, builds, and tests)
+script/setup
+
+# Start the development server
+script/server
+```
+
+**Alternative manual setup:**
+```bash
 # REQUIRED: Install git hooks to prevent formatting issues
 ./scripts/setup-git-hooks.sh
 
