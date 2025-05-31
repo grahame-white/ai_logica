@@ -198,10 +198,8 @@ public class HomeViewModel : ViewModelBase
     /// </summary>
     private bool CanConnect(Connection from, Connection to)
     {
-        // Can't connect to the same gate
-        if (from.GateId == to.GateId) return false;
-
         // Can connect output to input, or input to input (for fan-out)
+        // Same-gate connections are allowed for feedback loops
         return (from.Type == ConnectionType.Output && to.Type == ConnectionType.Input) ||
                (from.Type == ConnectionType.Input && to.Type == ConnectionType.Input);
     }

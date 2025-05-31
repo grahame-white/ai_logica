@@ -76,7 +76,7 @@ public class WireConnectionTests
     }
 
     [Fact]
-    public void CompleteWiring_SameGate_ShouldNotCreateWire()
+    public void CompleteWiring_SameGate_ShouldCreateWire()
     {
         // Arrange
         var viewModel = new HomeViewModel();
@@ -92,7 +92,11 @@ public class WireConnectionTests
         viewModel.CompleteWiring(inputConnection);
 
         // Assert
-        Assert.Empty(viewModel.Wires); // No wire should be created
+        Assert.Single(viewModel.Wires); // Wire should be created for feedback loops
+        var wire = viewModel.Wires[0];
+        Assert.Equal(outputConnection.Id, wire.FromConnectionId);
+        Assert.Equal(inputConnection.Id, wire.ToConnectionId);
+        Assert.True(wire.IsConnected);
         Assert.False(viewModel.IsWiring);
         Assert.Null(viewModel.ActiveConnection);
     }
