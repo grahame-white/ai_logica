@@ -9,6 +9,7 @@ on:
       - '**/*.csproj'
       - '**/*.sln'
       - '.github/workflows/**'
+      - 'script/**'
   pull_request:
     branches: [main]
     paths:
@@ -16,6 +17,7 @@ on:
       - '**/*.csproj'
       - '**/*.sln'
       - '.github/workflows/**'
+      - 'script/**'
 
 # Cancel superseded workflow runs
 concurrency:
@@ -31,6 +33,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+<<<<<<< HEAD
       - uses: actions/checkout@v4.2.2
 
       - name: Setup .NET
@@ -95,3 +98,22 @@ jobs:
           name: test-screenshots
           path: /tmp/*.png
           retention-days: 7
+=======
+    - uses: actions/checkout@v4.2.2
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4.3.1
+      with:
+        dotnet-version: '8.0.x'
+        
+    - name: Cache NuGet packages
+      uses: actions/cache@v4.2.3
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+    
+    - name: Run CI build
+      run: script/cibuild
+>>>>>>> main
