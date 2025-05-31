@@ -42,7 +42,7 @@ namespace AiLogica.Tests.EndToEnd
 
             // Initialize Playwright
             Playwright = await Microsoft.Playwright.Playwright.CreateAsync();
-            
+
             // Launch browser - use Chromium for consistency
             Browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
@@ -64,13 +64,13 @@ namespace AiLogica.Tests.EndToEnd
         {
             if (Page != null)
                 await Page.CloseAsync();
-            
+
             if (BrowserContext != null)
                 await BrowserContext.CloseAsync();
-            
+
             if (Browser != null)
                 await Browser.CloseAsync();
-            
+
             Playwright?.Dispose();
             Factory?.Dispose();
         }
@@ -92,7 +92,7 @@ namespace AiLogica.Tests.EndToEnd
         {
             var timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss");
             var filename = name != null ? $"{name}_{timestamp}.png" : $"screenshot_{timestamp}.png";
-            
+
             return await Page.ScreenshotAsync(new PageScreenshotOptions
             {
                 Path = $"/tmp/{filename}",
@@ -108,7 +108,7 @@ namespace AiLogica.Tests.EndToEnd
             var element = Page.Locator(selector);
             await element.WaitForAsync(new LocatorWaitForOptions { Timeout = timeoutMs });
             var text = await element.TextContentAsync();
-            
+
             if (text == null || !text.Contains(expectedText))
             {
                 // Take screenshot for debugging
@@ -123,9 +123,10 @@ namespace AiLogica.Tests.EndToEnd
         protected async Task<ILocator> WaitForElementAsync(string selector, int timeoutMs = 5000)
         {
             var element = Page.Locator(selector);
-            await element.WaitForAsync(new LocatorWaitForOptions { 
+            await element.WaitForAsync(new LocatorWaitForOptions
+            {
                 State = WaitForSelectorState.Visible,
-                Timeout = timeoutMs 
+                Timeout = timeoutMs
             });
             return element;
         }

@@ -37,7 +37,7 @@ namespace AiLogica.Tests.EndToEnd
             // Assert - Check that OR gate is selected and highlighted
             var selectedGate = Page.Locator(".gate-item.selected:has-text('OR')");
             await selectedGate.WaitForAsync(new LocatorWaitForOptions { Timeout = 2000 });
-            
+
             // Check properties panel shows selection
             await AssertElementContainsTextAsync(".properties-panel", "Selected: OR");
             await AssertElementContainsTextAsync(".properties-panel", "Status: Dragging");
@@ -60,9 +60,10 @@ namespace AiLogica.Tests.EndToEnd
 
             // Assert - Check that dragging gate is visible and positioned correctly
             var draggingGate = Page.Locator(".dragging-gate");
-            await draggingGate.WaitForAsync(new LocatorWaitForOptions { 
+            await draggingGate.WaitForAsync(new LocatorWaitForOptions
+            {
                 State = WaitForSelectorState.Visible,
-                Timeout = 2000 
+                Timeout = 2000
             });
 
             // Verify the dragging gate contains OR text
@@ -113,7 +114,7 @@ namespace AiLogica.Tests.EndToEnd
 
             // Assert - Check that selection is cancelled
             await AssertElementContainsTextAsync(".properties-panel", "No gate selected");
-            
+
             // Verify dragging gate is no longer visible (if it was visible)
             var draggingGates = await Page.Locator(".dragging-gate").CountAsync();
             Assert.Equal(0, draggingGates);
@@ -153,25 +154,25 @@ namespace AiLogica.Tests.EndToEnd
             await NavigateToHomePageAsync();
 
             // Act & Assert - Complete workflow
-            
+
             // 1. Verify initial state
             await AssertElementContainsTextAsync(".properties-panel", "No gate selected");
-            
+
             // 2. Select OR gate
             var orGateButton = await WaitForElementAsync(".gate-item:has-text('OR')");
             await orGateButton.ClickAsync();
             await AssertElementContainsTextAsync(".properties-panel", "Selected: OR");
-            
+
             // 3. Verify dragging state
             var canvas = await WaitForElementAsync(".canvas-container");
             await canvas.HoverAsync(new LocatorHoverOptions { Position = new Position { X = 250, Y = 175 } });
             await AssertElementContainsTextAsync(".dragging-gate", "OR");
-            
+
             // 4. Place gate
             await canvas.ClickAsync(new LocatorClickOptions { Position = new Position { X = 250, Y = 175 } });
             await AssertElementContainsTextAsync(".placed-gate", "OR");
             await AssertElementContainsTextAsync(".status-bar", "Gates: 1");
-            
+
             // 5. Verify selection persists for additional placements
             await canvas.ClickAsync(new LocatorClickOptions { Position = new Position { X = 350, Y = 275 } });
             await AssertElementContainsTextAsync(".status-bar", "Gates: 2");
