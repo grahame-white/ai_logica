@@ -67,11 +67,12 @@ public class HomeViewModel : ViewModelBase
         if (SelectedGate != null)
         {
             // Apply the same offset used during dragging to center the gate on cursor
+            // Updated offsets for larger gate size (96x72 instead of 48x36)
             PlacedGates.Add(new PlacedGate
             {
                 Type = SelectedGate,
-                X = x - 30, // Same offset as dragging-gate positioning
-                Y = y - 15, // Same offset as dragging-gate positioning
+                X = x - 48, // Same offset as dragging-gate positioning (half of 96px width)
+                Y = y - 36, // Same offset as dragging-gate positioning (half of 72px height)
                 Id = Guid.NewGuid()
             });
             OnPropertyChanged(nameof(PlacedGates));

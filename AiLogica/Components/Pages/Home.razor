@@ -68,7 +68,7 @@
     <!-- Dragging Gate (follows mouse) -->
     @if (ViewModel.IsDragging && ViewModel.SelectedGate != null && (ViewModel.MouseX != 0 || ViewModel.MouseY != 0))
     {
-        <div class="dragging-gate" style="left: @(ViewModel.MouseX - 30)px; top: @(ViewModel.MouseY - 15)px;">
+        <div class="dragging-gate" style="left: @(ViewModel.MouseX - 48)px; top: @(ViewModel.MouseY - 36)px;">
             @RenderGateContent(ViewModel.SelectedGate, false, true)
         </div>
     }
@@ -101,34 +101,35 @@
     private RenderFragment RenderOrGateSvg(bool isPlacedGate)
     {
         // Use IEEE standard proportions - width:height ratio of 4:3 for proper OR gate shape
-        int width = isPlacedGate ? 48 : 32;
-        int height = isPlacedGate ? 36 : 24;
+        // Placed gates are now 100% larger (96x72) to make wiring less fiddly
+        int width = isPlacedGate ? 96 : 32;
+        int height = isPlacedGate ? 72 : 24;
         string strokeWidth = "1";
         
         if (isPlacedGate)
         {
-            // Larger placed gate with IEEE standard OR gate geometry
-            return @<svg width="@width" height="@height" viewBox="0 0 48 36" style="display: block;">
+            // Larger placed gate with IEEE standard OR gate geometry (doubled in size for easier wiring)
+            return @<svg width="@width" height="@height" viewBox="0 0 96 72" style="display: block;">
                 <!-- OR gate curved back (input side) - more pronounced curve -->
-                <path d="M8 10 Q12 18 8 26" 
+                <path d="M16 20 Q24 36 16 52" 
                       stroke="currentColor" 
                       fill="none" 
                       stroke-width="@strokeWidth"/>
                 <!-- OR gate top curve - smooth arc to output point -->
-                <path d="M8 10 Q24 6 38 18" 
+                <path d="M16 20 Q48 12 76 36" 
                       stroke="currentColor" 
                       fill="none" 
                       stroke-width="@strokeWidth"/>
                 <!-- OR gate bottom curve - smooth arc to output point -->
-                <path d="M8 26 Q24 30 38 18" 
+                <path d="M16 52 Q48 60 76 36" 
                       stroke="currentColor" 
                       fill="none" 
                       stroke-width="@strokeWidth"/>
                 <!-- Input lines positioned to connect with curved back -->
-                <line x1="2" y1="14" x2="9" y2="14" stroke="currentColor" stroke-width="@strokeWidth"/>
-                <line x1="2" y1="22" x2="9" y2="22" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <line x1="4" y1="28" x2="18" y2="28" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <line x1="4" y1="44" x2="18" y2="44" stroke="currentColor" stroke-width="@strokeWidth"/>
                 <!-- Output line -->
-                <line x1="38" y1="18" x2="44" y2="18" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <line x1="76" y1="36" x2="88" y2="36" stroke="currentColor" stroke-width="@strokeWidth"/>
             </svg>;
         }
         else
