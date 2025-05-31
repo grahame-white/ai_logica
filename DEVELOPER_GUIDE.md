@@ -291,7 +291,29 @@ dotnet test --collect:"XPlat Code Coverage"
 
 # Run specific test project
 dotnet test AiLogica.Tests
+
+# Run tests excluding end-to-end tests (faster for development)
+dotnet test --filter "Category!=EndToEnd"
+
+# Run only end-to-end tests
+dotnet test --filter "Category=EndToEnd"
 ```
+
+### End-to-End Testing
+
+The project includes comprehensive end-to-end tests using Playwright for browser automation. These tests validate complete user workflows and ensure the application works correctly from the user's perspective.
+
+```bash
+# Set up and run E2E tests (automated script)
+./script/run-e2e-tests.sh
+
+# Manual E2E test setup
+dotnet build --configuration Release
+pwsh ./AiLogica.Tests/bin/Release/net8.0/playwright.ps1 install firefox
+dotnet test --filter "Category=EndToEnd" --configuration Release
+```
+
+For detailed information about end-to-end testing, see [E2E_TESTING_GUIDE.md](E2E_TESTING_GUIDE.md).
 
 ### Running the Application
 ```bash

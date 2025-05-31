@@ -72,7 +72,7 @@ All development scripts are located in the `script/` directory and provide a tec
 
 - **Frontend**: Blazor Server Components, HTML5, CSS3
 - **Backend**: .NET 8, ASP.NET Core  
-- **Testing**: xUnit
+- **Testing**: xUnit, Playwright (End-to-End), bunit (Component Testing)
 - **Architecture**: MVVM pattern with clean separation of concerns
 
 For detailed technical architecture information, see [ARCHITECTURE.md](ARCHITECTURE.md).
