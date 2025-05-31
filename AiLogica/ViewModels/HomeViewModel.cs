@@ -63,11 +63,12 @@ namespace AiLogica.ViewModels
         {
             if (SelectedGate != null)
             {
+                // Apply the same offset used during dragging to center the gate on cursor
                 PlacedGates.Add(new PlacedGate
                 {
                     Type = SelectedGate,
-                    X = x,
-                    Y = y,
+                    X = x - 30, // Same offset as dragging-gate positioning
+                    Y = y - 15, // Same offset as dragging-gate positioning
                     Id = Guid.NewGuid()
                 });
                 OnPropertyChanged(nameof(PlacedGates));

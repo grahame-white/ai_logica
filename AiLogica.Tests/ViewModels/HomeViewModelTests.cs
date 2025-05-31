@@ -78,8 +78,8 @@ namespace AiLogica.Tests.ViewModels
             // Assert
             Assert.Single(viewModel.PlacedGates);
             Assert.Equal("OR", viewModel.PlacedGates[0].Type);
-            Assert.Equal(150, viewModel.PlacedGates[0].X);
-            Assert.Equal(250, viewModel.PlacedGates[0].Y);
+            Assert.Equal(120, viewModel.PlacedGates[0].X); // 150 - 30 offset
+            Assert.Equal(235, viewModel.PlacedGates[0].Y); // 250 - 15 offset
             Assert.Equal("OR", viewModel.SelectedGate); // Gate should stay selected
             Assert.True(viewModel.IsDragging); // Should remain in dragging state
         }
@@ -114,14 +114,14 @@ namespace AiLogica.Tests.ViewModels
             Assert.All(viewModel.PlacedGates, gate => Assert.Equal("OR", gate.Type));
             Assert.Equal("OR", viewModel.SelectedGate); // Should still be selected
             Assert.True(viewModel.IsDragging); // Should still be dragging
-            
+
             // Verify positions
-            Assert.Equal(100, viewModel.PlacedGates[0].X);
-            Assert.Equal(100, viewModel.PlacedGates[0].Y);
-            Assert.Equal(200, viewModel.PlacedGates[1].X);
-            Assert.Equal(150, viewModel.PlacedGates[1].Y);
-            Assert.Equal(300, viewModel.PlacedGates[2].X);
-            Assert.Equal(200, viewModel.PlacedGates[2].Y);
+            Assert.Equal(70, viewModel.PlacedGates[0].X); // 100 - 30 offset
+            Assert.Equal(85, viewModel.PlacedGates[0].Y); // 100 - 15 offset
+            Assert.Equal(170, viewModel.PlacedGates[1].X); // 200 - 30 offset
+            Assert.Equal(135, viewModel.PlacedGates[1].Y); // 150 - 15 offset
+            Assert.Equal(270, viewModel.PlacedGates[2].X); // 300 - 30 offset
+            Assert.Equal(185, viewModel.PlacedGates[2].Y); // 200 - 15 offset
         }
 
         [Fact]
