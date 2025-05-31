@@ -4,6 +4,16 @@
 
 This guide provides information for both human and AI developers contributing to the AI Logica project. The project is currently in early development, focused on building a logic gate simulator using AI-assisted development practices.
 
+## ⚠️ Critical First Step for All Developers
+
+**Before making any commits or changes, you MUST install the git hooks to prevent formatting issues that cause CI failures:**
+
+```bash
+./scripts/setup-git-hooks.sh
+```
+
+This is especially important for AI developers who should install these hooks proactively at the start of any new conversation thread or development session.
+
 ## Getting Started
 
 ### Prerequisites
@@ -17,6 +27,12 @@ This guide provides information for both human and AI developers contributing to
 # Clone the repository
 git clone https://github.com/grahame-white/ai_logica.git
 cd ai_logica
+
+# Set up git hooks to prevent formatting issues (REQUIRED)
+./scripts/setup-git-hooks.sh
+
+# Verify git hooks are installed (optional check)
+./scripts/check-git-hooks.sh
 
 # Build the solution
 dotnet build
@@ -49,6 +65,7 @@ For detailed information about the project structure and technical architecture,
 - Follow the established project structure
 
 ### For AI Developers
+- **FIRST**: Install git hooks with `./scripts/setup-git-hooks.sh` at the start of every new conversation thread
 - Focus on implementing the features outlined in REQUIREMENTS.md
 - Build upon the existing MVVM foundation
 - Ensure all new code includes appropriate tests
@@ -67,6 +84,13 @@ For detailed information about the project structure and technical architecture,
 - Use dependency injection for services
 - Implement proper disposal patterns where needed
 - Follow the established separation between presentation and business logic
+
+### Testing Best Practices
+- Use specific element selectors in tests rather than generic ones to avoid ambiguity as the application grows
+- Add data attributes (e.g., `data-testid`, `data-gate-type`) to elements that need to be tested for reliable selection
+- Extract repeated inline styles to CSS classes for better maintainability
+- Ensure tests target the specific functionality being tested rather than relying on implementation details
+- Write descriptive test names that clearly indicate what is being tested
 
 ## Building and Testing
 
@@ -97,11 +121,41 @@ dotnet build -c Release
 dotnet format
 ```
 
-#### Automatic Formatting Check
-A pre-commit git hook is installed that automatically checks formatting before each commit. If formatting issues are detected, the commit will be rejected with instructions on how to fix them.
+#### Automatic Formatting Prevention
+To prevent formatting issues from ever being committed or pushed:
+
+```bash
+# Install git hooks that check formatting automatically
+./scripts/setup-git-hooks.sh
+```
+
+This installs:
+- **Pre-commit hook**: Checks formatting before each commit and rejects commits with formatting issues
+- **Pre-push hook**: Provides a final formatting check before pushing to remote
+
+#### Verify Git Hooks Installation
+To check if git hooks are properly installed:
+
+```bash
+# Verify hooks are installed and configured correctly
+./scripts/check-git-hooks.sh
+```
+
+This is particularly useful for AI developers to verify their environment is properly configured at the start of a development session.
+
+#### Manual Formatting Check
+If git hooks are not installed, always run formatting checks manually:
+
+```bash
+# Before committing
+./scripts/check-format.sh
+
+# Fix formatting issues
+./scripts/format-code.sh
+```
 
 #### CI Integration
-The CI pipeline includes a formatting verification step that will fail if code is not properly formatted. Use the scripts above to prevent CI failures.
+The CI pipeline includes a formatting verification step that will fail if code is not properly formatted. The git hooks prevent this from happening by catching issues locally.
 
 ### Running Tests
 ```bash

@@ -15,16 +15,30 @@
         <div class="gate-category">
             <h5>Basic Gates</h5>
             <div class="gate-list">
-                <div class="gate-item non-functional">AND</div>
-                <div class="gate-item @(ViewModel.SelectedGate == "OR" ? "selected" : "")" @onclick="() => SelectOrGate()" @onclick:stopPropagation="true">
-                    OR @(ViewModel.SelectedGate == "OR" ? "✓" : "")
+                <div class="gate-item non-functional">
+                    @RenderGateContent("AND", false)
                 </div>
-                <div class="gate-item non-functional">NOT</div>
-                <div class="gate-item non-functional">NAND</div>
-                <div class="gate-item non-functional">NOR</div>
-                <div class="gate-item non-functional">XOR</div>
-                <div class="gate-item non-functional">XNOR</div>
-                <div class="gate-item non-functional">BUFFER</div>
+                <div class="gate-item @(ViewModel.SelectedGate == "OR" ? "selected" : "")" data-gate-type="OR" @onclick="() => SelectOrGate()" @onclick:stopPropagation="true">
+                    @RenderGateContent("OR", ViewModel.SelectedGate == "OR")
+                </div>
+                <div class="gate-item non-functional">
+                    @RenderGateContent("NOT", false)
+                </div>
+                <div class="gate-item non-functional">
+                    @RenderGateContent("NAND", false)
+                </div>
+                <div class="gate-item non-functional">
+                    @RenderGateContent("NOR", false)
+                </div>
+                <div class="gate-item non-functional">
+                    @RenderGateContent("XOR", false)
+                </div>
+                <div class="gate-item non-functional">
+                    @RenderGateContent("XNOR", false)
+                </div>
+                <div class="gate-item non-functional">
+                    @RenderGateContent("BUFFER", false)
+                </div>
             </div>
         </div>
     </div>
@@ -47,7 +61,7 @@
     @foreach (var gate in ViewModel.PlacedGates)
     {
         <div class="placed-gate" style="left: @(gate.X)px; top: @(gate.Y)px;">
-            @gate.Type
+            @RenderGateContent(gate.Type, false, true)
         </div>
     }
 
@@ -55,7 +69,7 @@
     @if (ViewModel.IsDragging && ViewModel.SelectedGate != null && (ViewModel.MouseX != 0 || ViewModel.MouseY != 0))
     {
         <div class="dragging-gate" style="left: @(ViewModel.MouseX - 30)px; top: @(ViewModel.MouseY - 15)px;">
-            @ViewModel.SelectedGate
+            @RenderGateContent(ViewModel.SelectedGate, false, true)
         </div>
     }
 </div>
@@ -67,6 +81,82 @@
     {
         ViewModel.PropertyChanged += OnViewModelPropertyChanged;
         base.OnInitialized();
+    }
+
+    private RenderFragment RenderGateContent(string gateType, bool showSelectionIndicator = false, bool isPlacedGate = false)
+    {
+        return gateType switch
+        {
+            "OR" => @<div class="gate-content">
+                @RenderOrGateSvg(isPlacedGate)
+                @if (showSelectionIndicator) { <span>✓</span> }
+            </div>,
+            _ => @<div class="gate-content">
+                <span>@gateType</span>
+                @if (showSelectionIndicator) { <span>✓</span> }
+            </div>
+        };
+    }
+
+    private RenderFragment RenderOrGateSvg(bool isPlacedGate)
+    {
+        // Use IEEE standard proportions - width:height ratio of 4:3 for proper OR gate shape
+        int width = isPlacedGate ? 48 : 32;
+        int height = isPlacedGate ? 36 : 24;
+        string strokeWidth = "1";
+        
+        if (isPlacedGate)
+        {
+            // Larger placed gate with IEEE standard OR gate geometry
+            return @<svg width="@width" height="@height" viewBox="0 0 48 36" style="display: block;">
+                <!-- OR gate curved back (input side) - more pronounced curve -->
+                <path d="M8 10 Q12 18 8 26" 
+                      stroke="currentColor" 
+                      fill="none" 
+                      stroke-width="@strokeWidth"/>
+                <!-- OR gate top curve - smooth arc to output point -->
+                <path d="M8 10 Q24 6 38 18" 
+                      stroke="currentColor" 
+                      fill="none" 
+                      stroke-width="@strokeWidth"/>
+                <!-- OR gate bottom curve - smooth arc to output point -->
+                <path d="M8 26 Q24 30 38 18" 
+                      stroke="currentColor" 
+                      fill="none" 
+                      stroke-width="@strokeWidth"/>
+                <!-- Input lines positioned to connect with curved back -->
+                <line x1="2" y1="14" x2="9" y2="14" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <line x1="2" y1="22" x2="9" y2="22" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <!-- Output line -->
+                <line x1="38" y1="18" x2="44" y2="18" stroke="currentColor" stroke-width="@strokeWidth"/>
+            </svg>;
+        }
+        else
+        {
+            // Smaller palette gate with IEEE standard OR gate geometry
+            return @<svg width="@width" height="@height" viewBox="0 0 32 24" style="display: block;">
+                <!-- OR gate curved back (input side) - more pronounced curve -->
+                <path d="M5 7 Q8 12 5 17" 
+                      stroke="currentColor" 
+                      fill="none" 
+                      stroke-width="@strokeWidth"/>
+                <!-- OR gate top curve - smooth arc to output point -->
+                <path d="M5 7 Q16 4 25 12" 
+                      stroke="currentColor" 
+                      fill="none" 
+                      stroke-width="@strokeWidth"/>
+                <!-- OR gate bottom curve - smooth arc to output point -->
+                <path d="M5 17 Q16 20 25 12" 
+                      stroke="currentColor" 
+                      fill="none" 
+                      stroke-width="@strokeWidth"/>
+                <!-- Input lines positioned to connect with curved back -->
+                <line x1="1" y1="9" x2="6" y2="9" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <line x1="1" y1="15" x2="6" y2="15" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <!-- Output line -->
+                <line x1="25" y1="12" x2="29" y2="12" stroke="currentColor" stroke-width="@strokeWidth"/>
+            </svg>;
+        }
     }
 
     private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
