@@ -1,15 +1,16 @@
+---
 name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
       - '**/*.cs'
       - '**/*.csproj'
       - '**/*.sln'
       - '.github/workflows/**'
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths:
       - '**/*.cs'
       - '**/*.csproj'
@@ -28,63 +29,69 @@ permissions:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v4.2.2
-    
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4.3.1
-      with:
-        dotnet-version: '8.0.x'
-        
-    - name: Cache NuGet packages
-      uses: actions/cache@v4.2.3
-      with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-        restore-keys: |
-          ${{ runner.os }}-nuget-
-    
-    - name: Restore dependencies
-      run: dotnet restore
-      
-    - name: Check code formatting
-      run: dotnet format --verify-no-changes --verbosity normal
-      
-    - name: Build
-      run: dotnet build --no-restore --configuration Release
-      
-    - name: Run unit and integration tests
-      run: dotnet test --no-build --no-restore --configuration Release --verbosity normal --filter "Category!=EndToEnd"
+      - uses: actions/checkout@v4.2.2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4.3.1
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4.2.3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Check code formatting
+        run: dotnet format --verify-no-changes --verbosity normal
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Run unit and integration tests
+        run: >
+          dotnet test --no-build --no-restore --configuration Release
+          --verbosity normal --filter "Category!=EndToEnd"
 
   end-to-end-tests:
     runs-on: ubuntu-latest
     needs: build-and-test
-    
+
     steps:
-    - uses: actions/checkout@v4.2.2
-    
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4.3.1
-      with:
-        dotnet-version: '8.0.x'
-    
-    - name: Restore dependencies
-      run: dotnet restore
-      
-    - name: Build
-      run: dotnet build --no-restore --configuration Release
-      
-    - name: Install Playwright browsers
-      run: pwsh AiLogica.Tests/bin/Release/net8.0/playwright.ps1 install firefox
-      
-    - name: Run end-to-end tests
-      run: dotnet test --no-build --no-restore --configuration Release --verbosity normal --filter "Category=EndToEnd"
-      
-    - name: Upload screenshots on failure
-      if: failure()
-      uses: actions/upload-artifact@v4
-      with:
-        name: test-screenshots
-        path: /tmp/*.png
-        retention-days: 7
+      - uses: actions/checkout@v4.2.2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4.3.1
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Install Playwright browsers
+        run: >
+          pwsh AiLogica.Tests/bin/Release/net8.0/playwright.ps1
+          install firefox
+
+      - name: Run end-to-end tests
+        run: >
+          dotnet test --no-build --no-restore --configuration Release
+          --verbosity normal --filter "Category=EndToEnd"
+
+      - name: Upload screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-screenshots
+          path: /tmp/*.png
+          retention-days: 7
