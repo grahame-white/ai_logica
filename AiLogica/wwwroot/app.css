@@ -189,7 +189,7 @@ h1:focus {
     background-color: #21262d;
     border: 1px solid #30363d;
     border-radius: 4px;
-    padding: 0.5rem;
+    padding: 0.25rem;
     text-align: center;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -219,7 +219,7 @@ h1:focus {
 .placed-gate, .dragging-gate {
     position: absolute;
     border-radius: 8px;
-    padding: 0.25rem 0.5rem;
+    padding: 0.125rem 0.25rem;
     color: #e0e0e0;
     font-size: 0.85rem;
     font-weight: 500;

@@ -16,6 +16,19 @@ Based on the application outline, AI Logica shall provide the following capabili
 - **FR-2.4**: The end user shall be able to place the selected gate by clicking on the canvas at the desired location
 - **FR-2.5**: The end user shall be able to place multiple gates of the same type without having to reselect the gate from the palette each time
 
+#### 1.1.1 Gate Visual Design Standards
+- **FR-2.6**: All logic gates shall be displayed using symbolic SVG representations following IEEE standard conventions
+- **FR-2.7**: Gate symbols shall use vector graphics (SVG) for scalable, crisp rendering at any size
+- **FR-2.8**: Gate symbols shall use `currentColor` for stroke color to inherit proper text color from CSS themes
+- **FR-2.9**: Gates shall have consistent sizing with two size variants:
+  - Palette gates: 32x24 pixels for efficient gate selection
+  - Placed gates: 48x36 pixels for easier wire connection operations
+- **FR-2.10**: Gate symbols shall maintain IEEE standard proportions (4:3 width-to-height ratio)
+- **FR-2.11**: Gate symbols shall include proper input and output connection lines positioned for straight-line wire connections
+- **FR-2.12**: Gate visual design shall use minimal internal margins (0.125rem 0.25rem for placed gates, 0.25rem for palette gates) to maximize symbol visibility
+- **FR-2.13**: Line width for gate symbols shall be 1 pixel and shall not scale with canvas zoom (future feature consideration)
+- **FR-2.14**: Gates shall display without background shading or border outlines to maintain clean appearance
+
 ### 1.2 Gate Wiring
 - **FR-3**: The end user will be able to wire the inputs and outputs of the gates together
 
