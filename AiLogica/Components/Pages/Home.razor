@@ -1,12 +1,14 @@
 ﻿@page "/"
 @implements IDisposable
 @using AiLogica.ViewModels
+@using Microsoft.JSInterop
 @inject HomeViewModel ViewModel
+@inject IJSRuntime JSRuntime
 @rendermode InteractiveServer
 
 <PageTitle>AI Logica - Logic Gate Simulator</PageTitle>
 
-<div class="canvas-container" @onmousemove="OnMouseMove" @onclick="OnCanvasClick" @onmouseleave="OnMouseLeave">
+<div class="canvas-container" @ref="canvasContainer" @onmousemove="OnMouseMove" @onclick="OnCanvasClick" @onmouseleave="OnMouseLeave">
     <!-- Interactive Gate Palette -->
     <div class="interactive-gate-palette">
         <h4>Gate Palette</h4>
@@ -59,6 +61,8 @@
 </div>
 
 @code {
+    private ElementReference canvasContainer;
+
     protected override void OnInitialized()
     {
         ViewModel.PropertyChanged += OnViewModelPropertyChanged;
@@ -70,20 +74,30 @@
         InvokeAsync(StateHasChanged);
     }
 
-    private void OnMouseMove(MouseEventArgs e)
+    private async void OnMouseMove(MouseEventArgs e)
     {
         if (ViewModel.IsDragging)
         {
-            ViewModel.UpdateMousePosition(e.OffsetX, e.OffsetY);
+            // Get canvas-relative coordinates by calculating from client coordinates
+            var rect = await JSRuntime.InvokeAsync<BoundingClientRect>("getBoundingClientRect", canvasContainer);
+            var canvasX = e.ClientX - rect.Left;
+            var canvasY = e.ClientY - rect.Top;
+            
+            ViewModel.UpdateMousePosition(canvasX, canvasY);
             StateHasChanged(); // Force immediate re-render for smoother dragging
         }
     }
 
-    private void OnCanvasClick(MouseEventArgs e)
+    private async void OnCanvasClick(MouseEventArgs e)
     {
         if (ViewModel.IsDragging && ViewModel.SelectedGate != null)
         {
-            ViewModel.PlaceGate(e.OffsetX, e.OffsetY);
+            // Get canvas-relative coordinates for placement
+            var rect = await JSRuntime.InvokeAsync<BoundingClientRect>("getBoundingClientRect", canvasContainer);
+            var canvasX = e.ClientX - rect.Left;
+            var canvasY = e.ClientY - rect.Top;
+            
+            ViewModel.PlaceGate(canvasX, canvasY);
         }
     }
 
@@ -105,5 +119,15 @@
     public void Dispose()
     {
         ViewModel.PropertyChanged -= OnViewModelPropertyChanged;
+    }
+
+    public class BoundingClientRect
+    {
+        public double Left { get; set; }
+        public double Top { get; set; }
+        public double Right { get; set; }
+        public double Bottom { get; set; }
+        public double Width { get; set; }
+        public double Height { get; set; }
     }
 }
