@@ -15,7 +15,7 @@ The end-to-end testing infrastructure validates complete user workflows by autom
 
 ### Technology Stack
 - **Playwright**: Browser automation framework
-- **Chromium**: Primary browser for E2E tests
+- **Firefox**: Primary browser for E2E tests
 - **xUnit**: Test framework with trait-based categorization
 - **ASP.NET Core Testing**: Integration with WebApplicationFactory
 
@@ -30,7 +30,7 @@ The end-to-end testing infrastructure validates complete user workflows by autom
 #### Quick Start
 ```bash
 # Run the automated E2E setup script
-./scripts/run-e2e-tests.sh
+./script/run-e2e-tests.sh
 ```
 
 #### Manual Setup
@@ -39,7 +39,7 @@ The end-to-end testing infrastructure validates complete user workflows by autom
 dotnet build --configuration Release
 
 # Install Playwright browsers
-pwsh ./AiLogica.Tests/bin/Release/net8.0/playwright.ps1 install chromium
+pwsh ./AiLogica.Tests/bin/Release/net8.0/playwright.ps1 install firefox
 
 # Run E2E tests
 dotnet test --filter "Category=EndToEnd" --configuration Release
@@ -109,7 +109,7 @@ Tests are designed for consistent, reliable execution:
 
 ### Browser Configuration
 ```csharp
-Browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+Browser = await Playwright.Firefox.LaunchAsync(new BrowserTypeLaunchOptions
 {
     Headless = true, // Set to false for debugging
     Args = new[] { "--no-sandbox", "--disable-dev-shm-usage" } // CI-friendly options
@@ -182,7 +182,7 @@ Developers can run E2E tests before committing:
 dotnet test --filter "Category!=EndToEnd"
 
 # Full validation with E2E tests
-./scripts/run-e2e-tests.sh
+./script/run-e2e-tests.sh
 ```
 
 ### AI Developer Usage

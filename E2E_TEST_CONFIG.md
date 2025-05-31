@@ -6,7 +6,7 @@ The E2E tests can be configured through environment variables and settings:
 
 ### Browser Configuration
 - `E2E_HEADLESS`: Set to "false" to run tests with visible browser (default: true)
-- `E2E_BROWSER`: Browser to use - "chromium", "firefox", or "webkit" (default: chromium)
+- `E2E_BROWSER`: Browser to use - "chromium", "firefox", or "webkit" (default: firefox)
 - `E2E_VIEWPORT_WIDTH`: Browser viewport width (default: 1280)
 - `E2E_VIEWPORT_HEIGHT`: Browser viewport height (default: 720)
 

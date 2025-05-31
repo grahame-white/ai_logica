@@ -305,11 +305,11 @@ The project includes comprehensive end-to-end tests using Playwright for browser
 
 ```bash
 # Set up and run E2E tests (automated script)
-./scripts/run-e2e-tests.sh
+./script/run-e2e-tests.sh
 
 # Manual E2E test setup
 dotnet build --configuration Release
-pwsh ./AiLogica.Tests/bin/Release/net8.0/playwright.ps1 install chromium
+pwsh ./AiLogica.Tests/bin/Release/net8.0/playwright.ps1 install firefox
 dotnet test --filter "Category=EndToEnd" --configuration Release
 ```
 
