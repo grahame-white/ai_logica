@@ -75,7 +75,7 @@ namespace AiLogica.ViewModels
                     Id = Guid.NewGuid()
                 });
                 OnPropertyChanged(nameof(PlacedGates));
-                
+
                 // Intentionally keep gate selected and dragging state active to allow 
                 // users to place multiple gates of the same type without re-selecting.
                 // This implements the requirement for continuous gate placement workflow.

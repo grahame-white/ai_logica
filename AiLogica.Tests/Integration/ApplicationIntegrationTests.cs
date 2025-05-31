@@ -39,11 +39,11 @@ namespace AiLogica.Tests.Integration
         {
             // Arrange & Act
             var serviceProvider = _factory.Services;
-            
+
             // Create separate scopes to verify scoped registration
             using var scope1 = serviceProvider.CreateScope();
             using var scope2 = serviceProvider.CreateScope();
-            
+
             var viewModel1 = scope1.ServiceProvider.GetRequiredService<AiLogica.ViewModels.HomeViewModel>();
             var viewModel2 = scope2.ServiceProvider.GetRequiredService<AiLogica.ViewModels.HomeViewModel>();
 
