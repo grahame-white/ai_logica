@@ -54,5 +54,37 @@ jobs:
     - name: Build
       run: dotnet build --no-restore --configuration Release
       
-    - name: Run tests
-      run: dotnet test --no-build --no-restore --configuration Release --verbosity normal
+    - name: Run unit and integration tests
+      run: dotnet test --no-build --no-restore --configuration Release --verbosity normal --filter "Category!=EndToEnd"
+
+  end-to-end-tests:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    
+    steps:
+    - uses: actions/checkout@v4.2.2
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4.3.1
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+      
+    - name: Install Playwright browsers
+      run: pwsh AiLogica.Tests/bin/Release/net8.0/playwright.ps1 install chromium
+      
+    - name: Run end-to-end tests
+      run: dotnet test --no-build --no-restore --configuration Release --verbosity normal --filter "Category=EndToEnd"
+      
+    - name: Upload screenshots on failure
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-screenshots
+        path: /tmp/*.png
+        retention-days: 7
