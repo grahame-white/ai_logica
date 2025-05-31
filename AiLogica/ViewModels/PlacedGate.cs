@@ -46,38 +46,7 @@ public class PlacedGate
                     GateId = Id
                 });
             }
-            // AND gate connection points based on SVG coordinates
-            else if (Type == "AND")
-            {
-                // Input connections (left side)
-                _connectionPoints.Add(new ConnectionPoint
-                {
-                    Id = Guid.NewGuid(),
-                    Type = ConnectionType.Input,
-                    X = X + 2,
-                    Y = Y + 14,
-                    GateId = Id
-                });
-                _connectionPoints.Add(new ConnectionPoint
-                {
-                    Id = Guid.NewGuid(),
-                    Type = ConnectionType.Input,
-                    X = X + 2,
-                    Y = Y + 22,
-                    GateId = Id
-                });
 
-                // Output connection (right side) - AND gate output where line starts at x=34 in SVG
-                // But connection point should be at gate body edge, not line end
-                _connectionPoints.Add(new ConnectionPoint
-                {
-                    Id = Guid.NewGuid(),
-                    Type = ConnectionType.Output,
-                    X = X + 34,
-                    Y = Y + 18,
-                    GateId = Id
-                });
-            }
         }
 
         return _connectionPoints;
