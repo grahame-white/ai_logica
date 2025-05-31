@@ -35,15 +35,20 @@ namespace AiLogica.Tests.Integration
         }
 
         [Fact]
-        public void ViewModel_ShouldBeRegistered_AsSingleton()
+        public void ViewModel_ShouldBeRegistered_AsScoped()
         {
             // Arrange & Act
             var serviceProvider = _factory.Services;
-            var viewModel1 = serviceProvider.GetRequiredService<AiLogica.ViewModels.HomeViewModel>();
-            var viewModel2 = serviceProvider.GetRequiredService<AiLogica.ViewModels.HomeViewModel>();
+            
+            // Create separate scopes to verify scoped registration
+            using var scope1 = serviceProvider.CreateScope();
+            using var scope2 = serviceProvider.CreateScope();
+            
+            var viewModel1 = scope1.ServiceProvider.GetRequiredService<AiLogica.ViewModels.HomeViewModel>();
+            var viewModel2 = scope2.ServiceProvider.GetRequiredService<AiLogica.ViewModels.HomeViewModel>();
 
             // Assert
-            Assert.Same(viewModel1, viewModel2); // Should be the same instance
+            Assert.NotSame(viewModel1, viewModel2); // Should be different instances across scopes
         }
     }
 }

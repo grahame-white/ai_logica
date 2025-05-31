@@ -7,8 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-// Register ViewModels
-builder.Services.AddSingleton<HomeViewModel>();
+// Register ViewModels - using scoped to ensure per-session state isolation
+builder.Services.AddScoped<HomeViewModel>();
 
 var app = builder.Build();
 
