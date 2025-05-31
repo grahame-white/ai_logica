@@ -9,6 +9,7 @@ on:
       - '**/*.sln'
       - '.github/workflows/**'
       - 'script/**'
+      - 'scripts/**'
   pull_request:
     branches: [ main ]
     paths:
@@ -17,6 +18,7 @@ on:
       - '**/*.sln'
       - '.github/workflows/**'
       - 'script/**'
+      - 'scripts/**'
 
 # Cancel superseded workflow runs
 concurrency:
