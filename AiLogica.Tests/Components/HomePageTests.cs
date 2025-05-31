@@ -71,8 +71,8 @@ namespace AiLogica.Tests.Components
             var orGateElement = component.Find(".gate-item:not(.non-functional)");
             var svgElement = orGateElement.QuerySelector("svg");
             Assert.NotNull(svgElement);
-            Assert.Equal("24", svgElement.GetAttribute("width"));
-            Assert.Equal("16", svgElement.GetAttribute("height"));
+            Assert.Equal("32", svgElement.GetAttribute("width"));
+            Assert.Equal("20", svgElement.GetAttribute("height"));
             
             // Verify that it doesn't contain the raw text "OR"
             Assert.DoesNotContain("OR", orGateElement.TextContent.Trim());
