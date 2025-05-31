@@ -218,9 +218,8 @@ h1:focus {
 /* Placed and Dragging Gates */
 .placed-gate, .dragging-gate {
     position: absolute;
-    background-color: #21262d;
     border-radius: 8px;
-    padding: 0.5rem 1rem;
+    padding: 0.25rem 0.5rem;
     color: #e0e0e0;
     font-size: 0.85rem;
     font-weight: 500;
