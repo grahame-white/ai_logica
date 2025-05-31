@@ -14,7 +14,7 @@
             <h5>Basic Gates</h5>
             <div class="gate-list">
                 <div class="gate-item">AND</div>
-                <div class="gate-item @(ViewModel.SelectedGate == "OR" ? "selected" : "")" @onclick="() => SelectOrGate()">
+                <div class="gate-item @(ViewModel.SelectedGate == "OR" ? "selected" : "")" @onclick="() => SelectOrGate()" @onclick:stopPropagation="true">
                     OR @(ViewModel.SelectedGate == "OR" ? "✓" : "")
                 </div>
                 <div class="gate-item">NOT</div>
