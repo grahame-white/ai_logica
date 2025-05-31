@@ -213,42 +213,98 @@ public class HomeViewModel : ViewModelBase
     {
         var segments = new List<WireSegment>();
 
-        // Simple orthogonal routing: horizontal then vertical
-        // TODO: Implement collision avoidance with gates
+        // Improved orthogonal routing with collision avoidance
+        double startX = from.X;
+        double startY = from.Y;
+        double endX = to.X;
+        double endY = to.Y;
 
-        double midX = (from.X + to.X) / 2;
+        // Find a safe intermediate X position that avoids gates
+        double midX = FindSafeXPosition(startX, endX, startY, endY);
 
-        // First segment: horizontal from start to midpoint
-        segments.Add(new WireSegment
+        // Create three-segment route: horizontal -> vertical -> horizontal
+        if (Math.Abs(midX - startX) > 1) // Only add segment if there's meaningful distance
         {
-            StartX = from.X,
-            StartY = from.Y,
-            EndX = midX,
-            EndY = from.Y,
-            Orientation = WireOrientation.Horizontal
-        });
+            segments.Add(new WireSegment
+            {
+                StartX = startX,
+                StartY = startY,
+                EndX = midX,
+                EndY = startY,
+                Orientation = WireOrientation.Horizontal
+            });
+        }
 
-        // Second segment: vertical from midpoint height change
-        segments.Add(new WireSegment
+        if (Math.Abs(endY - startY) > 1) // Only add segment if there's meaningful distance
         {
-            StartX = midX,
-            StartY = from.Y,
-            EndX = midX,
-            EndY = to.Y,
-            Orientation = WireOrientation.Vertical
-        });
+            segments.Add(new WireSegment
+            {
+                StartX = midX,
+                StartY = startY,
+                EndX = midX,
+                EndY = endY,
+                Orientation = WireOrientation.Vertical
+            });
+        }
 
-        // Third segment: horizontal to target
-        segments.Add(new WireSegment
+        if (Math.Abs(endX - midX) > 1) // Only add segment if there's meaningful distance
         {
-            StartX = midX,
-            StartY = to.Y,
-            EndX = to.X,
-            EndY = to.Y,
-            Orientation = WireOrientation.Horizontal
-        });
+            segments.Add(new WireSegment
+            {
+                StartX = midX,
+                StartY = endY,
+                EndX = endX,
+                EndY = endY,
+                Orientation = WireOrientation.Horizontal
+            });
+        }
 
         return segments;
+    }
+
+    /// <summary>
+    /// Finds a safe X position for wire routing that avoids gates
+    /// </summary>
+    private double FindSafeXPosition(double startX, double endX, double startY, double endY)
+    {
+        double midX = (startX + endX) / 2;
+
+        // Check if the simple midpoint route would intersect any gates
+        foreach (var gate in PlacedGates)
+        {
+            // Gate bounding box (with some padding for wire clearance)
+            double gateLeft = gate.X - 10;
+            double gateRight = gate.X + 96 + 10; // Gate width + padding
+            double gateTop = gate.Y - 10;
+            double gateBottom = gate.Y + 72 + 10; // Gate height + padding
+
+            // Check if the vertical segment would pass through this gate
+            bool verticalSegmentIntersects = midX >= gateLeft && midX <= gateRight &&
+                                           ((startY >= gateTop && startY <= gateBottom) ||
+                                            (endY >= gateTop && endY <= gateBottom) ||
+                                            (startY <= gateTop && endY >= gateBottom) ||
+                                            (startY >= gateBottom && endY <= gateTop));
+
+            if (verticalSegmentIntersects)
+            {
+                // Try routing around the gate
+                double leftRoute = gateLeft - 15; // Route to the left of the gate
+                double rightRoute = gateRight + 15; // Route to the right of the gate
+
+                // Choose the route that's closer to the original midpoint
+                if (Math.Abs(leftRoute - midX) <= Math.Abs(rightRoute - midX))
+                {
+                    midX = leftRoute;
+                }
+                else
+                {
+                    midX = rightRoute;
+                }
+                break; // Only avoid the first conflicting gate for simplicity
+            }
+        }
+
+        return midX;
     }
 
     /// <summary>

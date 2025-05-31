@@ -8,7 +8,7 @@
 
 <PageTitle>AI Logica - Logic Gate Simulator</PageTitle>
 
-<div class="canvas-container" @ref="canvasContainer" @onmousemove="OnMouseMove" @onclick="OnCanvasClick" @onmouseleave="OnMouseLeave">
+<div class="canvas-container" @ref="canvasContainer" @onmousemove="OnMouseMove" @onclick="OnCanvasClick" @onmouseleave="OnMouseLeave" @onkeydown="OnKeyDown" tabindex="0">
     <!-- Interactive Gate Palette -->
     <div class="interactive-gate-palette">
         <h4>Gate Palette</h4>
@@ -259,6 +259,23 @@
             ViewModel.StartWiring(connection);
         }
         StateHasChanged();
+    }
+
+    private void OnKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Escape")
+        {
+            if (ViewModel.IsWiring)
+            {
+                ViewModel.CancelWiring();
+                StateHasChanged();
+            }
+            else if (ViewModel.IsDragging)
+            {
+                ViewModel.CancelDrag();
+                StateHasChanged();
+            }
+        }
     }
 
     private void SelectOrGate()
