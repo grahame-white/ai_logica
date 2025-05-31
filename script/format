@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# script/format: Format code and check formatting
+# Usage:
+#   script/format          - Format code and verify it's correct
+#   script/format --check  - Check formatting without making changes (CI mode)
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+if [ "$1" = "--check" ] || [ "$1" = "check" ]; then
+    # Check mode - verify formatting without making changes (CI simulation)
+    echo "🔍 Checking code formatting (CI simulation)..."
+    echo ""
+    
+    dotnet format --verify-no-changes --verbosity normal
+    
+    if [ $? -ne 0 ]; then
+        echo ""
+        echo "❌ Code formatting issues detected!"
+        echo "This is what would cause CI to fail."
+        echo ""
+        echo "To fix these issues, run:"
+        echo "  script/format"
+        echo "or:"
+        echo "  dotnet format"
+        echo ""
+        exit 1
+    fi
+    
+    echo ""
+    echo "✅ Code formatting check passed!"
+    echo "This would pass the CI formatting check."
+else
+    # Format mode - format code and verify it's correct
+    echo "🔧 Formatting code..."
+    dotnet format
+    
+    if [ $? -ne 0 ]; then
+        echo "❌ dotnet format failed!"
+        exit 1
+    fi
+    
+    echo "✅ Code formatted successfully!"
+    
+    echo ""
+    echo "🔍 Verifying formatting..."
+    dotnet format --verify-no-changes --verbosity minimal
+    
+    if [ $? -ne 0 ]; then
+        echo "❌ Code still has formatting issues after running dotnet format!"
+        echo "This may indicate a problem with the formatting configuration."
+        exit 1
+    fi
+    
+    echo "✅ Code formatting verification passed!"
+    echo ""
+    echo "🚀 Your code is ready to commit!"
+fi

@@ -173,8 +173,7 @@ The `script/` directory also contains utility scripts for specific tasks:
 
 - **`script/setup-git-hooks`** - Install git hooks for automatic formatting checks
 - **`script/check-git-hooks`** - Verify git hooks are properly installed  
-- **`script/check-format`** - Check code formatting without making changes
-- **`script/format-code`** - Format code and verify formatting is correct
+- **`script/format`** - Format code and check formatting (use `--check` for CI mode)
 
 These utilities are called by the main standardized scripts but can also be used independently when needed.
 
@@ -201,10 +200,10 @@ dotnet build -c Release
 
 ```bash
 # Check if formatting is correct (simulates CI check)
-script/check-format
+script/format --check
 
 # Format code and verify it's correct
-script/format-code
+script/format
 
 # Or manually format code
 dotnet format
@@ -237,10 +236,10 @@ If git hooks are not installed, always run formatting checks manually:
 
 ```bash
 # Before committing
-script/check-format
+script/format --check
 
 # Fix formatting issues
-script/format-code
+script/format
 ```
 
 #### CI Integration

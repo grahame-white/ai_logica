@@ -14,7 +14,7 @@ script/bootstrap
 
 # Check code formatting (simulates CI check)
 echo "==> Checking code formatting..."
-script/check-format
+script/format --check
 
 # Build the application
 echo "==> Building application..."
