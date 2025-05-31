@@ -14,6 +14,7 @@ Based on the application outline, AI Logica shall provide the following capabili
 - **FR-2.2**: When the end user selects any other gate from the palette after selecting a gate, the previously selected gate in the palette shall not be highlighted
 - **FR-2.3**: The selected gate shall follow the mouse cursor over the canvas area to provide visual feedback during placement
 - **FR-2.4**: The end user shall be able to place the selected gate by clicking on the canvas at the desired location
+- **FR-2.5**: The end user shall be able to place multiple gates of the same type without having to reselect the gate from the palette each time
 
 ### 1.2 Gate Wiring
 - **FR-3**: The end user will be able to wire the inputs and outputs of the gates together

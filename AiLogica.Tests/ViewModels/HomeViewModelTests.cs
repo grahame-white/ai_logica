@@ -66,7 +66,7 @@ namespace AiLogica.Tests.ViewModels
         }
 
         [Fact]
-        public void PlaceGate_WithSelectedGate_ShouldAddToPlacedGatesAndClearSelection()
+        public void PlaceGate_WithSelectedGate_ShouldAddToPlacedGatesAndKeepSelection()
         {
             // Arrange
             var viewModel = new HomeViewModel();
@@ -80,8 +80,8 @@ namespace AiLogica.Tests.ViewModels
             Assert.Equal("OR", viewModel.PlacedGates[0].Type);
             Assert.Equal(150, viewModel.PlacedGates[0].X);
             Assert.Equal(250, viewModel.PlacedGates[0].Y);
-            Assert.Null(viewModel.SelectedGate);
-            Assert.False(viewModel.IsDragging);
+            Assert.Equal("OR", viewModel.SelectedGate); // Gate should stay selected
+            Assert.True(viewModel.IsDragging); // Should remain in dragging state
         }
 
         [Fact]
@@ -95,6 +95,33 @@ namespace AiLogica.Tests.ViewModels
 
             // Assert
             Assert.Empty(viewModel.PlacedGates);
+        }
+
+        [Fact]
+        public void PlaceGate_MultipleGates_ShouldAllowPlacingMultipleGatesWithoutReselection()
+        {
+            // Arrange
+            var viewModel = new HomeViewModel();
+            viewModel.SelectGate("OR");
+
+            // Act - Place multiple gates
+            viewModel.PlaceGate(100, 100);
+            viewModel.PlaceGate(200, 150);
+            viewModel.PlaceGate(300, 200);
+
+            // Assert
+            Assert.Equal(3, viewModel.PlacedGates.Count);
+            Assert.All(viewModel.PlacedGates, gate => Assert.Equal("OR", gate.Type));
+            Assert.Equal("OR", viewModel.SelectedGate); // Should still be selected
+            Assert.True(viewModel.IsDragging); // Should still be dragging
+            
+            // Verify positions
+            Assert.Equal(100, viewModel.PlacedGates[0].X);
+            Assert.Equal(100, viewModel.PlacedGates[0].Y);
+            Assert.Equal(200, viewModel.PlacedGates[1].X);
+            Assert.Equal(150, viewModel.PlacedGates[1].Y);
+            Assert.Equal(300, viewModel.PlacedGates[2].X);
+            Assert.Equal(200, viewModel.PlacedGates[2].Y);
         }
 
         [Fact]

@@ -71,8 +71,9 @@ namespace AiLogica.ViewModels
                     Id = Guid.NewGuid()
                 });
                 OnPropertyChanged(nameof(PlacedGates));
-                SelectedGate = null;
-                IsDragging = false;
+                // Keep gate selected and dragging for multiple placement
+                // SelectedGate = null;
+                // IsDragging = false;
             }
         }
 

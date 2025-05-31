@@ -75,6 +75,7 @@
         if (ViewModel.IsDragging)
         {
             ViewModel.UpdateMousePosition(e.OffsetX, e.OffsetY);
+            StateHasChanged(); // Force immediate re-render for smoother dragging
         }
     }
 
