@@ -278,11 +278,13 @@ public class HomeViewModel : ViewModelBase
             double gateBottom = gate.Y + 72 + 10; // Gate height + padding
 
             // Check if the vertical segment would pass through this gate
+            // A vertical segment from startY to endY intersects the gate if:
+            // 1. The X position is within gate bounds
+            // 2. The Y range of the segment overlaps with the gate's Y range
+            double segmentMinY = Math.Min(startY, endY);
+            double segmentMaxY = Math.Max(startY, endY);
             bool verticalSegmentIntersects = midX >= gateLeft && midX <= gateRight &&
-                                           ((startY >= gateTop && startY <= gateBottom) ||
-                                            (endY >= gateTop && endY <= gateBottom) ||
-                                            (startY <= gateTop && endY >= gateBottom) ||
-                                            (startY >= gateTop && endY <= gateBottom)); // Fixed: was gateBottom && endY <= gateTop
+                                           segmentMinY <= gateBottom && segmentMaxY >= gateTop;
 
             if (verticalSegmentIntersects)
             {

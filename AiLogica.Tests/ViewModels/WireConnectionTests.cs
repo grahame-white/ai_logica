@@ -327,4 +327,35 @@ public class WireConnectionTests
 
         Assert.False(passesThrough); // Wire should not pass through the gate center
     }
+
+    [Fact]
+    public void GenerateWireSegments_OutputToTopInput_UserScenario_ShouldRouteAroundGate()
+    {
+        // Arrange - Reproduce the exact user scenario: Output -> Top Input
+        var viewModel = new HomeViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+
+        var gate = viewModel.PlacedGates[0];
+        var outputConnection = gate.Connections.Single(c => c.Type == ConnectionType.Output);
+        var topInputConnection = gate.Connections.Where(c => c.Type == ConnectionType.Input).First(); // Top input (index 0)
+
+        // Act - Create wire from output to top input (user's exact scenario)
+        viewModel.StartWiring(outputConnection);
+        viewModel.CompleteWiring(topInputConnection);
+
+        // Assert
+        Assert.Single(viewModel.Wires);
+        var wire = viewModel.Wires[0];
+
+        // Verify collision avoidance: wire should route around the gate, not through it
+        bool passesThrough = wire.Segments.Any(segment =>
+            segment.Orientation == WireOrientation.Vertical &&
+            segment.StartX >= gate.X + 20 && segment.StartX <= gate.X + 76 && // Through main body of gate
+            Math.Min(segment.StartY, segment.EndY) <= gate.Y + 60 &&
+            Math.Max(segment.StartY, segment.EndY) >= gate.Y + 12);
+
+        Assert.False(passesThrough); // Wire should not pass through the gate
+        Assert.True(wire.Segments.Count >= 2); // Should have multiple segments for proper routing
+    }
 }
