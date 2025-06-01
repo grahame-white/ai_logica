@@ -74,6 +74,12 @@ A circuit configuration where the output of a gate or circuit is connected back 
 ### Gate
 A fundamental digital logic element that performs a boolean operation on its inputs to produce an output. Examples: AND, OR, NOT, NAND, NOR, XOR.
 
+### Gate Body
+The main visual component of a logic gate symbol that represents its distinctive shape and function. For example, the shield-like shape of an OR gate, the curved back of a NAND gate, or the triangular shape of a NOT gate. The gate body contains the core logic function and is standardized according to IEEE conventions.
+
+### Gate Connector Lines
+The straight line segments that extend from the gate body to provide visual pathways for signal connections. These lines connect the gate body to the **Connection Points** where wires can be attached, clearly indicating input and output locations on the gate symbol.
+
 ### Gate Palette
 The UI area containing available gate types that users can select and place onto the canvas. Gates in the palette are smaller (32x24 pixels) than placed gates.
 
