@@ -198,9 +198,10 @@ public class HomeViewModel : ViewModelBase
     /// </summary>
     private bool CanConnect(Connection from, Connection to)
     {
-        // Can connect output to input, or input to input (for fan-out)
+        // Can connect output to input, input to output, or input to input (for fan-out)
         // Same-gate connections are allowed for feedback loops
         return (from.Type == ConnectionType.Output && to.Type == ConnectionType.Input) ||
+               (from.Type == ConnectionType.Input && to.Type == ConnectionType.Output) ||
                (from.Type == ConnectionType.Input && to.Type == ConnectionType.Input);
     }
 
@@ -281,7 +282,7 @@ public class HomeViewModel : ViewModelBase
                                            ((startY >= gateTop && startY <= gateBottom) ||
                                             (endY >= gateTop && endY <= gateBottom) ||
                                             (startY <= gateTop && endY >= gateBottom) ||
-                                            (startY >= gateBottom && endY <= gateTop));
+                                            (startY >= gateTop && endY <= gateBottom)); // Fixed: was gateBottom && endY <= gateTop
 
             if (verticalSegmentIntersects)
             {
