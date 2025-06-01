@@ -82,8 +82,8 @@
     <!-- Placed Gates (FR-1: Graphical gate layout) -->
     @foreach (var gate in ViewModel.PlacedGates)
     {
-        <div class="placed-gate" style="left: @(gate.X)px; top: @(gate.Y)px;">
-            @RenderGateContent(gate.Type, false, true)
+        <div class="placed-gate" style="left: @(gate.X)px; top: @(gate.Y)px;" @ondblclick="() => OnGateDoubleClick(gate)" @ondblclick:stopPropagation="true">
+            @RenderPlacedGateContent(gate)
             
             @* FR-3.2: Visible connection points for gate wiring *@
             <!-- Connection points -->
@@ -273,6 +273,23 @@
         }
     }
 
+    private RenderFragment RenderPlacedGateContent(PlacedGate gate)
+    {
+        // For placed gates, we need to show the actual value for constants
+        return gate.Type switch
+        {
+            "OR" => @<div class="gate-content">
+                @RenderOrGateSvg(true)
+            </div>,
+            "CONSTANT0" or "CONSTANT1" => @<div class="gate-content">
+                @RenderConstantGateSvg(gate.Value ?? 0, true)
+            </div>,
+            _ => @<div class="gate-content">
+                <span>@gate.Type</span>
+            </div>
+        };
+    }
+
     private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         InvokeAsync(StateHasChanged);
@@ -374,6 +391,16 @@
     {
         ViewModel.SelectGate("CONSTANT1");
         StateHasChanged(); // Force immediate re-render
+    }
+
+    private void OnGateDoubleClick(PlacedGate gate)
+    {
+        // Double-click on constant gates toggles their value
+        if (gate.Type == "CONSTANT0" || gate.Type == "CONSTANT1")
+        {
+            ViewModel.ToggleConstantValue(gate);
+            StateHasChanged();
+        }
     }
 
     public void Dispose()

@@ -154,6 +154,34 @@ public class HomeViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Toggles the value of a constant gate between 0 and 1.
+    /// Also updates the gate type to match the new value.
+    /// </summary>
+    public void ToggleConstantValue(PlacedGate gate)
+    {
+        if (gate == null) return;
+
+        // Only toggle constant gates
+        if (gate.Type == "CONSTANT0" || gate.Type == "CONSTANT1")
+        {
+            // Toggle the value
+            gate.Value = gate.Value == 0 ? 1 : 0;
+
+            // Update the gate type to match the new value
+            gate.Type = gate.Value == 0 ? "CONSTANT0" : "CONSTANT1";
+
+            _logger.LogDebug(
+                "Toggled constant gate {GateId} to value {Value}, type {Type}",
+                gate.Id,
+                gate.Value,
+                gate.Type);
+
+            // Notify that the gates collection has changed
+            OnPropertyChanged(nameof(PlacedGates));
+        }
+    }
+
+    /// <summary>
     /// FR-3.4: Starts a wiring operation from a connection point.
     /// </summary>
     public void StartWiring(Connection connection)
