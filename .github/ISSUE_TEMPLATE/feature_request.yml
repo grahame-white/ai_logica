@@ -168,12 +168,26 @@ body:
         
         ### 📋 IMPLEMENTATION WORKFLOW:
         4. **Analyze requirements**: Review the functional requirements above, assign appropriate FR-X.Y IDs, and identify any conflicts with existing requirements that need resolution
-        5. **Understand testing**: Review E2E_TESTING_STRATEGY.md for testing approach
-        6. **Follow the pattern**: Use existing code as examples for implementation patterns
-        7. **Update requirements**: Add new functional requirements to REQUIREMENTS.md with proper IDs
-        8. **Test thoroughly**: Run `script/test` frequently during development
-        9. **Format code**: Use `script/format` before committing
-        10. **Verify in development**: Test feature works using `script/server`
+        5. **COMMIT PLAN**: Use `report_progress` to commit initial analysis and plan
+        6. **Understand testing**: Review E2E_TESTING_STRATEGY.md for testing approach
+        7. **Write failing tests**: Create tests that demonstrate the feature requirements
+        8. **COMMIT TESTS**: Use `report_progress` to commit failing tests
+        9. **Follow the pattern**: Use existing code as examples for implementation patterns
+        10. **Implement incrementally**: Break feature into 3-5 smaller sub-tasks
+        11. **COMMIT EACH SUB-TASK**: Use `report_progress` after completing each sub-task
+        12. **Update requirements**: Add new functional requirements to REQUIREMENTS.md with proper IDs
+        13. **Test thoroughly**: Run `script/test` frequently during development
+        14. **Format code**: Use `script/format` before committing
+        15. **Verify in development**: Test feature works using `script/server`
+        
+        ### ⚠️ CRITICAL: INCREMENTAL DEVELOPMENT
+        **COMMIT FREQUENTLY**: Use `report_progress` every 10 minutes to avoid losing work
+        - After initial analysis and planning
+        - After writing failing tests
+        - After implementing each sub-task (break large features into 3-5 sub-tasks)
+        - After updating requirements documentation
+        - After fixing any test failures
+        - Never go more than 10 minutes without committing progress
         
         ### 🛠️ DEVELOPMENT SCRIPTS:
         - `script/setup` - Complete setup for development
