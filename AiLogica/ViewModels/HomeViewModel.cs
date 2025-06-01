@@ -219,11 +219,18 @@ public class HomeViewModel : ViewModelBase
             Wires.Add(wire);
 
             // Debug: Log each segment being added to the wire collection
-            Console.WriteLine($"[DEBUG] Wire added to collection. Logging stored segments:");
+            _logger.LogTrace("Wire added to collection. Logging stored segments:");
             for (int i = 0; i < wire.Segments.Count; i++)
             {
                 var seg = wire.Segments[i];
-                Console.WriteLine($"  Stored segment {i}: ({seg.StartX}, {seg.StartY}) -> ({seg.EndX}, {seg.EndY}) [{seg.Orientation}]");
+                _logger.LogTrace(
+                    "Stored segment {Index}: ({StartX}, {StartY}) -> ({EndX}, {EndY}) [{Orientation}]",
+                    i,
+                    seg.StartX,
+                    seg.StartY,
+                    seg.EndX,
+                    seg.EndY,
+                    seg.Orientation);
             }
 
             _logger.LogTrace("Wire added to collection. Verifying segments in collection after adding:");
