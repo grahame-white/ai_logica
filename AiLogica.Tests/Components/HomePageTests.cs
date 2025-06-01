@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 using AiLogica.ViewModels;
 using AiLogica.Components.Pages;
+using AiLogica.Tests.Helpers;
 
 namespace AiLogica.Tests.Components;
 public class HomePageTests : TestContext
@@ -12,7 +13,7 @@ public class HomePageTests : TestContext
     public void HomePage_SelectOrGate_ShouldUpdateViewModel()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         Services.AddSingleton(viewModel);
 
         // Act - Test the ViewModel directly since interactive server mode doesn't work in unit tests
@@ -27,7 +28,7 @@ public class HomePageTests : TestContext
     public void HomePage_OrGateNotSelected_ShouldRenderCorrectly()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         Services.AddSingleton(viewModel);
 
         // Act
@@ -44,7 +45,7 @@ public class HomePageTests : TestContext
     public void HomePage_WithSelectedGate_ShouldRenderWithSelectedClass()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         viewModel.SelectGate("OR"); // Pre-select the gate
         Services.AddSingleton(viewModel);
 
@@ -61,7 +62,7 @@ public class HomePageTests : TestContext
     public void HomePage_OrGate_ShouldDisplaySvgSymbol()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         Services.AddSingleton(viewModel);
 
         // Act
@@ -82,7 +83,7 @@ public class HomePageTests : TestContext
     public void HomePage_PlacedOrGate_ShouldDisplaySvgSymbol()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         viewModel.SelectGate("OR");
         viewModel.PlaceGate(100, 100);
         Services.AddSingleton(viewModel);
@@ -106,7 +107,7 @@ public class HomePageTests : TestContext
         // (This is tested by manually creating a gate through ViewModel since other gates aren't functional in UI)
 
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         viewModel.PlacedGates.Add(new PlacedGate { Type = "AND", X = 50, Y = 50, Id = Guid.NewGuid() });
         Services.AddSingleton(viewModel);
 
@@ -121,6 +122,4 @@ public class HomePageTests : TestContext
         var svgElement = placedGateElement.QuerySelector("svg");
         Assert.Null(svgElement);
     }
-
-    private static HomeViewModel CreateTestViewModel() => new(NullLogger<HomeViewModel>.Instance);
 }

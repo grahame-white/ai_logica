@@ -1,3 +1,4 @@
+using AiLogica.Tests.Helpers;
 using AiLogica.ViewModels;
 using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
@@ -10,7 +11,7 @@ public class WireConnectionTests
     public void PlaceGate_ShouldCreateConnectionPoints()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         viewModel.SelectGate("OR");
 
         // Act
@@ -35,7 +36,7 @@ public class WireConnectionTests
     public void StartWiring_ShouldSetActiveConnectionAndWiringMode()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         viewModel.SelectGate("OR");
         viewModel.PlaceGate(100, 100);
         var connection = viewModel.PlacedGates[0].Connections[0];
@@ -52,7 +53,7 @@ public class WireConnectionTests
     public void CompleteWiring_ValidConnection_ShouldCreateWire()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         viewModel.SelectGate("OR");
         viewModel.PlaceGate(100, 100);
         viewModel.PlaceGate(200, 100);
@@ -80,7 +81,7 @@ public class WireConnectionTests
     public void CompleteWiring_SameGate_ShouldCreateWire()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         viewModel.SelectGate("OR");
         viewModel.PlaceGate(100, 100);
 
@@ -106,7 +107,7 @@ public class WireConnectionTests
     public void CompleteWiring_InputToInput_ShouldCreateWire()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         viewModel.SelectGate("OR");
         viewModel.PlaceGate(100, 100);
         viewModel.PlaceGate(200, 100);
@@ -132,7 +133,7 @@ public class WireConnectionTests
     public void CompleteWiring_InputToOutput_ShouldCreateWire()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         viewModel.SelectGate("OR");
         viewModel.PlaceGate(100, 100);
         viewModel.PlaceGate(200, 100);
@@ -158,7 +159,7 @@ public class WireConnectionTests
     public void CancelWiring_ShouldClearWiringState()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         viewModel.SelectGate("OR");
         viewModel.PlaceGate(100, 100);
         var connection = viewModel.PlacedGates[0].Connections[0];
@@ -176,7 +177,7 @@ public class WireConnectionTests
     public void UpdateConnectionPositions_ShouldSetAbsoluteCoordinates()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         viewModel.SelectGate("OR");
 
         // Act
@@ -195,7 +196,7 @@ public class WireConnectionTests
     public void GenerateWireSegments_ShouldAvoidGateCollisions()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         viewModel.SelectGate("OR");
 
         // Place gates that could cause wire collision
@@ -234,7 +235,7 @@ public class WireConnectionTests
     public void GenerateWireSegments_SameGateConnection_ShouldRouteAroundGate()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         viewModel.SelectGate("OR");
         viewModel.PlaceGate(100, 100);
 
@@ -279,7 +280,7 @@ public class WireConnectionTests
     public void GenerateWireSegments_SameGateConnection_SpecificScenario_ShouldRouteAroundGate()
     {
         // Arrange - Create exact scenario that might cause the bug
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         viewModel.SelectGate("OR");
         viewModel.PlaceGate(100, 100); // Place gate in middle
 
@@ -341,7 +342,7 @@ public class WireConnectionTests
     public void GenerateWireSegments_OutputToTopInput_UserScenario_ShouldRouteAroundGate()
     {
         // Arrange - Reproduce the exact user scenario: Output -> Top Input
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         viewModel.SelectGate("OR");
         viewModel.PlaceGate(100, 100);
 
@@ -367,6 +368,4 @@ public class WireConnectionTests
         Assert.False(passesThrough); // Wire should not pass through the gate
         Assert.True(wire.Segments.Count >= 2); // Should have multiple segments for proper routing
     }
-
-    private static HomeViewModel CreateTestViewModel() => new(NullLogger<HomeViewModel>.Instance);
 }

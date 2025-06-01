@@ -15,16 +15,17 @@ public class PlacedGate
     {
         foreach (var connection in Connections)
         {
-            var (relativeX, relativeY) = GetRelativeConnectionPosition(connection.Type, connection.Index);
+            var (relativeX, relativeY) = GetGateSpecificConnectionPosition(connection.Type, connection.Index);
             connection.X = X + relativeX;
             connection.Y = Y + relativeY;
         }
     }
 
     /// <summary>
-    /// Gets connection positions for OR gates (96x72 pixels).
+    /// Defines the fixed connection coordinates for OR gate template (96x72 pixels).
+    /// These are the standard positions within the OR gate SVG shape.
     /// </summary>
-    private static (double X, double Y) GetOrGateConnectionPosition(ConnectionType type, int index)
+    private static (double X, double Y) GetOrGateTemplateCoordinates(ConnectionType type, int index)
     {
         return type switch
         {
@@ -40,13 +41,13 @@ public class PlacedGate
     }
 
     /// <summary>
-    /// Gets the relative position of a connection point within the gate.
+    /// Resolves connection position for the specific gate type by delegating to the appropriate template method.
     /// </summary>
-    private (double X, double Y) GetRelativeConnectionPosition(ConnectionType type, int index)
+    private (double X, double Y) GetGateSpecificConnectionPosition(ConnectionType type, int index)
     {
         return Type switch
         {
-            "OR" => GetOrGateConnectionPosition(type, index),
+            "OR" => GetOrGateTemplateCoordinates(type, index),
             _ => (0, 0) // Default for unsupported gate types
         };
     }
