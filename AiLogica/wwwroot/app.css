@@ -253,6 +253,44 @@ h1:focus {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* Connection Points */
+.connection-point {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 2px solid #e0e0e0;
+    background-color: #161b22;
+    cursor: pointer;
+    pointer-events: auto;
+    z-index: 20;
+    transition: all 0.2s ease;
+}
+
+.connection-point:hover {
+    background-color: #5eb3f5;
+    border-color: #5eb3f5;
+    transform: scale(1.2);
+}
+
+.connection-point.input {
+    border-color: #f85149; /* Red for inputs */
+}
+
+.connection-point.output {
+    border-color: #4caf50; /* Green for outputs */
+}
+
+.connection-point.input:hover {
+    background-color: #f85149;
+    border-color: #f85149;
+}
+
+.connection-point.output:hover {
+    background-color: #4caf50;
+    border-color: #4caf50;
+}
+
 /* Main Canvas Area */
 .design-canvas {
     grid-area: canvas;

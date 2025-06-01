@@ -31,6 +31,22 @@ Based on the application outline, AI Logica shall provide the following capabili
 
 ### 1.2 Gate Wiring
 - **FR-3**: The end user will be able to wire the inputs and outputs of the gates together
+- **FR-3.1**: Placed gates shall be 100% larger than palette gates (96x72 pixels instead of 48x36 pixels) to make wire connections less fiddly
+- **FR-3.2**: Each gate shall have visible connection points for inputs and outputs
+- **FR-3.3**: Connection points shall be visually distinct with different colors for inputs (red) and outputs (green)
+- **FR-3.4**: The end user shall be able to drag a new wire from one connection point to another
+- **FR-3.5**: It shall be possible to wire an output connection to an input connection
+- **FR-3.6**: It shall be possible to wire an input connection to an input connection (fan-out capability)
+- **FR-3.7**: It shall be possible to wire connections within the same gate to enable feedback loops
+- **FR-3.8**: Wires shall be drawn using as few orthogonal straight line segments as possible
+- **FR-3.9**: Wire routing shall avoid passing through gates when possible
+- **FR-3.10**: Connected wires shall be visually distinct from disconnected or incomplete wire connections
+- **FR-3.11**: Connected wires shall be displayed in blue (#5eb3f5) color
+- **FR-3.12**: Disconnected or incomplete wires shall be displayed in red (#f44336) color with dashed lines
+- **FR-3.13**: Active wiring operations (wire being dragged) shall show a preview line from the source connection to the mouse cursor
+- **FR-3.14**: The end user shall be able to cancel an active wiring operation by clicking on empty canvas space or pressing Escape
+- **FR-3.15**: Connection points shall provide hover feedback to indicate they are interactive
+- **FR-3.16**: Wire segments shall only be created when there is meaningful distance between connection points
 
 ### 1.3 Simulation Capabilities
 - **FR-4**: The application will be able to simulate the behavior of the connected logic gates
