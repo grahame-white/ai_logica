@@ -8,7 +8,7 @@ namespace AiLogica.Tests.ViewModels;
 public class WireConnectionTests
 {
     [Fact]
-    public void PlaceGate_ShouldCreateConnectionPoints()
+    public void PlaceGate_ShouldCreateCorrectNumberOfConnections()
     {
         // Arrange
         var viewModel = TestHelper.CreateTestViewModel();
@@ -20,20 +20,110 @@ public class WireConnectionTests
         // Assert
         var gate = viewModel.PlacedGates[0];
         Assert.Equal(3, gate.Connections.Count); // OR gate should have 3 connections
+    }
 
-        // Check input connections
+    [Fact]
+    public void PlaceGate_ShouldCreateCorrectNumberOfInputConnections()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+
+        // Act
+        viewModel.PlaceGate(100, 100);
+
+        // Assert
+        var gate = viewModel.PlacedGates[0];
         var inputs = gate.Connections.Where(c => c.Type == ConnectionType.Input).ToList();
         Assert.Equal(2, inputs.Count);
-        Assert.Equal(0, inputs[0].Index);
-        Assert.Equal(1, inputs[1].Index);
+    }
 
-        // Check output connection
+    [Fact]
+    public void PlaceGate_ShouldCreateFirstInputConnectionWithCorrectIndex()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+
+        // Act
+        viewModel.PlaceGate(100, 100);
+
+        // Assert
+        var gate = viewModel.PlacedGates[0];
+        var inputs = gate.Connections.Where(c => c.Type == ConnectionType.Input).ToList();
+        Assert.Equal(0, inputs[0].Index);
+    }
+
+    [Fact]
+    public void PlaceGate_ShouldCreateSecondInputConnectionWithCorrectIndex()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+
+        // Act
+        viewModel.PlaceGate(100, 100);
+
+        // Assert
+        var gate = viewModel.PlacedGates[0];
+        var inputs = gate.Connections.Where(c => c.Type == ConnectionType.Input).ToList();
+        Assert.Equal(1, inputs[1].Index);
+    }
+
+    [Fact]
+    public void PlaceGate_ShouldCreateOutputConnectionWithCorrectIndex()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+
+        // Act
+        viewModel.PlaceGate(100, 100);
+
+        // Assert
+        var gate = viewModel.PlacedGates[0];
         var output = gate.Connections.Single(c => c.Type == ConnectionType.Output);
         Assert.Equal(0, output.Index);
     }
 
+    [Theory]
+    [InlineData(ConnectionType.Input)]
+    [InlineData(ConnectionType.Output)]
+    public void StartWiring_ShouldSetWiringModeForDifferentConnectionTypes(ConnectionType connectionType)
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+        var connection = viewModel.PlacedGates[0].Connections.First(c => c.Type == connectionType);
+
+        // Act
+        viewModel.StartWiring(connection);
+
+        // Assert
+        Assert.True(viewModel.IsWiring);
+    }
+
+    [Theory]
+    [InlineData(ConnectionType.Input)]
+    [InlineData(ConnectionType.Output)]
+    public void StartWiring_ShouldSetActiveConnectionForDifferentConnectionTypes(ConnectionType connectionType)
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+        var connection = viewModel.PlacedGates[0].Connections.First(c => c.Type == connectionType);
+
+        // Act
+        viewModel.StartWiring(connection);
+
+        // Assert
+        Assert.Equal(connection, viewModel.ActiveConnection);
+    }
+
     [Fact]
-    public void StartWiring_ShouldSetActiveConnectionAndWiringMode()
+    public void StartWiring_ShouldSetWiringMode()
     {
         // Arrange
         var viewModel = TestHelper.CreateTestViewModel();
@@ -46,11 +136,26 @@ public class WireConnectionTests
 
         // Assert
         Assert.True(viewModel.IsWiring);
+    }
+
+    [Fact]
+    public void StartWiring_ShouldSetActiveConnection()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+        var connection = viewModel.PlacedGates[0].Connections[0];
+
+        // Act
+        viewModel.StartWiring(connection);
+
+        // Assert
         Assert.Equal(connection, viewModel.ActiveConnection);
     }
 
     [Fact]
-    public void CompleteWiring_ValidConnection_ShouldCreateWire()
+    public void CompleteWiring_ValidConnection_ShouldCreateSingleWire()
     {
         // Arrange
         var viewModel = TestHelper.CreateTestViewModel();
@@ -69,16 +174,123 @@ public class WireConnectionTests
 
         // Assert
         Assert.Single(viewModel.Wires);
+    }
+
+    [Fact]
+    public void CompleteWiring_ValidConnection_ShouldSetFromConnectionId()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+        viewModel.PlaceGate(200, 100);
+
+        var gate1 = viewModel.PlacedGates[0];
+        var gate2 = viewModel.PlacedGates[1];
+        var outputConnection = gate1.Connections.Single(c => c.Type == ConnectionType.Output);
+        var inputConnection = gate2.Connections.First(c => c.Type == ConnectionType.Input);
+
+        // Act
+        viewModel.StartWiring(outputConnection);
+        viewModel.CompleteWiring(inputConnection);
+
+        // Assert
         var wire = viewModel.Wires[0];
         Assert.Equal(outputConnection.Id, wire.FromConnectionId);
+    }
+
+    [Fact]
+    public void CompleteWiring_ValidConnection_ShouldSetToConnectionId()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+        viewModel.PlaceGate(200, 100);
+
+        var gate1 = viewModel.PlacedGates[0];
+        var gate2 = viewModel.PlacedGates[1];
+        var outputConnection = gate1.Connections.Single(c => c.Type == ConnectionType.Output);
+        var inputConnection = gate2.Connections.First(c => c.Type == ConnectionType.Input);
+
+        // Act
+        viewModel.StartWiring(outputConnection);
+        viewModel.CompleteWiring(inputConnection);
+
+        // Assert
+        var wire = viewModel.Wires[0];
         Assert.Equal(inputConnection.Id, wire.ToConnectionId);
+    }
+
+    [Fact]
+    public void CompleteWiring_ValidConnection_ShouldSetWireAsConnected()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+        viewModel.PlaceGate(200, 100);
+
+        var gate1 = viewModel.PlacedGates[0];
+        var gate2 = viewModel.PlacedGates[1];
+        var outputConnection = gate1.Connections.Single(c => c.Type == ConnectionType.Output);
+        var inputConnection = gate2.Connections.First(c => c.Type == ConnectionType.Input);
+
+        // Act
+        viewModel.StartWiring(outputConnection);
+        viewModel.CompleteWiring(inputConnection);
+
+        // Assert
+        var wire = viewModel.Wires[0];
         Assert.True(wire.IsConnected);
+    }
+
+    [Fact]
+    public void CompleteWiring_ValidConnection_ShouldClearWiringMode()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+        viewModel.PlaceGate(200, 100);
+
+        var gate1 = viewModel.PlacedGates[0];
+        var gate2 = viewModel.PlacedGates[1];
+        var outputConnection = gate1.Connections.Single(c => c.Type == ConnectionType.Output);
+        var inputConnection = gate2.Connections.First(c => c.Type == ConnectionType.Input);
+
+        // Act
+        viewModel.StartWiring(outputConnection);
+        viewModel.CompleteWiring(inputConnection);
+
+        // Assert
         Assert.False(viewModel.IsWiring);
+    }
+
+    [Fact]
+    public void CompleteWiring_ValidConnection_ShouldClearActiveConnection()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+        viewModel.PlaceGate(200, 100);
+
+        var gate1 = viewModel.PlacedGates[0];
+        var gate2 = viewModel.PlacedGates[1];
+        var outputConnection = gate1.Connections.Single(c => c.Type == ConnectionType.Output);
+        var inputConnection = gate2.Connections.First(c => c.Type == ConnectionType.Input);
+
+        // Act
+        viewModel.StartWiring(outputConnection);
+        viewModel.CompleteWiring(inputConnection);
+
+        // Assert
         Assert.Null(viewModel.ActiveConnection);
     }
 
     [Fact]
-    public void CompleteWiring_SameGate_ShouldCreateWire()
+    public void CompleteWiring_SameGate_ShouldCreateSingleWire()
     {
         // Arrange
         var viewModel = TestHelper.CreateTestViewModel();
@@ -95,16 +307,113 @@ public class WireConnectionTests
 
         // Assert
         Assert.Single(viewModel.Wires); // Wire should be created for feedback loops
+    }
+
+    [Fact]
+    public void CompleteWiring_SameGate_ShouldSetFromConnectionId()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+
+        var gate = viewModel.PlacedGates[0];
+        var outputConnection = gate.Connections.Single(c => c.Type == ConnectionType.Output);
+        var inputConnection = gate.Connections.First(c => c.Type == ConnectionType.Input);
+
+        // Act
+        viewModel.StartWiring(outputConnection);
+        viewModel.CompleteWiring(inputConnection);
+
+        // Assert
         var wire = viewModel.Wires[0];
         Assert.Equal(outputConnection.Id, wire.FromConnectionId);
+    }
+
+    [Fact]
+    public void CompleteWiring_SameGate_ShouldSetToConnectionId()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+
+        var gate = viewModel.PlacedGates[0];
+        var outputConnection = gate.Connections.Single(c => c.Type == ConnectionType.Output);
+        var inputConnection = gate.Connections.First(c => c.Type == ConnectionType.Input);
+
+        // Act
+        viewModel.StartWiring(outputConnection);
+        viewModel.CompleteWiring(inputConnection);
+
+        // Assert
+        var wire = viewModel.Wires[0];
         Assert.Equal(inputConnection.Id, wire.ToConnectionId);
+    }
+
+    [Fact]
+    public void CompleteWiring_SameGate_ShouldSetWireAsConnected()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+
+        var gate = viewModel.PlacedGates[0];
+        var outputConnection = gate.Connections.Single(c => c.Type == ConnectionType.Output);
+        var inputConnection = gate.Connections.First(c => c.Type == ConnectionType.Input);
+
+        // Act
+        viewModel.StartWiring(outputConnection);
+        viewModel.CompleteWiring(inputConnection);
+
+        // Assert
+        var wire = viewModel.Wires[0];
         Assert.True(wire.IsConnected);
+    }
+
+    [Fact]
+    public void CompleteWiring_SameGate_ShouldClearWiringMode()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+
+        var gate = viewModel.PlacedGates[0];
+        var outputConnection = gate.Connections.Single(c => c.Type == ConnectionType.Output);
+        var inputConnection = gate.Connections.First(c => c.Type == ConnectionType.Input);
+
+        // Act
+        viewModel.StartWiring(outputConnection);
+        viewModel.CompleteWiring(inputConnection);
+
+        // Assert
         Assert.False(viewModel.IsWiring);
+    }
+
+    [Fact]
+    public void CompleteWiring_SameGate_ShouldClearActiveConnection()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+
+        var gate = viewModel.PlacedGates[0];
+        var outputConnection = gate.Connections.Single(c => c.Type == ConnectionType.Output);
+        var inputConnection = gate.Connections.First(c => c.Type == ConnectionType.Input);
+
+        // Act
+        viewModel.StartWiring(outputConnection);
+        viewModel.CompleteWiring(inputConnection);
+
+        // Assert
         Assert.Null(viewModel.ActiveConnection);
     }
 
     [Fact]
-    public void CompleteWiring_InputToInput_ShouldCreateWire()
+    public void CompleteWiring_InputToInput_ShouldCreateSingleWire()
     {
         // Arrange
         var viewModel = TestHelper.CreateTestViewModel();
@@ -123,14 +432,79 @@ public class WireConnectionTests
 
         // Assert
         Assert.Single(viewModel.Wires); // Should allow input-to-input connections
+    }
+
+    [Fact]
+    public void CompleteWiring_InputToInput_ShouldSetFromConnectionId()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+        viewModel.PlaceGate(200, 100);
+
+        var gate1 = viewModel.PlacedGates[0];
+        var gate2 = viewModel.PlacedGates[1];
+        var input1 = gate1.Connections.First(c => c.Type == ConnectionType.Input);
+        var input2 = gate2.Connections.First(c => c.Type == ConnectionType.Input);
+
+        // Act
+        viewModel.StartWiring(input1);
+        viewModel.CompleteWiring(input2);
+
+        // Assert
         var wire = viewModel.Wires[0];
         Assert.Equal(input1.Id, wire.FromConnectionId);
+    }
+
+    [Fact]
+    public void CompleteWiring_InputToInput_ShouldSetToConnectionId()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+        viewModel.PlaceGate(200, 100);
+
+        var gate1 = viewModel.PlacedGates[0];
+        var gate2 = viewModel.PlacedGates[1];
+        var input1 = gate1.Connections.First(c => c.Type == ConnectionType.Input);
+        var input2 = gate2.Connections.First(c => c.Type == ConnectionType.Input);
+
+        // Act
+        viewModel.StartWiring(input1);
+        viewModel.CompleteWiring(input2);
+
+        // Assert
+        var wire = viewModel.Wires[0];
         Assert.Equal(input2.Id, wire.ToConnectionId);
+    }
+
+    [Fact]
+    public void CompleteWiring_InputToInput_ShouldSetWireAsConnected()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+        viewModel.PlaceGate(200, 100);
+
+        var gate1 = viewModel.PlacedGates[0];
+        var gate2 = viewModel.PlacedGates[1];
+        var input1 = gate1.Connections.First(c => c.Type == ConnectionType.Input);
+        var input2 = gate2.Connections.First(c => c.Type == ConnectionType.Input);
+
+        // Act
+        viewModel.StartWiring(input1);
+        viewModel.CompleteWiring(input2);
+
+        // Assert
+        var wire = viewModel.Wires[0];
         Assert.True(wire.IsConnected);
     }
 
     [Fact]
-    public void CompleteWiring_InputToOutput_ShouldCreateWire()
+    public void CompleteWiring_InputToOutput_ShouldCreateSingleWire()
     {
         // Arrange
         var viewModel = TestHelper.CreateTestViewModel();
@@ -149,9 +523,74 @@ public class WireConnectionTests
 
         // Assert
         Assert.Single(viewModel.Wires); // Should allow input-to-output connections
+    }
+
+    [Fact]
+    public void CompleteWiring_InputToOutput_ShouldSetFromConnectionId()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+        viewModel.PlaceGate(200, 100);
+
+        var gate1 = viewModel.PlacedGates[0];
+        var gate2 = viewModel.PlacedGates[1];
+        var inputConnection = gate1.Connections.First(c => c.Type == ConnectionType.Input);
+        var outputConnection = gate2.Connections.Single(c => c.Type == ConnectionType.Output);
+
+        // Act - Test input-to-output connection (reverse direction)
+        viewModel.StartWiring(inputConnection);
+        viewModel.CompleteWiring(outputConnection);
+
+        // Assert
         var wire = viewModel.Wires[0];
         Assert.Equal(inputConnection.Id, wire.FromConnectionId);
+    }
+
+    [Fact]
+    public void CompleteWiring_InputToOutput_ShouldSetToConnectionId()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+        viewModel.PlaceGate(200, 100);
+
+        var gate1 = viewModel.PlacedGates[0];
+        var gate2 = viewModel.PlacedGates[1];
+        var inputConnection = gate1.Connections.First(c => c.Type == ConnectionType.Input);
+        var outputConnection = gate2.Connections.Single(c => c.Type == ConnectionType.Output);
+
+        // Act - Test input-to-output connection (reverse direction)
+        viewModel.StartWiring(inputConnection);
+        viewModel.CompleteWiring(outputConnection);
+
+        // Assert
+        var wire = viewModel.Wires[0];
         Assert.Equal(outputConnection.Id, wire.ToConnectionId);
+    }
+
+    [Fact]
+    public void CompleteWiring_InputToOutput_ShouldSetWireAsConnected()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+        viewModel.PlaceGate(200, 100);
+
+        var gate1 = viewModel.PlacedGates[0];
+        var gate2 = viewModel.PlacedGates[1];
+        var inputConnection = gate1.Connections.First(c => c.Type == ConnectionType.Input);
+        var outputConnection = gate2.Connections.Single(c => c.Type == ConnectionType.Output);
+
+        // Act - Test input-to-output connection (reverse direction)
+        viewModel.StartWiring(inputConnection);
+        viewModel.CompleteWiring(outputConnection);
+
+        // Assert
+        var wire = viewModel.Wires[0];
         Assert.True(wire.IsConnected);
     }
 
@@ -170,11 +609,27 @@ public class WireConnectionTests
 
         // Assert
         Assert.False(viewModel.IsWiring);
+    }
+
+    [Fact]
+    public void CancelWiring_ShouldClearActiveConnection()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+        var connection = viewModel.PlacedGates[0].Connections[0];
+        viewModel.StartWiring(connection);
+
+        // Act
+        viewModel.CancelWiring();
+
+        // Assert
         Assert.Null(viewModel.ActiveConnection);
     }
 
     [Fact]
-    public void UpdateConnectionPositions_ShouldSetAbsoluteCoordinates()
+    public void UpdateConnectionPositions_ShouldSetAbsoluteXCoordinate()
     {
         // Arrange
         var viewModel = TestHelper.CreateTestViewModel();
@@ -189,6 +644,23 @@ public class WireConnectionTests
 
         // Output should be at gate position + relative position (52, 64) + (88, 36) = (140, 100)
         Assert.Equal(140, outputConnection.X); // 52 + 88
+    }
+
+    [Fact]
+    public void UpdateConnectionPositions_ShouldSetAbsoluteYCoordinate()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+
+        // Act
+        viewModel.PlaceGate(100, 100);
+
+        // Assert
+        var gate = viewModel.PlacedGates[0];
+        var outputConnection = gate.Connections.Single(c => c.Type == ConnectionType.Output);
+
+        // Output should be at gate position + relative position (52, 64) + (88, 36) = (140, 100)
         Assert.Equal(100, outputConnection.Y); // 64 + 36
     }
 
@@ -232,7 +704,7 @@ public class WireConnectionTests
     }
 
     [Fact]
-    public void GenerateWireSegments_SameGateConnection_ShouldRouteAroundGate()
+    public void GenerateWireSegments_SameGateConnection_ShouldNotPassThroughGate()
     {
         // Arrange
         var viewModel = TestHelper.CreateTestViewModel();
@@ -248,20 +720,7 @@ public class WireConnectionTests
         viewModel.CompleteWiring(bottomInputConnection);
 
         // Assert
-        Assert.Single(viewModel.Wires);
         var wire = viewModel.Wires[0];
-
-        // Print wire segments for debugging
-#if DEBUG
-        Console.WriteLine($"Gate position: ({gate.X}, {gate.Y})");
-        Console.WriteLine($"Output connection: ({outputConnection.X}, {outputConnection.Y})");
-        Console.WriteLine($"Bottom input connection: ({bottomInputConnection.X}, {bottomInputConnection.Y})");
-        Console.WriteLine($"Wire segments count: {wire.Segments.Count}");
-        foreach (var segment in wire.Segments)
-        {
-            Console.WriteLine($"Segment: ({segment.StartX}, {segment.StartY}) -> ({segment.EndX}, {segment.EndY}) [{segment.Orientation}]");
-        }
-#endif
 
         // Wire should route around the gate, not through it
         // More specific check: look for vertical segments that pass through the visual center of the gate
@@ -273,6 +732,26 @@ public class WireConnectionTests
              (segment.EndY <= gate.Y + 60 && segment.StartY >= gate.Y + 12)));
 
         Assert.False(passesThrough); // Wire should not pass through the visual center of the gate
+    }
+
+    [Fact]
+    public void GenerateWireSegments_SameGateConnection_ShouldCreateMultipleSegments()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+
+        var gate = viewModel.PlacedGates[0];
+        var outputConnection = gate.Connections.Single(c => c.Type == ConnectionType.Output);
+        var bottomInputConnection = gate.Connections.Where(c => c.Type == ConnectionType.Input).Skip(1).First(); // Bottom input
+
+        // Act - Start from output and connect to bottom input (matching successful test pattern)
+        viewModel.StartWiring(outputConnection);
+        viewModel.CompleteWiring(bottomInputConnection);
+
+        // Assert
+        var wire = viewModel.Wires[0];
         Assert.True(wire.Segments.Count >= 2); // Should have multiple segments for routing around
     }
 
@@ -339,7 +818,7 @@ public class WireConnectionTests
     }
 
     [Fact]
-    public void GenerateWireSegments_OutputToTopInput_UserScenario_ShouldRouteAroundGate()
+    public void GenerateWireSegments_OutputToTopInput_UserScenario_ShouldNotPassThroughGate()
     {
         // Arrange - Reproduce the exact user scenario: Output -> Top Input
         var viewModel = TestHelper.CreateTestViewModel();
@@ -355,7 +834,6 @@ public class WireConnectionTests
         viewModel.CompleteWiring(topInputConnection);
 
         // Assert
-        Assert.Single(viewModel.Wires);
         var wire = viewModel.Wires[0];
 
         // Verify collision avoidance: wire should route around the gate, not through it
@@ -366,6 +844,26 @@ public class WireConnectionTests
             Math.Max(segment.StartY, segment.EndY) >= gate.Y + 12);
 
         Assert.False(passesThrough); // Wire should not pass through the gate
+    }
+
+    [Fact]
+    public void GenerateWireSegments_OutputToTopInput_UserScenario_ShouldCreateMultipleSegments()
+    {
+        // Arrange - Reproduce the exact user scenario: Output -> Top Input
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+
+        var gate = viewModel.PlacedGates[0];
+        var outputConnection = gate.Connections.Single(c => c.Type == ConnectionType.Output);
+        var topInputConnection = gate.Connections.First(c => c.Type == ConnectionType.Input); // Top input (index 0)
+
+        // Act - Create wire from output to top input (user's exact scenario)
+        viewModel.StartWiring(outputConnection);
+        viewModel.CompleteWiring(topInputConnection);
+
+        // Assert
+        var wire = viewModel.Wires[0];
         Assert.True(wire.Segments.Count >= 2); // Should have multiple segments for proper routing
     }
 }

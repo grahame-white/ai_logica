@@ -27,7 +27,7 @@ public class EndToEndInfrastructureTests : IClassFixture<WebApplicationFactory<P
     }
 
     [Fact]
-    public async Task EndToEndTestInfrastructure_ShouldBeConfiguredCorrectly()
+    public async Task EndToEndTestInfrastructure_ShouldReturnSuccessStatusCode()
     {
         // This test verifies that the end-to-end testing infrastructure is set up correctly
         // It doesn't require browser installation but validates the web application factory setup
@@ -40,15 +40,104 @@ public class EndToEndInfrastructureTests : IClassFixture<WebApplicationFactory<P
 
         // Assert
         response.EnsureSuccessStatusCode();
+        Assert.True(response.IsSuccessStatusCode);
+    }
+
+    [Fact]
+    public async Task EndToEndTestInfrastructure_ShouldContainGatePalette()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("/");
         var content = await response.Content.ReadAsStringAsync();
 
-        // Verify that the page contains the necessary elements for E2E testing
+        // Assert
         Assert.Contains("Gate Palette", content);
+    }
+
+    [Fact]
+    public async Task EndToEndTestInfrastructure_ShouldContainProperties()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("/");
+        var content = await response.Content.ReadAsStringAsync();
+
+        // Assert
         Assert.Contains("Properties", content);
+    }
+
+    [Fact]
+    public async Task EndToEndTestInfrastructure_ShouldContainOrGate()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("/");
+        var content = await response.Content.ReadAsStringAsync();
+
+        // Assert
         Assert.Contains("OR", content);
+    }
+
+    [Fact]
+    public async Task EndToEndTestInfrastructure_ShouldContainGateItemClass()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("/");
+        var content = await response.Content.ReadAsStringAsync();
+
+        // Assert
         Assert.Contains("gate-item", content); // CSS class needed for E2E tests
+    }
+
+    [Fact]
+    public async Task EndToEndTestInfrastructure_ShouldContainPropertiesPanelClass()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("/");
+        var content = await response.Content.ReadAsStringAsync();
+
+        // Assert
         Assert.Contains("properties-panel", content); // CSS class needed for E2E tests
+    }
+
+    [Fact]
+    public async Task EndToEndTestInfrastructure_ShouldContainStatusBarClass()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("/");
+        var content = await response.Content.ReadAsStringAsync();
+
+        // Assert
         Assert.Contains("status-bar", content); // CSS class needed for E2E tests
+    }
+
+    [Fact]
+    public async Task EndToEndTestInfrastructure_ShouldContainCanvasContainerClass()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("/");
+        var content = await response.Content.ReadAsStringAsync();
+
+        // Assert
         Assert.Contains("canvas-container", content); // CSS class needed for E2E tests
     }
 
@@ -67,14 +156,32 @@ public class EndToEndInfrastructureTests : IClassFixture<WebApplicationFactory<P
     }
 
     [Fact]
-    public void EndToEndTestStrategy_ShouldBeWellDocumented()
+    public void EndToEndTestStrategy_ShouldHaveTestCoverageDocumentation()
     {
         // This test verifies that our E2E test strategy is properly documented
         // and provides comprehensive coverage without browser automation complexity
 
         // Arrange & Act & Assert - Verify the strategy documentation exists
         Assert.NotNull(EndToEndTestStrategy.TestCoverageDocumentation);
+    }
+
+    [Fact]
+    public void EndToEndTestStrategy_ShouldDocumentComprehensiveWorkflowValidation()
+    {
+        // This test verifies that our E2E test strategy is properly documented
+        // and provides comprehensive coverage without browser automation complexity
+
+        // Arrange & Act & Assert - Verify the strategy documentation exists
         Assert.Contains("comprehensive workflow validation", EndToEndTestStrategy.TestCoverageDocumentation);
+    }
+
+    [Fact]
+    public void EndToEndTestStrategy_ShouldDocumentReliabilityInCiEnvironments()
+    {
+        // This test verifies that our E2E test strategy is properly documented
+        // and provides comprehensive coverage without browser automation complexity
+
+        // Arrange & Act & Assert - Verify the strategy documentation exists
         Assert.Contains("reliability in CI environments", EndToEndTestStrategy.TestCoverageDocumentation);
     }
 }
