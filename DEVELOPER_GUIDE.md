@@ -4,6 +4,8 @@
 
 This guide provides information for both human and AI developers contributing to the AI Logica project. The project is currently in early development, focused on building a logic gate simulator using AI-assisted development practices.
 
+**Important**: All developers should refer to [GLOSSARY.md](GLOSSARY.md) for consistent terminology when working on issues, writing documentation, or implementing features.
+
 ## ⚠️ Critical First Step for All Developers
 
 **Before making any commits or changes, you MUST install the git hooks to prevent formatting issues that cause CI failures:**
@@ -173,6 +175,11 @@ For detailed information about the project structure and technical architecture,
 
 ## Development Guidelines
 
+### General Guidelines for All Developers
+- **Terminology**: Always refer to [GLOSSARY.md](GLOSSARY.md) for consistent terminology when working on issues, writing documentation, or implementing features
+- **Documentation**: Update the glossary when introducing new terms or when misunderstandings arise
+- **Communication**: Use glossary definitions in issue discussions, code comments, and documentation
+
 ### For Human Developers
 - Follow standard .NET and Blazor development practices
 - Use the existing ViewModelBase for any new view models
@@ -181,6 +188,7 @@ For detailed information about the project structure and technical architecture,
 
 ### For AI Developers
 - **FIRST**: Install git hooks with `script/setup-git-hooks` at the start of every new conversation thread
+- **Reference glossary**: Use [GLOSSARY.md](GLOSSARY.md) for consistent terminology throughout development
 - Focus on implementing the features outlined in REQUIREMENTS.md
 - Build upon the existing MVVM foundation
 - Ensure all new code includes appropriate tests
