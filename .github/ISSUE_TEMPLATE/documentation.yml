@@ -132,31 +132,35 @@ body:
         - label: "Review documentation for clarity and completeness"
         - label: "Update related documentation if necessary"
 
-  - type: markdown
+  - type: textarea
+    id: ai-developer-guidance
     attributes:
+      label: "🤖 AI Developer Documentation Guide"
+      description: "Comprehensive guidance for AI developers improving this documentation"
       value: |
-        ---
+        ## For AI Developers improving this documentation:
         
-        **For AI Developers improving this documentation:**
+        ### ⚠️ CRITICAL SETUP STEPS:
+        1. **CRITICAL FIRST STEP**: Run `script/setup-git-hooks` to install git hooks before any development work
+        2. **Complete setup**: Run `script/setup` to install dependencies and verify environment
+        3. **Review current docs**: Read all related documentation files thoroughly
         
-        1. ⚠️ **CRITICAL FIRST STEP**: Run `script/setup-git-hooks` to install git hooks before any development work
-        2. 🔧 **Complete setup**: Run `script/setup` to install dependencies and verify environment
-        3. 📖 **Review current docs**: Read all related documentation files thoroughly
-        4. 🎯 **Understand the need**: Clearly identify what needs to be documented and why
-        5. ✍️ **Write clear content**: Use clear, concise language appropriate for the target audience
-        6. 🔗 **Check all links**: Ensure all references and links are working and accurate
-        7. 🧪 **Test examples**: If providing code examples or instructions, test them
-        8. 🎨 **Format properly**: Use `script/format` and follow markdown standards
-        9. 📝 **Update requirements**: If documentation changes affect functionality, update REQUIREMENTS.md
+        ### 📚 DOCUMENTATION WORKFLOW:
+        4. **Understand the need**: Clearly identify what needs to be documented and why
+        5. **Write clear content**: Use clear, concise language appropriate for the target audience
+        6. **Check all links**: Ensure all references and links are working and accurate
+        7. **Test examples**: If providing code examples or instructions, test them
+        8. **Format properly**: Use `script/format` and follow markdown standards
+        9. **Update requirements**: If documentation changes affect functionality, update REQUIREMENTS.md
         
-        **Documentation Guidelines:**
+        ### 📝 DOCUMENTATION GUIDELINES:
         - Use clear, concise language
         - Include practical examples where helpful
         - Keep the target audience in mind
         - Maintain consistency with existing documentation style
         - Update related documentation if changes affect multiple files
         
-        **Development Scripts:**
+        ### 🛠️ DEVELOPMENT SCRIPTS:
         - `script/setup` - Complete setup for development
         - `script/setup-git-hooks` - Install git hooks (CRITICAL first step)
         - `script/server` - Start development server for testing
@@ -164,3 +168,5 @@ body:
         - `script/format` - Format code and documentation
         - `script/check-git-hooks` - Verify git hooks are installed
         - `script/cibuild` - Run CI checks locally
+    validations:
+      required: false
