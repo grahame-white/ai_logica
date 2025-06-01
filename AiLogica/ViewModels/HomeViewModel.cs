@@ -3,6 +3,15 @@ using Microsoft.Extensions.Logging;
 
 namespace AiLogica.ViewModels;
 
+/// <summary>
+/// Requirements Traceability: Core business logic for gate layout and wiring functionality.
+/// FR-2.2, FR-2.5: Gate selection and dragging state management.
+/// FR-2.4: Gate placement with coordinate calculations.  
+/// FR-3: Complete wiring system implementation.
+/// FR-3.5-3.7: Connection validation and routing logic.
+/// FR-3.8-3.9: Orthogonal wire routing with collision avoidance.
+/// See TRACEABILITY_MATRIX.md for complete mapping.
+/// </summary>
 public class HomeViewModel : ViewModelBase
 {
     private readonly ILogger<HomeViewModel> _logger;
@@ -77,6 +86,7 @@ public class HomeViewModel : ViewModelBase
 
     public void SelectGate(string gateType)
     {
+        // FR-2.2: Previous selection clearing handled by SetProperty
         SelectedGate = gateType;
         IsDragging = true;
         // Reset mouse position to avoid showing gate at stale coordinates
@@ -92,10 +102,11 @@ public class HomeViewModel : ViewModelBase
 
     public void PlaceGate(double x, double y)
     {
+        // FR-2.4: Gate placement by clicking on canvas
         if (SelectedGate != null)
         {
             // Apply the same offset used during dragging to center the gate on cursor
-            // Updated offsets for larger gate size (96x72 instead of 48x36)
+            // FR-3.1: Updated offsets for larger gate size (96x72 instead of 48x36)
             var gate = new PlacedGate
             {
                 Type = SelectedGate,
@@ -129,7 +140,7 @@ public class HomeViewModel : ViewModelBase
                     connection.Y);
             }
 
-            // Intentionally keep gate selected and dragging state active to allow 
+            // FR-2.5: Intentionally keep gate selected and dragging state active to allow 
             // users to place multiple gates of the same type without re-selecting.
             // This implements the requirement for continuous gate placement workflow.
             // To reset selection, users can click elsewhere or select a different gate.
@@ -143,7 +154,7 @@ public class HomeViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Starts a wiring operation from a connection point.
+    /// FR-3.4: Starts a wiring operation from a connection point.
     /// </summary>
     public void StartWiring(Connection connection)
     {
@@ -163,7 +174,7 @@ public class HomeViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Completes a wiring operation by connecting to another connection point.
+    /// FR-3.4: Completes a wiring operation by connecting to another connection point.
     /// </summary>
     public void CompleteWiring(Connection toConnection)
     {
@@ -296,6 +307,9 @@ public class HomeViewModel : ViewModelBase
 
     /// <summary>
     /// Determines if two connections can be wired together.
+    /// FR-3.5: Output to input connections.
+    /// FR-3.6: Input to input connections (fan-out capability).  
+    /// FR-3.7: Same-gate connections for feedback loops.
     /// </summary>
     private static bool CanConnect(Connection from, Connection to)
     {
@@ -341,7 +355,8 @@ public class HomeViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Generates orthogonal wire segments between two connection points.
+    /// FR-3.8: Generates orthogonal wire segments between two connection points.
+    /// FR-3.16: Only creates segments when there is meaningful distance between points.
     /// </summary>
     private List<WireSegment> GenerateWireSegments(Connection from, Connection to)
     {
@@ -362,13 +377,13 @@ public class HomeViewModel : ViewModelBase
             endY,
             to.Type);
 
-        // Find a safe intermediate X position that avoids gates
+        // FR-3.9: Find a safe intermediate X position that avoids gates
         double midX = FindSafeXPosition(startX, endX, startY, endY);
 
         _logger.LogDebug("Using midX: {MidX} for routing", midX);
 
-        // Create three-segment route: horizontal -> vertical -> horizontal
-        // Only add segment if there's meaningful distance
+        // FR-3.8: Create three-segment route: horizontal -> vertical -> horizontal
+        // FR-3.16: Only add segment if there's meaningful distance
         if (Math.Abs(midX - startX) > 1)
         {
             var horizontalSegment1 = new WireSegment
@@ -433,7 +448,7 @@ public class HomeViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Finds a safe X position for wire routing that avoids gates.
+    /// FR-3.9: Finds a safe X position for wire routing that avoids gates.
     /// </summary>
     private double FindSafeXPosition(double startX, double endX, double startY, double endY)
     {

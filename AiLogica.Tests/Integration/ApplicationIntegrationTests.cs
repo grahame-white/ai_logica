@@ -5,6 +5,13 @@ using Xunit;
 using System.Threading.Tasks;
 
 namespace AiLogica.Tests.Integration;
+
+/// <summary>
+/// Requirements Traceability: Integration tests covering application startup and core functionality
+/// FR-10.1-FR-10.5: Implements testing requirements (one assert, descriptive names, AAA pattern)
+/// FR-1, FR-2: Validates core UI components are rendered properly
+/// See TRACEABILITY_MATRIX.md for complete mapping
+/// </summary>
 public class ApplicationIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _factory;

@@ -4,6 +4,14 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 
 namespace AiLogica.Tests.ViewModels;
+
+/// <summary>
+/// Requirements Traceability: Unit tests for HomeViewModel functionality
+/// FR-10.1-FR-10.5: Demonstrates testing requirements (one assert, AAA pattern, descriptive names)
+/// FR-2: Tests gate selection and dragging state management
+/// FR-2.4: Tests gate placement functionality
+/// See TRACEABILITY_MATRIX.md for complete mapping
+/// </summary>
 public class HomeViewModelTests
 {
     [Fact]
