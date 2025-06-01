@@ -243,6 +243,7 @@ public class HomeViewModel : ViewModelBase
     /// </summary>
     public void CancelWiring()
     {
+        Console.WriteLine($"[DEBUG] CancelWiring called - clearing active connection and wiring state");
         ActiveConnection = null;
         IsWiring = false;
     }

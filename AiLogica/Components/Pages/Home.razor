@@ -78,6 +78,19 @@
     <!-- Wires -->
     @if (ViewModel.Wires.Count > 0)
     {
+        @{
+            Console.WriteLine($"[DEBUG] Rendering {ViewModel.Wires.Count} wires to DOM:");
+            for (int wireIndex = 0; wireIndex < ViewModel.Wires.Count; wireIndex++)
+            {
+                var wire = ViewModel.Wires[wireIndex];
+                Console.WriteLine($"  Wire {wireIndex}: {wire.Segments.Count} segments, Connected: {wire.IsConnected}");
+                for (int segIndex = 0; segIndex < wire.Segments.Count; segIndex++)
+                {
+                    var seg = wire.Segments[segIndex];
+                    Console.WriteLine($"    Rendering segment {segIndex}: ({seg.StartX}, {seg.StartY}) -> ({seg.EndX}, {seg.EndY})");
+                }
+            }
+        }
         <svg class="wire-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5;">
             @foreach (var wire in ViewModel.Wires)
             {
@@ -95,6 +108,9 @@
     <!-- Active wiring preview -->
     @if (ViewModel.IsWiring && ViewModel.ActiveConnection != null)
     {
+        @{
+            Console.WriteLine($"[DEBUG] Rendering preview wire: ({ViewModel.ActiveConnection.X}, {ViewModel.ActiveConnection.Y}) -> ({ViewModel.MouseX}, {ViewModel.MouseY})");
+        }
         <svg class="wire-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 6;">
             <line x1="@ViewModel.ActiveConnection.X" y1="@ViewModel.ActiveConnection.Y" 
                   x2="@ViewModel.MouseX" y2="@ViewModel.MouseY"
