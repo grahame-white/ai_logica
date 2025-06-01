@@ -120,11 +120,11 @@ body:
       label: "Developer Implementation Checklist"
       description: "For developers addressing this documentation issue (reference DEVELOPER_GUIDE.md)"
       options:
+        - label: "⚠️ CRITICAL: Install git hooks using `script/setup-git-hooks` before starting"
         - label: "Review and understand the documentation request"
         - label: "Identify all affected documentation files"
         - label: "Check if changes affect requirements in REQUIREMENTS.md"
         - label: "Follow documentation standards and style guides"
-        - label: "Install git hooks using `script/setup-git-hooks`"
         - label: "Ensure documentation is accurate and up-to-date"
         - label: "Verify all links and references work correctly"
         - label: "Test any code examples or instructions provided"
@@ -139,13 +139,15 @@ body:
         
         **For AI Developers improving this documentation:**
         
-        1. 🔧 **Start with setup**: Run `script/setup` to install dependencies and git hooks
-        2. 📖 **Review current docs**: Read all related documentation files thoroughly
-        3. 🎯 **Understand the need**: Clearly identify what needs to be documented and why
-        4. ✍️ **Write clear content**: Use clear, concise language appropriate for the target audience
-        5. 🔗 **Check all links**: Ensure all references and links are working and accurate
-        6. 🧪 **Test examples**: If providing code examples or instructions, test them
-        7. 🎨 **Format properly**: Use `script/format` and follow markdown standards
+        1. ⚠️ **CRITICAL FIRST STEP**: Run `script/setup-git-hooks` to install git hooks before any development work
+        2. 🔧 **Complete setup**: Run `script/setup` to install dependencies and verify environment
+        3. 📖 **Review current docs**: Read all related documentation files thoroughly
+        4. 🎯 **Understand the need**: Clearly identify what needs to be documented and why
+        5. ✍️ **Write clear content**: Use clear, concise language appropriate for the target audience
+        6. 🔗 **Check all links**: Ensure all references and links are working and accurate
+        7. 🧪 **Test examples**: If providing code examples or instructions, test them
+        8. 🎨 **Format properly**: Use `script/format` and follow markdown standards
+        9. 📝 **Update requirements**: If documentation changes affect functionality, update REQUIREMENTS.md
         
         **Documentation Guidelines:**
         - Use clear, concise language
@@ -156,7 +158,9 @@ body:
         
         **Development Scripts:**
         - `script/setup` - Complete setup for development
+        - `script/setup-git-hooks` - Install git hooks (CRITICAL first step)
         - `script/server` - Start development server for testing
         - `script/test` - Run all tests
         - `script/format` - Format code and documentation
+        - `script/check-git-hooks` - Verify git hooks are installed
         - `script/cibuild` - Run CI checks locally
