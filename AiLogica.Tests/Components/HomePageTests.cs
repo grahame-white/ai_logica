@@ -121,8 +121,10 @@ public class HomePageTests : TestContext
         Assert.NotNull(svgElement);
     }
 
-    [Fact]
-    public void HomePage_OrGate_ShouldDisplaySvgWithCorrectWidth()
+    [Theory]
+    [InlineData("width", "32")]
+    [InlineData("height", "24")]
+    public void HomePage_OrGate_ShouldDisplaySvgWithCorrectDimensions(string attribute, string expectedValue)
     {
         // Arrange
         var viewModel = TestHelper.CreateTestViewModel();
@@ -131,28 +133,11 @@ public class HomePageTests : TestContext
         // Act
         var component = RenderComponent<Home>();
 
-        // Assert - Check that the OR gate contains an SVG symbol instead of text
+        // Assert - Check that the OR gate contains an SVG symbol with correct dimensions
         var orGateElement = component.Find("[data-gate-type='OR']");
         var svgElement = orGateElement.QuerySelector("svg");
         Assert.NotNull(svgElement);
-        Assert.Equal("32", svgElement!.GetAttribute("width"));
-    }
-
-    [Fact]
-    public void HomePage_OrGate_ShouldDisplaySvgWithCorrectHeight()
-    {
-        // Arrange
-        var viewModel = TestHelper.CreateTestViewModel();
-        Services.AddSingleton(viewModel);
-
-        // Act
-        var component = RenderComponent<Home>();
-
-        // Assert - Check that the OR gate contains an SVG symbol instead of text
-        var orGateElement = component.Find("[data-gate-type='OR']");
-        var svgElement = orGateElement.QuerySelector("svg");
-        Assert.NotNull(svgElement);
-        Assert.Equal("24", svgElement!.GetAttribute("height"));
+        Assert.Equal(expectedValue, svgElement!.GetAttribute(attribute));
     }
 
     [Fact]

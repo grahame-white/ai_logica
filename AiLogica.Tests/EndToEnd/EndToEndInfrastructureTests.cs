@@ -39,7 +39,6 @@ public class EndToEndInfrastructureTests : IClassFixture<WebApplicationFactory<P
         var response = await client.GetAsync("/");
 
         // Assert
-        response.EnsureSuccessStatusCode();
         Assert.True(response.IsSuccessStatusCode);
     }
 
