@@ -56,7 +56,7 @@ public class PlacedGate
     {
         return type switch
         {
-            ConnectionType.Output => (18, 10), // Single output on right side, centered vertically
+            ConnectionType.Output => (20, 9), // Single output at edge of gate, centered vertically
             _ => (0, 0) // Constants have no inputs
         };
     }

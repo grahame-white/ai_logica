@@ -244,32 +244,32 @@
         {
             // Constant gate as unfilled square with centered value for placed gates
             return @<svg width="@size" height="@size" viewBox="0 0 20 20" style="display: block;">
-                <!-- Unfilled square -->
-                <rect x="1" y="1" width="16" height="16" 
+                <!-- Unfilled square - larger and better centered -->
+                <rect x="2" y="2" width="14" height="14" 
                       stroke="currentColor" 
                       fill="none" 
                       stroke-width="@strokeWidth"/>
                 <!-- Centered value -->
-                <text x="9" y="11" text-anchor="middle" dominant-baseline="central" 
-                      fill="currentColor" font-family="Arial, sans-serif" font-size="10">@value</text>
-                <!-- Output line -->
-                <line x1="17" y1="10" x2="18" y2="10" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <text x="9" y="10" text-anchor="middle" dominant-baseline="central" 
+                      fill="currentColor" font-family="Arial, sans-serif" font-size="8" font-weight="bold">@value</text>
+                <!-- Output line - extended further -->
+                <line x1="16" y1="9" x2="20" y2="9" stroke="currentColor" stroke-width="@strokeWidth"/>
             </svg>;
         }
         else
         {
             // Constant gate as unfilled square with centered value for palette gates
             return @<svg width="@size" height="@size" viewBox="0 0 16 16" style="display: block;">
-                <!-- Unfilled square -->
-                <rect x="1" y="1" width="12" height="12" 
+                <!-- Unfilled square - larger and better centered -->
+                <rect x="2" y="2" width="10" height="10" 
                       stroke="currentColor" 
                       fill="none" 
                       stroke-width="@strokeWidth"/>
                 <!-- Centered value -->
-                <text x="7" y="8" text-anchor="middle" dominant-baseline="central" 
-                      fill="currentColor" font-family="Arial, sans-serif" font-size="8">@value</text>
-                <!-- Output line -->
-                <line x1="13" y1="8" x2="14" y2="8" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <text x="7" y="7.5" text-anchor="middle" dominant-baseline="central" 
+                      fill="currentColor" font-family="Arial, sans-serif" font-size="6" font-weight="bold">@value</text>
+                <!-- Output line - extended further -->
+                <line x1="12" y1="7" x2="16" y2="7" stroke="currentColor" stroke-width="@strokeWidth"/>
             </svg>;
         }
     }
