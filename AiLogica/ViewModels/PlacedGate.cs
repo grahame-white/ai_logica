@@ -56,7 +56,7 @@ public class PlacedGate
     {
         return type switch
         {
-            ConnectionType.Output => (36, 8), // Output at end of 16px connector line + 4px offset for center alignment, centered vertically
+            ConnectionType.Output => (32, 8), // Output at right end of connector line (x=32 in SVG), centered vertically
             _ => (0, 0) // Constants have no inputs
         };
     }
