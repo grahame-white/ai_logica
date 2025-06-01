@@ -16,8 +16,8 @@ script/bootstrap
 echo "==> Checking code formatting..."
 script/format --check
 
-# Build the application
-echo "==> Building application..."
+# Build the application with static analysis
+echo "==> Building application with static analysis..."
 dotnet build --configuration Release
 
 # Run tests

@@ -54,8 +54,12 @@ jobs:
       - name: Check code formatting
         run: dotnet format --verify-no-changes --verbosity normal
 
-      - name: Build
+      - name: Build with Static Analysis
         run: dotnet build --no-restore --configuration Release
+        # Static analysis is automatically included via Directory.Build.props
+        # - Treats all warnings as errors (TreatWarningsAsErrors=true)
+        # - Enables .NET analyzers with latest analysis level
+        # - Enforces code style in build (EnforceCodeStyleInBuild=true)
 
       - name: Run comprehensive test suite
         run: >

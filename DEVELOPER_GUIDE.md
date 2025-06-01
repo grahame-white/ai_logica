@@ -197,6 +197,31 @@ For detailed information about the project structure and technical architecture,
 - Use file level namespaces
 - Source files must be logically organised
 
+### Static Analysis and Code Quality
+**All violations from warning level and above must be addressed.** The project is configured to treat warnings as errors to enforce code quality standards.
+
+Static analysis is automatically enabled for all projects via `Directory.Build.props` and includes:
+- **Microsoft .NET Analyzers**: Built-in code quality and security analysis
+- **Code Style Enforcement**: Formatting and style rules are enforced at build time
+- **Warning Level Enforcement**: All compiler warnings are treated as build errors
+- **Latest Analysis Level**: Uses the most recent analyzer rule sets
+
+To check for static analysis issues locally:
+```bash
+# Build will fail if any warnings/analysis issues are found
+dotnet build
+
+# Or use the CI script which includes static analysis
+script/cibuild
+```
+
+Common static analysis violations to avoid:
+- Unused variables, fields, or methods
+- Missing null checks where required
+- Unreachable code
+- Code style violations
+- Potential security issues flagged by analyzers
+
 ### Project Conventions
 - Namespaces should follow the folder structure
 - Use dependency injection for services
@@ -223,9 +248,11 @@ dotnet build
 # Build specific project
 dotnet build AiLogica.Core
 
-# Build for release
+# Build for release (includes static analysis)
 dotnet build -c Release
 ```
+
+**Note**: All builds automatically include static analysis checks. Builds will fail if any warnings or code quality issues are detected.
 
 ### Code Formatting
 
