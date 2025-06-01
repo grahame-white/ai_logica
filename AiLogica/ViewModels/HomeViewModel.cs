@@ -475,8 +475,9 @@ public class HomeViewModel : ViewModelBase
                 gate.Y);
 
             // Gate bounding box (with some padding for wire clearance)
-            double gateLeft = gate.X - 10;
-            double gateRight = gate.X + 96 + 10; // Gate width + padding
+            // Use explicit left/right edge calculations to avoid confusion
+            double gateLeft = CoordinateHelper.GetPositionToTheLeftOf(gate.X, 10);  // Left edge with padding (LOWER X)
+            double gateRight = CoordinateHelper.GetPositionToTheRightOf(gate.X, 96, 10); // Right edge with padding (HIGHER X)
             double gateTop = gate.Y - 10;
             double gateBottom = gate.Y + 72 + 10; // Gate height + padding
 
@@ -518,9 +519,11 @@ public class HomeViewModel : ViewModelBase
             {
                 _logger.LogDebug("COLLISION DETECTED! Rerouting around gate {Index}", i);
 
-                // Try routing around the gate
-                double leftRoute = gateLeft - 15; // Route to the left of the gate
-                double rightRoute = gateRight + 15; // Route to the right of the gate
+                // Try routing around the gate using explicit left/right coordinate calculations
+                // LEFT route = position to the LEFT of gate (LOWER X coordinate)
+                // RIGHT route = position to the RIGHT of gate (HIGHER X coordinate)
+                double leftRoute = CoordinateHelper.GetPositionToTheLeftOf(gate.X, 15);
+                double rightRoute = CoordinateHelper.GetPositionToTheRightOf(gate.X, 96, 15);
 
                 _logger.LogTrace(
                     "Left route option: {LeftRoute}, Right route option: {RightRoute}, Distance to left: {LeftDistance}, Distance to right: {RightDistance}",
@@ -533,12 +536,12 @@ public class HomeViewModel : ViewModelBase
                 if (Math.Abs(leftRoute - midX) <= Math.Abs(rightRoute - midX))
                 {
                     midX = leftRoute;
-                    _logger.LogTrace("Chose LEFT route: {MidX}", midX);
+                    _logger.LogTrace("Chose LEFT route (lower X): {MidX}", midX);
                 }
                 else
                 {
                     midX = rightRoute;
-                    _logger.LogTrace("Chose RIGHT route: {MidX}", midX);
+                    _logger.LogTrace("Chose RIGHT route (higher X): {MidX}", midX);
                 }
 
                 break; // Only avoid the first conflicting gate for simplicity
