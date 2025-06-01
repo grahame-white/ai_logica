@@ -216,6 +216,15 @@ public class HomeViewModel : ViewModelBase
                 Console.WriteLine($"  Stored segment {i}: ({seg.StartX}, {seg.StartY}) -> ({seg.EndX}, {seg.EndY}) [{seg.Orientation}]");
             }
 
+            // Debug: Verify segments in the Wires collection after adding
+            Console.WriteLine($"[DEBUG] Verifying wire segments in collection after adding:");
+            var addedWire = Wires.Last();
+            for (int i = 0; i < addedWire.Segments.Count; i++)
+            {
+                var seg = addedWire.Segments[i];
+                Console.WriteLine($"  Collection segment {i}: ({seg.StartX}, {seg.StartY}) -> ({seg.EndX}, {seg.EndY}) [{seg.Orientation}]");
+            }
+
             OnPropertyChanged(nameof(Wires));
 
             Console.WriteLine($"  Wire created with {wire.Segments.Count} segments");

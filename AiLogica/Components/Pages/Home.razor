@@ -76,15 +76,18 @@
     }
 
     <!-- Wires -->
-    @foreach (var wire in ViewModel.Wires)
+    @if (ViewModel.Wires.Count > 0)
     {
         <svg class="wire-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5;">
-            @foreach (var segment in wire.Segments)
+            @foreach (var wire in ViewModel.Wires)
             {
-                <line x1="@segment.StartX" y1="@segment.StartY" 
-                      x2="@segment.EndX" y2="@segment.EndY"
-                      stroke="@(wire.IsConnected ? "#5eb3f5" : "#f44336")" 
-                      stroke-width="2"/>
+                @foreach (var segment in wire.Segments)
+                {
+                    <line x1="@segment.StartX" y1="@segment.StartY" 
+                          x2="@segment.EndX" y2="@segment.EndY"
+                          stroke="@(wire.IsConnected ? "#5eb3f5" : "#f44336")" 
+                          stroke-width="2"/>
+                }
             }
         </svg>
     }
