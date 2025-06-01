@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="JetBrains-Aligned Analysis Rules" Description="Static analysis configuration aligned with JetBrains ReSharper/Rider analysis standards" ToolsVersion="16.0">
+  
+  <!-- Inherit from Microsoft recommended rules as baseline -->
+  <Include Path="microsoft.codeanalysis.netanalyzers.targets" Action="Default" />
+  
+  <!-- Microsoft Design Rules - Align with JetBrains preferences -->
+  <Rules AnalyzerId="Microsoft.CodeAnalysis.NetAnalyzers" RuleNamespace="Microsoft.CodeAnalysis.NetAnalyzers">
+    <!-- CA1000: Do not declare static members on generic types -->
+    <Rule Id="CA1000" Action="Warning" />
+    <!-- CA1001: Types that own disposable fields should be disposable -->
+    <Rule Id="CA1001" Action="Error" />
+    <!-- CA1002: Do not expose generic lists -->
+    <Rule Id="CA1002" Action="Warning" />
+    <!-- CA1003: Use generic event handler instances -->
+    <Rule Id="CA1003" Action="Warning" />
+    <!-- CA1005: Avoid excessive parameters on generic types -->
+    <Rule Id="CA1005" Action="Warning" />
+    <!-- CA1008: Enums should have zero value -->
+    <Rule Id="CA1008" Action="Warning" />
+    <!-- CA1010: Collections should implement generic interface -->
+    <Rule Id="CA1010" Action="Warning" />
+    <!-- CA1012: Abstract types should not have constructors -->
+    <Rule Id="CA1012" Action="Warning" />
+    <!-- CA1014: Mark assemblies with CLSCompliant -->
+    <Rule Id="CA1014" Action="None" />
+    <!-- CA1016: Mark assemblies with assembly version -->
+    <Rule Id="CA1016" Action="Warning" />
+    <!-- CA1017: Mark assemblies with ComVisible -->
+    <Rule Id="CA1017" Action="None" />
+    <!-- CA1018: Mark attributes with AttributeUsageAttribute -->
+    <Rule Id="CA1018" Action="Warning" />
+    <!-- CA1019: Define accessors for attribute arguments -->
+    <Rule Id="CA1019" Action="Warning" />
+    <!-- CA1021: Avoid out parameters -->
+    <Rule Id="CA1021" Action="Info" />
+    <!-- CA1024: Use properties where appropriate -->
+    <Rule Id="CA1024" Action="Warning" />
+    <!-- CA1027: Mark enums with FlagsAttribute -->
+    <Rule Id="CA1027" Action="Warning" />
+    <!-- CA1028: Enum Storage should be Int32 -->
+    <Rule Id="CA1028" Action="Warning" />
+    <!-- CA1030: Use events where appropriate -->
+    <Rule Id="CA1030" Action="Warning" />
+    <!-- CA1031: Do not catch general exception types -->
+    <Rule Id="CA1031" Action="Warning" />
+    <!-- CA1032: Implement standard exception constructors -->
+    <Rule Id="CA1032" Action="Warning" />
+    <!-- CA1033: Interface methods should be callable by child types -->
+    <Rule Id="CA1033" Action="Warning" />
+    <!-- CA1034: Nested types should not be visible -->
+    <Rule Id="CA1034" Action="Warning" />
+    <!-- CA1036: Override methods on comparable types -->
+    <Rule Id="CA1036" Action="Warning" />
+    <!-- CA1040: Avoid empty interfaces -->
+    <Rule Id="CA1040" Action="Warning" />
+    <!-- CA1041: Provide ObsoleteAttribute message -->
+    <Rule Id="CA1041" Action="Warning" />
+    <!-- CA1043: Use Integral Or String Argument For Indexers -->
+    <Rule Id="CA1043" Action="Warning" />
+    <!-- CA1044: Properties should not be write only -->
+    <Rule Id="CA1044" Action="Warning" />
+    <!-- CA1045: Do not pass types by reference -->
+    <Rule Id="CA1045" Action="Warning" />
+    <!-- CA1046: Do not overload equality operator on reference types -->
+    <Rule Id="CA1046" Action="Warning" />
+    <!-- CA1047: Do not declare protected member in sealed type -->
+    <Rule Id="CA1047" Action="Error" />
+    <!-- CA1050: Declare types in namespaces -->
+    <Rule Id="CA1050" Action="Error" />
+    <!-- CA1051: Do not declare visible instance fields -->
+    <Rule Id="CA1051" Action="Warning" />
+    <!-- CA1052: Static holder types should be Static or NotInheritable -->
+    <Rule Id="CA1052" Action="Warning" />
+    <!-- CA1054: Uri parameters should not be strings -->
+    <Rule Id="CA1054" Action="Warning" />
+    <!-- CA1055: Uri return values should not be strings -->
+    <Rule Id="CA1055" Action="Warning" />
+    <!-- CA1056: Uri properties should not be strings -->
+    <Rule Id="CA1056" Action="Warning" />
+    <!-- CA1058: Types should not extend certain base types -->
+    <Rule Id="CA1058" Action="Warning" />
+    <!-- CA1060: Move pinvokes to native methods class -->
+    <Rule Id="CA1060" Action="Warning" />
+    <!-- CA1061: Do not hide base class methods -->
+    <Rule Id="CA1061" Action="Error" />
+    <!-- CA1062: Validate arguments of public methods -->
+    <Rule Id="CA1062" Action="Warning" />
+    <!-- CA1063: Implement IDisposable Correctly -->
+    <Rule Id="CA1063" Action="Error" />
+    <!-- CA1064: Exceptions should be public -->
+    <Rule Id="CA1064" Action="Warning" />
+    <!-- CA1065: Do not raise exceptions in unexpected locations -->
+    <Rule Id="CA1065" Action="Error" />
+    <!-- CA1066: Type {0} should implement IEquatable<T> because it overrides Equals -->
+    <Rule Id="CA1066" Action="Warning" />
+    <!-- CA1067: Override Object.Equals(object) when implementing IEquatable<T> -->
+    <Rule Id="CA1067" Action="Error" />
+    <!-- CA1068: CancellationToken parameters must come last -->
+    <Rule Id="CA1068" Action="Warning" />
+    <!-- CA1069: Enums values should not be duplicated -->
+    <Rule Id="CA1069" Action="Error" />
+    <!-- CA1070: Do not declare event fields as virtual -->
+    <Rule Id="CA1070" Action="Error" />
+  </Rules>
+
+  <!-- StyleCop Rules - Align with JetBrains code style preferences -->
+  <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
+    <!-- SA1000: Keywords should be spaced correctly - Warning only -->
+    <!-- SA1001: Commas should be spaced correctly -->
+    <Rule Id="SA1001" Action="Warning" />
+    <!-- SA1002: Semicolons should be spaced correctly -->
+    <Rule Id="SA1002" Action="Warning" />
+    <!-- SA1003: Symbols should be spaced correctly -->
+    <Rule Id="SA1003" Action="Warning" />
+    <!-- SA1004: Documentation lines should begin with single space -->
+    <Rule Id="SA1004" Action="Warning" />
+    <!-- SA1005: Single line comments should begin with single space -->
+    <Rule Id="SA1005" Action="Warning" />
+    <!-- SA1006: Preprocessor keywords should not be preceded by space -->
+    <Rule Id="SA1006" Action="Warning" />
+    <!-- SA1007: Operator keyword should be followed by space -->
+    <Rule Id="SA1007" Action="Warning" />
+    <!-- SA1008: Opening parenthesis should be spaced correctly -->
+    <Rule Id="SA1008" Action="Warning" />
+    <!-- SA1009: Closing parenthesis should be spaced correctly -->
+    <Rule Id="SA1009" Action="Warning" />
+    <!-- SA1010: Opening square brackets should be spaced correctly -->
+    <Rule Id="SA1010" Action="Warning" />
+    <!-- SA1011: Closing square brackets should be spaced correctly -->
+    <Rule Id="SA1011" Action="Warning" />
+    <!-- SA1012: Opening braces should be spaced correctly -->
+    <Rule Id="SA1012" Action="Warning" />
+    <!-- SA1013: Closing braces should be spaced correctly -->
+    <Rule Id="SA1013" Action="Warning" />
+    
+    <!-- JetBrains-aligned adjustments for better developer experience -->
+    <!-- SA1101: Prefix local calls with this - Disabled (JetBrains/modern C# preference) -->
+    <Rule Id="SA1101" Action="None" />
+    <!-- SA1200: Using directives placement - Allow outside namespace (JetBrains default) -->
+    <Rule Id="SA1200" Action="None" />
+    <!-- SA1309: Field names should not begin with underscore - Disabled (JetBrains style allows this) -->
+    <Rule Id="SA1309" Action="None" />
+    <!-- SA1413: Use trailing comma - Info only (preference, not required) -->
+    <Rule Id="SA1413" Action="Info" />
+    <!-- SA1503: Braces should not be omitted - Info only (JetBrains allows single-line statements) -->
+    <Rule Id="SA1503" Action="Info" />
+    <!-- SA1502: Element should not be on single line - Info only (more flexible) -->
+    <Rule Id="SA1502" Action="Info" />
+    <!-- SA1515: Single-line comment should be preceded by blank line - Info only -->
+    <Rule Id="SA1515" Action="Info" />
+    <!-- SA1516: Elements should be separated by blank line - Info only -->
+    <Rule Id="SA1516" Action="Info" />
+    <!-- SA1028: Code should not contain trailing whitespace - Info only -->
+    <Rule Id="SA1028" Action="Info" />
+    <!-- SA1000: Keywords should be spaced correctly - Info only -->
+    <Rule Id="SA1000" Action="Info" />
+    
+    <!-- Documentation Rules - More lenient to align with JetBrains approach -->
+    <!-- SA1600: Elements should be documented -->
+    <Rule Id="SA1600" Action="None" />
+    <!-- SA1601: Partial elements should be documented -->
+    <Rule Id="SA1601" Action="None" />
+    <!-- SA1602: Enumeration items should be documented -->
+    <Rule Id="SA1602" Action="None" />
+    <!-- SA1633: File should have header -->
+    <Rule Id="SA1633" Action="None" />
+    
+    <!-- Ordering Rules - Align with JetBrains member ordering -->
+    <!-- SA1201: Elements should appear in the correct order -->
+    <Rule Id="SA1201" Action="Warning" />
+    <!-- SA1202: Elements should be ordered by access -->
+    <Rule Id="SA1202" Action="Warning" />
+    <!-- SA1203: Constants should appear before fields -->
+    <Rule Id="SA1203" Action="Warning" />
+    <!-- SA1204: Static elements should appear before instance elements -->
+    <Rule Id="SA1204" Action="Warning" />
+    <!-- SA1205: Partial elements should declare access -->
+    <Rule Id="SA1205" Action="Error" />
+    <!-- SA1206: Declaration keywords should follow order -->
+    <Rule Id="SA1206" Action="Error" />
+    <!-- SA1207: Protected should come before internal -->
+    <Rule Id="SA1207" Action="Error" />
+    <!-- SA1208: System using directives should be placed before other using directives -->
+    <Rule Id="SA1208" Action="Error" />
+    <!-- SA1209: Using alias directives should be placed after other using directives -->
+    <Rule Id="SA1209" Action="Error" />
+    <!-- SA1210: Using directives should be ordered alphabetically by namespace -->
+    <Rule Id="SA1210" Action="Warning" />
+    <!-- SA1211: Using alias directives should be ordered alphabetically by alias name -->
+    <Rule Id="SA1211" Action="Warning" />
+    <!-- SA1212: Property accessors should follow order -->
+    <Rule Id="SA1212" Action="Error" />
+    <!-- SA1213: Event accessors should follow order -->
+    <Rule Id="SA1213" Action="Error" />
+    <!-- SA1214: Readonly fields should appear before non-readonly fields -->
+    <Rule Id="SA1214" Action="Warning" />
+  </Rules>
+
+  <!-- SonarAnalyzer Rules - Include key rules that align with JetBrains analysis -->
+  <Rules AnalyzerId="SonarAnalyzer.CSharp" RuleNamespace="SonarAnalyzer.CSharp">
+    <!-- S1118: Utility classes should not have public constructors -->
+    <Rule Id="S1118" Action="Warning" />
+    <!-- S1135: Track uses of "TODO" tags -->
+    <Rule Id="S1135" Action="Info" />
+    <!-- S1172: Unused method parameters should be removed -->
+    <Rule Id="S1172" Action="Warning" />
+    <!-- S1186: Methods should not be empty -->
+    <Rule Id="S1186" Action="Warning" />
+    <!-- S1481: Unused local variables should be removed -->
+    <Rule Id="S1481" Action="Warning" />
+    <!-- S1854: Unused assignments should be removed -->
+    <Rule Id="S1854" Action="Warning" />
+    <!-- S2094: Classes should not be empty -->
+    <Rule Id="S2094" Action="Warning" />
+    <!-- S2583: Conditionally executed code should be reachable -->
+    <Rule Id="S2583" Action="Warning" />
+    <!-- S2589: Boolean expressions should not be gratuitous -->
+    <Rule Id="S2589" Action="Warning" />
+    <!-- S3881: "IDisposable" should be implemented correctly -->
+    <Rule Id="S3881" Action="Error" />
+    <!-- S3925: "ISerializable" should be implemented correctly -->
+    <Rule Id="S3925" Action="Error" />
+    <!-- S4487: Unread "private" fields should be removed -->
+    <Rule Id="S4487" Action="Warning" />
+  </Rules>
+
+</RuleSet>

@@ -201,10 +201,25 @@ For detailed information about the project structure and technical architecture,
 **All violations from warning level and above must be addressed.** The project is configured to treat warnings as errors to enforce code quality standards.
 
 Static analysis is automatically enabled for all projects via `Directory.Build.props` and includes:
+
+#### Core Analysis Engines
 - **Microsoft .NET Analyzers**: Built-in code quality and security analysis
+- **StyleCop Analyzers**: Code style enforcement with JetBrains-aligned configuration
+- **SonarAnalyzer**: Advanced code quality rules complementing JetBrains analysis
+- **JetBrains Annotations**: Enhanced code contracts and nullability analysis
+
+#### JetBrains Integration
+The static analysis configuration is specifically aligned with JetBrains ReSharper/Rider analysis standards:
+- **Field Naming**: Allows underscore prefixes (e.g., `_field`) following JetBrains conventions
+- **Using Directives**: Supports both inside and outside namespace placement
+- **Code Style**: Flexible brace and spacing rules aligned with modern C# practices
+- **Documentation**: More relaxed documentation requirements for rapid development
+
+#### Analysis Features
 - **Code Style Enforcement**: Formatting and style rules are enforced at build time
 - **Warning Level Enforcement**: All compiler warnings are treated as build errors
 - **Latest Analysis Level**: Uses the most recent analyzer rule sets
+- **Custom Ruleset**: `jetbrains-aligned.ruleset` provides JetBrains-compatible rule configuration
 
 To check for static analysis issues locally:
 ```bash
@@ -221,6 +236,19 @@ Common static analysis violations to avoid:
 - Unreachable code
 - Code style violations
 - Potential security issues flagged by analyzers
+
+#### IDE Integration
+For the best development experience with JetBrains-style analysis:
+- **JetBrains Rider**: Full integration with enhanced inspection and refactoring
+- **ReSharper (Visual Studio)**: Complete analysis with real-time feedback
+- **Visual Studio**: Basic integration via configured analyzers
+- **VS Code**: Analyzer support through C# extension
+
+#### Configuration Files
+- `Directory.Build.props`: Project-wide analyzer configuration
+- `jetbrains-aligned.ruleset`: JetBrains-compatible rule definitions
+- `stylecop.json`: StyleCop analyzer settings
+- `.editorconfig`: Code formatting standards
 
 ### Project Conventions
 - Namespaces should follow the folder structure

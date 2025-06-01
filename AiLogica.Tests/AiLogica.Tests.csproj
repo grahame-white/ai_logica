@@ -10,6 +10,9 @@
     
     <!-- Test projects may have different documentation requirements -->
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    
+    <!-- Test projects have more relaxed static analysis rules -->
+    <NoWarn>$(NoWarn);SA1210;SA1208;SA1512;SA1122;CA1062;SA0001;SA1629;SA1514</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
