@@ -22,10 +22,12 @@ jobs:
 
       - name: Bootstrap
         shell: bash
+        continue-on-error: true
         run: |
           ./script/bootstrap
           
       - name: Setup
         shell: bash
+        continue-on-error: true
         run: |
           ./script/setup

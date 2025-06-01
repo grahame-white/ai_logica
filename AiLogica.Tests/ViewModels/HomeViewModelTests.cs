@@ -77,8 +77,8 @@ public class HomeViewModelTests
         // Assert
         Assert.Single(viewModel.PlacedGates);
         Assert.Equal("OR", viewModel.PlacedGates[0].Type);
-        Assert.Equal(120, viewModel.PlacedGates[0].X); // 150 - 30 offset
-        Assert.Equal(235, viewModel.PlacedGates[0].Y); // 250 - 15 offset
+        Assert.Equal(102, viewModel.PlacedGates[0].X); // 150 - 48 offset (updated for larger gates)
+        Assert.Equal(214, viewModel.PlacedGates[0].Y); // 250 - 36 offset (updated for larger gates)
         Assert.Equal("OR", viewModel.SelectedGate); // Gate should stay selected
         Assert.True(viewModel.IsDragging); // Should remain in dragging state
     }
@@ -114,13 +114,13 @@ public class HomeViewModelTests
         Assert.Equal("OR", viewModel.SelectedGate); // Should still be selected
         Assert.True(viewModel.IsDragging); // Should still be dragging
 
-        // Verify positions
-        Assert.Equal(70, viewModel.PlacedGates[0].X); // 100 - 30 offset
-        Assert.Equal(85, viewModel.PlacedGates[0].Y); // 100 - 15 offset
-        Assert.Equal(170, viewModel.PlacedGates[1].X); // 200 - 30 offset
-        Assert.Equal(135, viewModel.PlacedGates[1].Y); // 150 - 15 offset
-        Assert.Equal(270, viewModel.PlacedGates[2].X); // 300 - 30 offset
-        Assert.Equal(185, viewModel.PlacedGates[2].Y); // 200 - 15 offset
+        // Verify positions (updated for larger gates)
+        Assert.Equal(52, viewModel.PlacedGates[0].X); // 100 - 48 offset
+        Assert.Equal(64, viewModel.PlacedGates[0].Y); // 100 - 36 offset
+        Assert.Equal(152, viewModel.PlacedGates[1].X); // 200 - 48 offset
+        Assert.Equal(114, viewModel.PlacedGates[1].Y); // 150 - 36 offset
+        Assert.Equal(252, viewModel.PlacedGates[2].X); // 300 - 48 offset
+        Assert.Equal(164, viewModel.PlacedGates[2].Y); // 200 - 36 offset
     }
 
     [Fact]
