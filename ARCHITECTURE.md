@@ -30,6 +30,7 @@ ai_logica/
 
 ### 2.1 Implemented Components
 - **ViewModelBase**: Basic MVVM foundation with INotifyPropertyChanged implementation
+- **CoordinateHelper**: Utility class providing explicit coordinate system methods for avoiding left/right positioning confusion
 - **Standard Blazor Pages**: Template pages (Home, Counter, Weather, Error)
 - **Layout System**: Standard Blazor Server layout structure
 - **Basic Project Structure**: Multi-project solution setup

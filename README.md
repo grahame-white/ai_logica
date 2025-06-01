@@ -14,6 +14,7 @@ This project is in early development. The current implementation includes:
 - ✅ Basic Blazor Server application structure (.NET 8)
 - ✅ Multi-project solution organization
 - ✅ MVVM foundation with ViewModelBase implementation
+- ✅ Coordinate system utilities with explicit left/right positioning methods
 - ✅ Comprehensive documentation covering vision, requirements, and architecture
 - ✅ Test project setup
 
@@ -67,6 +68,7 @@ All development scripts are located in the `script/` directory and provide a tec
 - [**REQUIREMENTS.md**](REQUIREMENTS.md) - Functional requirements based on application outline
 - [**ARCHITECTURE.md**](ARCHITECTURE.md) - Current technical architecture and planned structure  
 - [**DEVELOPER_GUIDE.md**](DEVELOPER_GUIDE.md) - Development setup and guidelines
+- [**COORDINATE_SYSTEM.md**](COORDINATE_SYSTEM.md) - Coordinate system and positioning documentation
 - [**GLOSSARY.md**](GLOSSARY.md) - Definitions of terms used throughout the project
 
 ## Technology Stack
