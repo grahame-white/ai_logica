@@ -37,7 +37,7 @@ Based on the application outline, AI Logica shall provide the following capabili
 - **FR-3.4**: The end user shall be able to drag a new wire from one connection point to another
 - **FR-3.5**: It shall be possible to wire an output connection to an input connection
 - **FR-3.6**: It shall be possible to wire an input connection to an input connection (fan-out capability)
-- **FR-3.7**: It shall not be possible to wire connections within the same gate
+- **FR-3.7**: It shall be possible to wire connections within the same gate to enable feedback loops
 - **FR-3.8**: Wires shall be drawn using as few orthogonal straight line segments as possible
 - **FR-3.9**: Wire routing shall avoid passing through gates when possible
 - **FR-3.10**: Connected wires shall be visually distinct from disconnected or incomplete wire connections

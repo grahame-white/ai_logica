@@ -261,7 +261,7 @@ public class HomeViewModel : ViewModelBase
     private bool CanConnect(Connection from, Connection to)
     {
         // Can connect output to input, input to output, or input to input (for fan-out)
-        // Same-gate connections are allowed for feedback loops
+        // Same-gate connections are explicitly allowed for feedback loops (FR-3.7)
         return (from.Type == ConnectionType.Output && to.Type == ConnectionType.Input) ||
                (from.Type == ConnectionType.Input && to.Type == ConnectionType.Output) ||
                (from.Type == ConnectionType.Input && to.Type == ConnectionType.Input);
