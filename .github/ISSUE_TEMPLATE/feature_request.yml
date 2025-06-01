@@ -12,6 +12,7 @@ body:
         - [REQUIREMENTS.md](../blob/main/REQUIREMENTS.md) - Current functional requirements
         - [DEVELOPER_GUIDE.md](../blob/main/DEVELOPER_GUIDE.md) - Development guidelines and standards
         - [ARCHITECTURE.md](../blob/main/ARCHITECTURE.md) - Technical architecture overview
+        - [COORDINATE_SYSTEM.md](../blob/main/COORDINATE_SYSTEM.md) - Coordinate system and positioning documentation
 
   - type: textarea
     id: user-story
@@ -62,6 +63,7 @@ body:
         - "1.4 Hierarchical Design"
         - "1.5 Design Overview"
         - "2. Technical Requirements"
+        - "Coordinate/Positioning Features"
         - "UI/UX Improvements"
         - "Performance Enhancements"
         - "Developer Experience"
@@ -81,6 +83,7 @@ body:
         - What existing functionality might be affected?
         - Are there any performance or compatibility concerns?
         - Should this integrate with existing features?
+        - If this involves positioning/layout, consider using CoordinateHelper utilities (see COORDINATE_SYSTEM.md)
 
   - type: textarea
     id: acceptance-criteria

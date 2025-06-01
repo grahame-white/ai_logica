@@ -13,6 +13,7 @@ body:
         - [REQUIREMENTS.md](../blob/main/REQUIREMENTS.md) - Functional requirements specification
         - [DEVELOPER_GUIDE.md](../blob/main/DEVELOPER_GUIDE.md) - Development guidelines and standards
         - [ARCHITECTURE.md](../blob/main/ARCHITECTURE.md) - Technical architecture overview
+        - [COORDINATE_SYSTEM.md](../blob/main/COORDINATE_SYSTEM.md) - Coordinate system and positioning documentation
         - [E2E_TESTING_STRATEGY.md](../blob/main/E2E_TESTING_STRATEGY.md) - Testing approach
 
   - type: dropdown
@@ -39,6 +40,7 @@ body:
         - "REQUIREMENTS.md"
         - "DEVELOPER_GUIDE.md"
         - "ARCHITECTURE.md"
+        - "COORDINATE_SYSTEM.md"
         - "E2E_TESTING_STRATEGY.md"
         - "Code Comments/Inline Documentation"
         - "API Documentation"
