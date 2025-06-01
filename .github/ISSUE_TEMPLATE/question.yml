@@ -1,0 +1,158 @@
+name: ❓ Question/Support
+description: Ask questions about AI Logica or request help with usage
+title: "[QUESTION] "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for your question about AI Logica! This template will help ensure you get the best possible assistance.
+        
+        📖 **Please check these resources first:**
+        - [README.md](../blob/main/README.md) - Project overview and getting started guide
+        - [DEVELOPER_GUIDE.md](../blob/main/DEVELOPER_GUIDE.md) - Development setup and workflows
+        - [REQUIREMENTS.md](../blob/main/REQUIREMENTS.md) - Current feature capabilities
+        - [GitHub Discussions](https://github.com/grahame-white/ai_logica/discussions) - Community Q&A
+        
+        💡 **Consider using GitHub Discussions instead** if your question is:
+        - General discussion about the project
+        - Ideas for future features
+        - Community-driven support
+
+  - type: dropdown
+    id: question-type
+    attributes:
+      label: "Question Type"
+      description: "What type of question is this?"
+      options:
+        - "Usage Help - How to use a specific feature"
+        - "Setup/Installation - Getting AI Logica running"
+        - "Development Help - Contributing to the project"
+        - "Feature Clarification - Understanding how something works"
+        - "Architecture Question - Technical implementation details"
+        - "Requirements Question - Current or planned functionality"
+        - "Other"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: user-type
+    attributes:
+      label: "User Type"
+      description: "Which best describes you?"
+      options:
+        - "End User - Using the AI Logica application"
+        - "Developer - Contributing to the project"
+        - "AI Developer - AI assistant working on the project"
+        - "Student/Learner - Learning about logic circuits"
+        - "Educator - Using for teaching"
+        - "Other"
+    validations:
+      required: true
+
+  - type: textarea
+    id: question-description
+    attributes:
+      label: "Question"
+      description: "What would you like to know?"
+      placeholder: "Ask your question clearly and provide as much context as possible..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: "Context"
+      description: "Provide context about what you're trying to accomplish"
+      placeholder: |
+        - What are you trying to do?
+        - What have you tried so far?
+        - What specific outcome are you looking for?
+    validations:
+      required: true
+
+  - type: textarea
+    id: attempted-solutions
+    attributes:
+      label: "What You've Tried"
+      description: "What have you already attempted? (Optional but helpful)"
+      placeholder: |
+        - Steps you've taken
+        - Documentation you've read
+        - Solutions you've attempted
+        - Search terms you've used
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: "Environment (if relevant)"
+      description: "Provide environment details if your question is technical"
+      placeholder: |
+        - Operating System: [e.g., Windows 11, macOS 13, Ubuntu 22.04]
+        - Browser: [e.g., Chrome 119, Firefox 120, Safari 17]
+        - .NET Version: [if applicable]
+        - AI Logica Version/Commit: [if known]
+
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: "Urgency"
+      description: "How urgent is this question?"
+      options:
+        - "Low - General inquiry, no rush"
+        - "Medium - Would like to know soon"
+        - "High - Blocking my work or learning"
+        - "Critical - Urgent assistance needed"
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-answer
+    attributes:
+      label: "Expected Answer Type"
+      description: "What type of answer would be most helpful?"
+      placeholder: |
+        - Step-by-step instructions
+        - Code examples
+        - Conceptual explanation
+        - Links to relevant documentation
+        - Clarification of requirements/features
+
+  - type: checkboxes
+    id: research-checklist
+    attributes:
+      label: "Research Checklist"
+      description: "Have you checked these resources? (Helps us provide better answers)"
+      options:
+        - label: "I've read the README.md file"
+        - label: "I've checked the DEVELOPER_GUIDE.md (if development-related)"
+        - label: "I've reviewed REQUIREMENTS.md (if feature-related)"
+        - label: "I've searched existing issues for similar questions"
+        - label: "I've checked GitHub Discussions"
+        - label: "I've tried basic troubleshooting steps"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        **Response Guidelines for Community Members:**
+        
+        🤝 **For Community Members answering questions:**
+        - Provide clear, helpful answers
+        - Reference official documentation when possible
+        - If suggesting code changes, ensure they follow project standards
+        - Consider if the question indicates missing documentation
+        
+        🔧 **For Developers addressing questions:**
+        - Check if the question reveals gaps in documentation
+        - Consider if frequently asked questions need better documentation
+        - Use questions to improve the user experience
+        - Update documentation if the question is common
+        
+        📚 **Helpful Resources:**
+        - [README.md](../blob/main/README.md) - Getting started
+        - [DEVELOPER_GUIDE.md](../blob/main/DEVELOPER_GUIDE.md) - Development info
+        - [REQUIREMENTS.md](../blob/main/REQUIREMENTS.md) - Feature details
+        - [ARCHITECTURE.md](../blob/main/ARCHITECTURE.md) - Technical details
+        - [GitHub Discussions](https://github.com/grahame-white/ai_logica/discussions) - Community support
