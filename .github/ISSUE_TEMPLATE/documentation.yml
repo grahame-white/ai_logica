@@ -1,0 +1,162 @@
+name: 📚 Documentation Issue
+description: Report issues with documentation or request documentation improvements
+title: "[DOCS] "
+labels: ["documentation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping improve AI Logica's documentation! This template will help ensure your request includes all the information needed for effective documentation updates.
+        
+        📖 **Current documentation files:**
+        - [README.md](../blob/main/README.md) - Project overview and getting started
+        - [REQUIREMENTS.md](../blob/main/REQUIREMENTS.md) - Functional requirements specification
+        - [DEVELOPER_GUIDE.md](../blob/main/DEVELOPER_GUIDE.md) - Development guidelines and standards
+        - [ARCHITECTURE.md](../blob/main/ARCHITECTURE.md) - Technical architecture overview
+        - [E2E_TESTING_STRATEGY.md](../blob/main/E2E_TESTING_STRATEGY.md) - Testing approach
+
+  - type: dropdown
+    id: documentation-type
+    attributes:
+      label: "Documentation Type"
+      description: "What type of documentation issue is this?"
+      options:
+        - "Missing Documentation - Information that should be documented but isn't"
+        - "Incorrect Documentation - Information that is wrong or outdated"
+        - "Unclear Documentation - Information that exists but is confusing"
+        - "Documentation Improvement - Suggestion to make existing docs better"
+        - "New Documentation Request - Request for entirely new documentation"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: affected-documentation
+    attributes:
+      label: "Affected Documentation"
+      description: "Which documentation file(s) are affected?"
+      options:
+        - "README.md"
+        - "REQUIREMENTS.md"
+        - "DEVELOPER_GUIDE.md"
+        - "ARCHITECTURE.md"
+        - "E2E_TESTING_STRATEGY.md"
+        - "Code Comments/Inline Documentation"
+        - "API Documentation"
+        - "Multiple Files"
+        - "New File Needed"
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue-description
+    attributes:
+      label: "Issue Description"
+      description: "Describe the documentation issue or improvement needed"
+      placeholder: "Clearly explain what is missing, incorrect, unclear, or could be improved..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-documentation
+    attributes:
+      label: "Current Documentation (if applicable)"
+      description: "Quote or reference the current documentation that needs to be changed"
+      placeholder: "Copy the relevant section of current documentation here, or provide a link to the specific section..."
+
+  - type: textarea
+    id: suggested-improvement
+    attributes:
+      label: "Suggested Improvement"
+      description: "How should the documentation be improved?"
+      placeholder: "Provide your suggested text, structure, or improvement..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: target-audience
+    attributes:
+      label: "Target Audience"
+      description: "Who is the primary audience for this documentation?"
+      options:
+        - "End Users - People using the AI Logica application"
+        - "Human Developers - Developers working on the project"
+        - "AI Developers - AI assistants implementing features"
+        - "Contributors - People contributing to the project"
+        - "General Public - Anyone interested in the project"
+        - "Multiple Audiences"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: "Priority"
+      description: "How important is this documentation issue?"
+      options:
+        - "Low - Nice to have improvement"
+        - "Medium - Would help users/developers"
+        - "High - Important for project success"
+        - "Critical - Blocking project use or development"
+    validations:
+      required: true
+
+  - type: textarea
+    id: user-story
+    attributes:
+      label: "User Story (optional)"
+      description: "Describe from the user's perspective why this documentation is needed"
+      placeholder: "As a [user type], I want [documentation goal] so that [benefit]..."
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: "Additional Context"
+      description: "Any other context about this documentation need"
+      placeholder: "Related issues, examples from other projects, specific use cases, etc..."
+
+  - type: checkboxes
+    id: documentation-checklist
+    attributes:
+      label: "Developer Implementation Checklist"
+      description: "For developers addressing this documentation issue (reference DEVELOPER_GUIDE.md)"
+      options:
+        - label: "Review and understand the documentation request"
+        - label: "Identify all affected documentation files"
+        - label: "Check if changes affect requirements in REQUIREMENTS.md"
+        - label: "Follow documentation standards and style guides"
+        - label: "Install git hooks using `script/setup-git-hooks`"
+        - label: "Ensure documentation is accurate and up-to-date"
+        - label: "Verify all links and references work correctly"
+        - label: "Test any code examples or instructions provided"
+        - label: "Run `script/format` to ensure formatting is correct"
+        - label: "Review documentation for clarity and completeness"
+        - label: "Update related documentation if necessary"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        **For AI Developers improving this documentation:**
+        
+        1. 🔧 **Start with setup**: Run `script/setup` to install dependencies and git hooks
+        2. 📖 **Review current docs**: Read all related documentation files thoroughly
+        3. 🎯 **Understand the need**: Clearly identify what needs to be documented and why
+        4. ✍️ **Write clear content**: Use clear, concise language appropriate for the target audience
+        5. 🔗 **Check all links**: Ensure all references and links are working and accurate
+        6. 🧪 **Test examples**: If providing code examples or instructions, test them
+        7. 🎨 **Format properly**: Use `script/format` and follow markdown standards
+        
+        **Documentation Guidelines:**
+        - Use clear, concise language
+        - Include practical examples where helpful
+        - Keep the target audience in mind
+        - Maintain consistency with existing documentation style
+        - Update related documentation if changes affect multiple files
+        
+        **Development Scripts:**
+        - `script/setup` - Complete setup for development
+        - `script/server` - Start development server for testing
+        - `script/test` - Run all tests
+        - `script/format` - Format code and documentation
+        - `script/cibuild` - Run CI checks locally

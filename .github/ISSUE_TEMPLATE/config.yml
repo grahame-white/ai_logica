@@ -1,11 +1,5 @@
 blank_issues_enabled: false
 contact_links:
-  - name: 📚 Documentation
-    url: https://github.com/grahame-white/ai_logica/blob/main/README.md
-    about: Review project documentation and getting started guide
   - name: 💡 General Questions & Discussions
     url: https://github.com/grahame-white/ai_logica/discussions
     about: Ask questions, share ideas, or discuss the project with the community
-  - name: 🐛 Bug Reports
-    url: https://github.com/grahame-white/ai_logica/issues/new
-    about: Report bugs or technical issues (use the bug report template when creating)

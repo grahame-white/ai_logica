@@ -77,6 +77,15 @@ Based on the application outline, AI Logica shall provide the following capabili
 - Clear visual feedback for all operations
 - Minimal learning curve for new users
 
+### 2.4 Project Infrastructure
+- **FR-10.1**: The project infrastructure shall make it easy for users to contribute across different capacities (feature requests, development, bug reporting, etc.)
+- **FR-10.2**: The project infrastructure shall ensure that developers, Human and AI, are provided with the information they need to implement issues they are assigned
+- **FR-10.3**: The project infrastructure shall help requesters express the problem that they are trying to solve through appropriate issue templates
+- **FR-10.4**: The project infrastructure shall ensure that developers have the freedom to explore innovative solutions that solve user issues
+- **FR-10.5**: Issue templates shall exist for each top-level ticket type (bug reports, feature requests, documentation issues, questions/support)
+- **FR-10.6**: Each issue template shall prompt the requester to provide the details most likely to allow the desired outcome
+- **FR-10.7**: Required fields in issue templates shall be carefully considered so that only information that a requester is reasonably likely to have is asked for
+
 ## 3. Conflicting Requirements and Trade-offs
 
 As requested in the documentation requirements, the following conflicting requirements must be highlighted for appropriate direction:
