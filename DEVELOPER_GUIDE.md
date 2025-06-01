@@ -198,7 +198,7 @@ For detailed information about the project structure and technical architecture,
 
 #### 1. **Early and Frequent Commits**
 - **Commit every meaningful milestone**, no matter how small
-- **Never let more than 15-20 minutes pass** without committing progress
+- **Never let more than 10 minutes pass** without committing progress
 - **Use `report_progress` tool frequently** to push changes and update the PR
 
 #### 2. **Break Down Large Tasks**
@@ -227,7 +227,7 @@ script/setup
 # Use report_progress to commit setup completion
 ```
 
-#### **During Development (Every 15-20 minutes)**
+#### **During Development (Every 10 minutes)**
 - ✅ Added new test case
 - ✅ Implemented basic method stub
 - ✅ Added validation logic
@@ -245,7 +245,7 @@ script/setup
 #### **Warning Signs You're Doing Too Much**
 - Making changes to more than 3-4 files simultaneously
 - Adding more than 50-100 lines of code before committing
-- Spending more than 20 minutes without a successful test run
+- Spending more than 10 minutes without a successful test run
 - Implementing multiple requirements in one commit
 
 #### **Recovery Actions**
@@ -309,10 +309,10 @@ script/setup
 ### ✅ Success Metrics
 
 **You're following incremental development correctly if:**
-- You commit working code every 15-20 minutes
+- You commit working code every 10 minutes
 - Each commit has a single, clear purpose
 - Tests pass after every commit
-- You never lose more than 15 minutes of work
+- You never lose more than 10 minutes of work
 - You use `report_progress` at least 3-4 times per session
 - You can stop work at any commit and have a working system
 

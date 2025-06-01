@@ -181,13 +181,13 @@ body:
         15. **Verify in development**: Test feature works using `script/server`
         
         ### ⚠️ CRITICAL: INCREMENTAL DEVELOPMENT
-        **COMMIT FREQUENTLY**: Use `report_progress` every 15-20 minutes to avoid losing work
+        **COMMIT FREQUENTLY**: Use `report_progress` every 10 minutes to avoid losing work
         - After initial analysis and planning
         - After writing failing tests
         - After implementing each sub-task (break large features into 3-5 sub-tasks)
         - After updating requirements documentation
         - After fixing any test failures
-        - Never go more than 20 minutes without committing progress
+        - Never go more than 10 minutes without committing progress
         
         ### 🛠️ DEVELOPMENT SCRIPTS:
         - `script/setup` - Complete setup for development

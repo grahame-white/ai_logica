@@ -157,12 +157,12 @@ body:
         11. **Test in development**: Verify fix works using `script/server`
         
         ### ⚠️ CRITICAL: INCREMENTAL DEVELOPMENT
-        **COMMIT FREQUENTLY**: Use `report_progress` every 15-20 minutes to avoid losing work
+        **COMMIT FREQUENTLY**: Use `report_progress` every 10 minutes to avoid losing work
         - After reproducing the issue
         - After writing failing tests  
         - After implementing basic fix
         - After fixing any additional issues
-        - Never go more than 20 minutes without committing progress
+        - Never go more than 10 minutes without committing progress
         
         ### 🛠️ DEVELOPMENT SCRIPTS:
         - `script/setup` - Complete setup for development
