@@ -1,0 +1,172 @@
+name: 🚀 Feature Request
+description: Request new functionality or enhancements to AI Logica
+title: "[FEATURE] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for proposing a new feature for AI Logica! This template will help ensure your request includes all the information needed for effective implementation, especially by AI developers.
+        
+        📖 **Please review the existing documentation first:**
+        - [REQUIREMENTS.md](../blob/main/REQUIREMENTS.md) - Current functional requirements
+        - [DEVELOPER_GUIDE.md](../blob/main/DEVELOPER_GUIDE.md) - Development guidelines and standards
+        - [ARCHITECTURE.md](../blob/main/ARCHITECTURE.md) - Technical architecture overview
+
+  - type: textarea
+    id: user-story
+    attributes:
+      label: "User Story"
+      description: "Describe the feature from the user's perspective"
+      placeholder: "As a [user type], I want [goal] so that [benefit]..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: "Feature Description"
+      description: "Provide a detailed description of the requested functionality"
+      placeholder: "Describe what the feature should do, how it should behave, and any specific requirements..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: functional-requirements
+    attributes:
+      label: "Functional Requirements"
+      description: "List specific functional requirements using the project's FR-X.Y format (see REQUIREMENTS.md for examples)"
+      placeholder: |
+        - **FR-X.1**: The system shall [requirement description]
+        - **FR-X.2**: The user shall be able to [user action]
+        - **FR-X.3**: The feature shall [behavior description]
+      value: |
+        - **FR-X.1**: 
+        - **FR-X.2**: 
+        - **FR-X.3**: 
+    validations:
+      required: true
+
+  - type: dropdown
+    id: feature-category
+    attributes:
+      label: "Feature Category"
+      description: "Which area of the application does this feature relate to?"
+      options:
+        - "1.1 Graphical Gate Layout"
+        - "1.2 Gate Wiring"
+        - "1.3 Simulation Capabilities"
+        - "1.4 Hierarchical Design"
+        - "1.5 Design Overview"
+        - "2. Technical Requirements"
+        - "UI/UX Improvements"
+        - "Performance Enhancements"
+        - "Developer Experience"
+        - "Testing Infrastructure"
+        - "Other"
+    validations:
+      required: true
+
+  - type: textarea
+    id: technical-considerations
+    attributes:
+      label: "Technical Implementation Considerations"
+      description: "Provide guidance for developers implementing this feature"
+      placeholder: |
+        - Which components/classes likely need modification?
+        - Are there any architectural patterns that should be followed?
+        - What existing functionality might be affected?
+        - Are there any performance or compatibility concerns?
+        - Should this integrate with existing features?
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: "Acceptance Criteria"
+      description: "Define what constitutes successful implementation"
+      placeholder: |
+        - [ ] User can [specific action]
+        - [ ] System responds with [expected behavior]
+        - [ ] Feature integrates with [existing functionality]
+        - [ ] Performance meets [specific criteria]
+      value: |
+        - [ ] 
+        - [ ] 
+        - [ ] 
+
+  - type: textarea
+    id: testing-strategy
+    attributes:
+      label: "Testing Strategy"
+      description: "How should this feature be tested? Reference E2E_TESTING_STRATEGY.md for current approach"
+      placeholder: |
+        - Unit tests needed for [components]
+        - Component tests for [UI behaviors]
+        - Integration tests for [workflows]
+        - Any special testing considerations?
+
+  - type: checkboxes
+    id: development-checklist
+    attributes:
+      label: "Development Implementation Checklist"
+      description: "For developers implementing this feature (reference DEVELOPER_GUIDE.md)"
+      options:
+        - label: "Review and understand all functional requirements"
+        - label: "Update REQUIREMENTS.md with new functional requirements"
+        - label: "Follow coding standards defined in DEVELOPER_GUIDE.md"
+        - label: "Install git hooks using `script/setup-git-hooks`"
+        - label: "Implement unit tests following the existing test patterns"
+        - label: "Implement component tests for UI changes"
+        - label: "Update documentation if new APIs or workflows are introduced"
+        - label: "Run `script/test` to ensure all tests pass"
+        - label: "Run `script/format` to ensure code formatting is correct"
+        - label: "Verify feature works in development using `script/server`"
+
+  - type: textarea
+    id: mockups-or-examples
+    attributes:
+      label: "Mockups, Examples, or References"
+      description: "Include any visual mockups, code examples, or references that would help with implementation"
+      placeholder: "Attach files, provide links, or describe visual/behavioral examples..."
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: "Priority"
+      description: "How important is this feature?"
+      options:
+        - "Low - Nice to have"
+        - "Medium - Would improve user experience"
+        - "High - Important for core functionality"
+        - "Critical - Blocking other work"
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: "Additional Context"
+      description: "Any other information that would be helpful for implementation"
+      placeholder: "Related issues, dependencies, constraints, or other relevant information..."
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        **For AI Developers implementing this feature:**
+        
+        1. 🔧 **Start with setup**: Run `script/setup` to install dependencies and git hooks
+        2. 📖 **Review documentation**: Read REQUIREMENTS.md, DEVELOPER_GUIDE.md, and ARCHITECTURE.md
+        3. 🧪 **Understand testing**: Review E2E_TESTING_STRATEGY.md for testing approach
+        4. 🎯 **Follow the pattern**: Use existing code as examples for implementation patterns
+        5. 📝 **Update requirements**: Add new functional requirements to REQUIREMENTS.md
+        6. ✅ **Test thoroughly**: Run `script/test` frequently during development
+        7. 🎨 **Format code**: Use `script/format` before committing
+        
+        **Development Scripts:**
+        - `script/setup` - Complete setup for development
+        - `script/server` - Start development server
+        - `script/test` - Run all tests
+        - `script/format` - Format code
+        - `script/cibuild` - Run CI checks locally
