@@ -77,15 +77,22 @@ Based on the application outline, AI Logica shall provide the following capabili
 - Clear visual feedback for all operations
 - Minimal learning curve for new users
 
-### 2.4 Project Infrastructure
-- **FR-10.1**: The project infrastructure shall make it easy for users to contribute across different capacities (feature requests, development, bug reporting, etc.)
-- **FR-10.2**: The project infrastructure shall ensure that developers, Human and AI, are provided with the information they need to implement issues they are assigned
-- **FR-10.3**: The project infrastructure shall help requesters express the problem that they are trying to solve through appropriate issue templates
-- **FR-10.4**: The project infrastructure shall ensure that developers have the freedom to explore innovative solutions that solve user issues
-- **FR-10.5**: Issue templates shall exist for each top-level ticket type (bug reports, feature requests, documentation issues, questions/support)
-- **FR-10.6**: Each issue template shall prompt the requester to provide the details most likely to allow the desired outcome
-- **FR-10.7**: Required fields in issue templates shall be carefully considered so that only information that a requester is reasonably likely to have is asked for
-- **FR-10.8**: Issue templates shall include comprehensive and consistent AI developer guidance that ensures all critical development steps are covered, including git hooks installation, requirements documentation updates, code formatting, testing, and development workflow requirements
+### 2.4 Testing Requirements
+- **FR-10.1**: Unit tests shall follow a one test, one assert principle to ensure clear failure diagnosis and improved test maintainability
+- **FR-10.2**: Parametric tests shall be used when testing multiple scenarios with the same logic to reduce code duplication and improve test coverage
+- **FR-10.3**: Unit tests shall use xUnit's `[Theory]` and `[InlineData]` attributes for parametric testing scenarios
+- **FR-10.4**: Test methods shall have descriptive names that clearly indicate what functionality is being tested and the expected outcome
+- **FR-10.5**: Tests shall follow the Arrange-Act-Assert pattern for consistent structure and readability
+
+### 2.5 Project Infrastructure
+- **FR-11.1**: The project infrastructure shall make it easy for users to contribute across different capacities (feature requests, development, bug reporting, etc.)
+- **FR-11.2**: The project infrastructure shall ensure that developers, Human and AI, are provided with the information they need to implement issues they are assigned
+- **FR-11.3**: The project infrastructure shall help requesters express the problem that they are trying to solve through appropriate issue templates
+- **FR-11.4**: The project infrastructure shall ensure that developers have the freedom to explore innovative solutions that solve user issues
+- **FR-11.5**: Issue templates shall exist for each top-level ticket type (bug reports, feature requests, documentation issues, questions/support)
+- **FR-11.6**: Each issue template shall prompt the requester to provide the details most likely to allow the desired outcome
+- **FR-11.7**: Required fields in issue templates shall be carefully considered so that only information that a requester is reasonably likely to have is asked for
+- **FR-11.8**: Issue templates shall include comprehensive and consistent AI developer guidance that ensures all critical development steps are covered, including git hooks installation, requirements documentation updates, code formatting, testing, and development workflow requirements
 
 ## 3. Conflicting Requirements and Trade-offs
 

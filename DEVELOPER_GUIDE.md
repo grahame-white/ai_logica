@@ -269,11 +269,68 @@ For the best development experience with JetBrains-style analysis:
 - Follow the established separation between presentation and business logic
 
 ### Testing Best Practices
+
+#### Unit Testing Guidelines
+- **One Test, One Assert**: Each test method should focus on a single assertion to improve test clarity and make failure diagnosis easier
+- **Use Parametric Tests**: Leverage xUnit's `[Theory]` and `[InlineData]` attributes to test multiple scenarios without duplicating test logic
+- **Descriptive Test Names**: Write test names that clearly indicate what is being tested and the expected outcome
+- **Arrange-Act-Assert Pattern**: Structure tests with clear sections for setup, execution, and verification
+
+##### Examples
+
+**Single Assert per Test:**
+```csharp
+[Fact]
+public void SelectGate_ShouldSetSelectedGate()
+{
+    // Arrange
+    var viewModel = CreateTestViewModel();
+    
+    // Act
+    viewModel.SelectGate("OR");
+    
+    // Assert
+    Assert.Equal("OR", viewModel.SelectedGate);
+}
+
+[Fact]
+public void SelectGate_ShouldSetDraggingState()
+{
+    // Arrange
+    var viewModel = CreateTestViewModel();
+    
+    // Act
+    viewModel.SelectGate("OR");
+    
+    // Assert
+    Assert.True(viewModel.IsDragging);
+}
+```
+
+**Parametric Tests for Multiple Scenarios:**
+```csharp
+[Theory]
+[InlineData("OR")]
+[InlineData("AND")]
+[InlineData("NOT")]
+public void SelectGate_ShouldSetSelectedGateForDifferentTypes(string gateType)
+{
+    // Arrange
+    var viewModel = CreateTestViewModel();
+    
+    // Act
+    viewModel.SelectGate(gateType);
+    
+    // Assert
+    Assert.Equal(gateType, viewModel.SelectedGate);
+}
+```
+
+#### UI and Integration Testing
 - Use specific element selectors in tests rather than generic ones to avoid ambiguity as the application grows
 - Add data attributes (e.g., `data-testid`, `data-gate-type`) to elements that need to be tested for reliable selection
 - Extract repeated inline styles to CSS classes for better maintainability
 - Ensure tests target the specific functionality being tested rather than relying on implementation details
-- Write descriptive test names that clearly indicate what is being tested
 
 ## Building and Testing
 
