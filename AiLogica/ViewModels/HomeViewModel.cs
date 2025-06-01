@@ -187,16 +187,22 @@ public class HomeViewModel : ViewModelBase
         {
             Console.WriteLine($"  Connection allowed: true");
 
+            // Store reference to active connection before clearing wiring state
+            var fromConnection = ActiveConnection;
+
+            // Clear wiring state IMMEDIATELY to hide preview wire before adding routed wire
+            CancelWiring();
+
             var wire = new Wire
             {
                 Id = Guid.NewGuid(),
-                FromConnectionId = ActiveConnection.Id,
+                FromConnectionId = fromConnection.Id,
                 ToConnectionId = toConnection.Id,
                 IsConnected = true
             };
 
             // Generate wire segments using orthogonal routing
-            wire.Segments = GenerateWireSegments(ActiveConnection, toConnection);
+            wire.Segments = GenerateWireSegments(fromConnection, toConnection);
 
             // Debug: Log the final wire segments before adding to collection
             Console.WriteLine($"[DEBUG] Final wire segments before adding to collection:");
@@ -233,9 +239,8 @@ public class HomeViewModel : ViewModelBase
         else
         {
             Console.WriteLine($"  Connection not allowed");
+            CancelWiring();
         }
-
-        CancelWiring();
     }
 
     /// <summary>
@@ -246,6 +251,8 @@ public class HomeViewModel : ViewModelBase
         Console.WriteLine($"[DEBUG] CancelWiring called - clearing active connection and wiring state");
         ActiveConnection = null;
         IsWiring = false;
+        OnPropertyChanged(nameof(IsWiring));
+        OnPropertyChanged(nameof(ActiveConnection));
     }
 
     /// <summary>
