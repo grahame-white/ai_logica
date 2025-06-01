@@ -95,6 +95,9 @@ Based on the application outline, AI Logica shall provide the following capabili
 - **FR-11.6**: Each issue template shall prompt the requester to provide the details most likely to allow the desired outcome
 - **FR-11.7**: Required fields in issue templates shall be carefully considered so that only information that a requester is reasonably likely to have is asked for
 - **FR-11.8**: Issue templates shall include comprehensive and consistent AI developer guidance that ensures all critical development steps are covered, including git hooks installation, requirements documentation updates, code formatting, testing, and development workflow requirements
+- **FR-11.9**: The project shall maintain a comprehensive glossary of terms to ensure consistent terminology across all documentation, implementation, and communication between developers
+- **FR-11.10**: The glossary shall be referenced by developers when assigned to issues and extended when new terms are introduced or misunderstandings arise
+- **FR-11.11**: Changes to the glossary shall be reviewed against existing documentation and implementation to ensure consistency
 
 ## 3. Conflicting Requirements and Trade-offs
 

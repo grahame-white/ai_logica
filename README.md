@@ -67,6 +67,7 @@ All development scripts are located in the `script/` directory and provide a tec
 - [**REQUIREMENTS.md**](REQUIREMENTS.md) - Functional requirements based on application outline
 - [**ARCHITECTURE.md**](ARCHITECTURE.md) - Current technical architecture and planned structure  
 - [**DEVELOPER_GUIDE.md**](DEVELOPER_GUIDE.md) - Development setup and guidelines
+- [**GLOSSARY.md**](GLOSSARY.md) - Definitions of terms used throughout the project
 
 ## Technology Stack
 
