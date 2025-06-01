@@ -133,7 +133,8 @@
     <!-- Dragging Gate (follows mouse) -->
     @if (ViewModel.IsDragging && ViewModel.SelectedGate != null && (ViewModel.MouseX != 0 || ViewModel.MouseY != 0))
     {
-        <div class="dragging-gate" style="left: @(ViewModel.MouseX - 48)px; top: @(ViewModel.MouseY - 36)px;">
+        var (offsetX, offsetY) = GetGateOffset(ViewModel.SelectedGate);
+        <div class="dragging-gate" style="left: @(ViewModel.MouseX - offsetX)px; top: @(ViewModel.MouseY - offsetY)px;">
             @RenderGateContent(ViewModel.SelectedGate, false, true)
         </div>
     }
@@ -235,40 +236,40 @@
 
     private RenderFragment RenderConstantGateSvg(int value, bool isPlacedGate)
     {
-        // Constant gates are square: 32x32 for placed gates, 24x24 for palette
-        int size = isPlacedGate ? 32 : 24;
+        // Constant gates are smaller for better alignment: 20x20 for placed gates, 16x16 for palette
+        int size = isPlacedGate ? 20 : 16;
         string strokeWidth = "1"; // 1 pixel line width
         
         if (isPlacedGate)
         {
             // Constant gate as unfilled square with centered value for placed gates
-            return @<svg width="@size" height="@size" viewBox="0 0 32 32" style="display: block;">
+            return @<svg width="@size" height="@size" viewBox="0 0 20 20" style="display: block;">
                 <!-- Unfilled square -->
-                <rect x="2" y="2" width="24" height="24" 
+                <rect x="1" y="1" width="16" height="16" 
                       stroke="currentColor" 
                       fill="none" 
                       stroke-width="@strokeWidth"/>
                 <!-- Centered value -->
-                <text x="14" y="18" text-anchor="middle" dominant-baseline="central" 
-                      fill="currentColor" font-family="Arial, sans-serif" font-size="12">@value</text>
+                <text x="9" y="11" text-anchor="middle" dominant-baseline="central" 
+                      fill="currentColor" font-family="Arial, sans-serif" font-size="10">@value</text>
                 <!-- Output line -->
-                <line x1="26" y1="14" x2="30" y2="14" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <line x1="17" y1="9" x2="19" y2="9" stroke="currentColor" stroke-width="@strokeWidth"/>
             </svg>;
         }
         else
         {
             // Constant gate as unfilled square with centered value for palette gates
-            return @<svg width="@size" height="@size" viewBox="0 0 24 24" style="display: block;">
+            return @<svg width="@size" height="@size" viewBox="0 0 16 16" style="display: block;">
                 <!-- Unfilled square -->
-                <rect x="2" y="2" width="16" height="16" 
+                <rect x="1" y="1" width="12" height="12" 
                       stroke="currentColor" 
                       fill="none" 
                       stroke-width="@strokeWidth"/>
                 <!-- Centered value -->
-                <text x="10" y="12" text-anchor="middle" dominant-baseline="central" 
-                      fill="currentColor" font-family="Arial, sans-serif" font-size="9">@value</text>
+                <text x="7" y="8" text-anchor="middle" dominant-baseline="central" 
+                      fill="currentColor" font-family="Arial, sans-serif" font-size="8">@value</text>
                 <!-- Output line -->
-                <line x1="18" y1="10" x2="22" y2="10" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <line x1="13" y1="7" x2="15" y2="7" stroke="currentColor" stroke-width="@strokeWidth"/>
             </svg>;
         }
     }
@@ -287,6 +288,16 @@
             _ => @<div class="gate-content">
                 <span>@gate.Type</span>
             </div>
+        };
+    }
+
+    private (double offsetX, double offsetY) GetGateOffset(string gateType)
+    {
+        return gateType switch
+        {
+            "CONSTANT0" or "CONSTANT1" => (10, 10), // Half of 20x20
+            "OR" => (48, 36), // Half of 96x72
+            _ => (24, 18) // Default fallback
         };
     }
 

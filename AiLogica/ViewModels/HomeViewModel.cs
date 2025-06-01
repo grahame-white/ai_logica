@@ -106,12 +106,13 @@ public class HomeViewModel : ViewModelBase
         if (SelectedGate != null)
         {
             // Apply the same offset used during dragging to center the gate on cursor
-            // FR-3.1: Updated offsets for larger gate size (96x72 instead of 48x36)
+            // Different gate types have different sizes
+            var (offsetX, offsetY) = GetGateOffsets(SelectedGate);
             var gate = new PlacedGate
             {
                 Type = SelectedGate,
-                X = x - 48, // Same offset as dragging-gate positioning (half of 96px width)
-                Y = y - 36, // Same offset as dragging-gate positioning (half of 72px height)
+                X = x - offsetX,
+                Y = y - offsetY,
                 Id = Guid.NewGuid()
             };
 
@@ -346,6 +347,19 @@ public class HomeViewModel : ViewModelBase
         return (from.Type == ConnectionType.Output && to.Type == ConnectionType.Input) ||
                (from.Type == ConnectionType.Input && to.Type == ConnectionType.Output) ||
                (from.Type == ConnectionType.Input && to.Type == ConnectionType.Input);
+    }
+
+    /// <summary>
+    /// Gets the offset values for centering gates during dragging and placement.
+    /// </summary>
+    private static (double offsetX, double offsetY) GetGateOffsets(string gateType)
+    {
+        return gateType switch
+        {
+            "CONSTANT0" or "CONSTANT1" => (10, 10), // Half of 20x20
+            "OR" => (48, 36), // Half of 96x72
+            _ => (24, 18) // Default fallback
+        };
     }
 
     private void CreateConnectionsForGate(PlacedGate gate)
