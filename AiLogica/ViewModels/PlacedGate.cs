@@ -46,9 +46,9 @@ public class PlacedGate
     }
 
     /// <summary>
-    /// Defines the fixed connection coordinates for constant gate template (20x20 pixels).
-    /// Constants have only one output connection on the right side.
-    /// Small size allows alignment with OR gate inputs without overlapping.
+    /// Defines the fixed connection coordinates for constant gate template (32x16 pixels).
+    /// Constants have only one output connection at the end of the connector line.
+    /// 16x16 grid square + 16px connector line for proper grid alignment.
     /// </summary>
 #pragma warning disable S1172 // Remove this unused method parameter 'index'
     private static (double X, double Y) GetConstantGateTemplateCoordinates(ConnectionType type, int index)
@@ -56,7 +56,7 @@ public class PlacedGate
     {
         return type switch
         {
-            ConnectionType.Output => (20, 9), // Single output at edge of gate, centered vertically
+            ConnectionType.Output => (32, 8), // Output at end of 16px connector line, centered vertically
             _ => (0, 0) // Constants have no inputs
         };
     }

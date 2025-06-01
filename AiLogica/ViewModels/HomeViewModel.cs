@@ -356,7 +356,7 @@ public class HomeViewModel : ViewModelBase
     {
         return gateType switch
         {
-            "CONSTANT0" or "CONSTANT1" => (10, 10), // Half of 20x20
+            "CONSTANT0" or "CONSTANT1" => (16, 8), // Half of 32x16
             "OR" => (48, 36), // Half of 96x72
             _ => (24, 18) // Default fallback
         };
