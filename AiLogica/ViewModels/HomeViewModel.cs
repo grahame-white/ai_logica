@@ -121,40 +121,6 @@ public class HomeViewModel : ViewModelBase
         }
     }
 
-    private void CreateConnectionsForGate(PlacedGate gate)
-    {
-        switch (gate.Type)
-        {
-            case "OR":
-                // OR gate has 2 inputs and 1 output
-                gate.Connections.Add(new Connection
-                {
-                    Id = Guid.NewGuid(),
-                    GateId = gate.Id,
-                    Type = ConnectionType.Input,
-                    Index = 0
-                });
-                gate.Connections.Add(new Connection
-                {
-                    Id = Guid.NewGuid(),
-                    GateId = gate.Id,
-                    Type = ConnectionType.Input,
-                    Index = 1
-                });
-                gate.Connections.Add(new Connection
-                {
-                    Id = Guid.NewGuid(),
-                    GateId = gate.Id,
-                    Type = ConnectionType.Output,
-                    Index = 0
-                });
-                break;
-        }
-
-        // Update connection positions based on gate position
-        gate.UpdateConnectionPositions();
-    }
-
     public void CancelDrag()
     {
         SelectedGate = null;
@@ -162,10 +128,13 @@ public class HomeViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Starts a wiring operation from a connection point
+    /// Starts a wiring operation from a connection point.
     /// </summary>
     public void StartWiring(Connection connection)
     {
+        if (connection == null)
+            throw new ArgumentNullException(nameof(connection));
+
         Console.WriteLine($"[DEBUG] StartWiring called:");
         Console.WriteLine($"  Connection: {connection.Type} {connection.Index} at ({connection.X}, {connection.Y})");
         Console.WriteLine($"  Gate ID: {connection.GateId}");
@@ -175,10 +144,13 @@ public class HomeViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Completes a wiring operation by connecting to another connection point
+    /// Completes a wiring operation by connecting to another connection point.
     /// </summary>
     public void CompleteWiring(Connection toConnection)
     {
+        if (toConnection == null)
+            throw new ArgumentNullException(nameof(toConnection));
+
         Console.WriteLine($"[DEBUG] CompleteWiring called:");
         Console.WriteLine($"  From: {ActiveConnection?.Type} {ActiveConnection?.Index} at ({ActiveConnection?.X}, {ActiveConnection?.Y})");
         Console.WriteLine($"  To: {toConnection.Type} {toConnection.Index} at ({toConnection.X}, {toConnection.Y})");
@@ -224,7 +196,7 @@ public class HomeViewModel : ViewModelBase
 
             // Debug: Verify segments in the Wires collection after adding
             Console.WriteLine($"[DEBUG] Verifying wire segments in collection after adding:");
-            var addedWire = Wires.Last();
+            var addedWire = Wires[^1];
             for (int i = 0; i < addedWire.Segments.Count; i++)
             {
                 var seg = addedWire.Segments[i];
@@ -244,7 +216,7 @@ public class HomeViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Cancels the current wiring operation
+    /// Cancels the current wiring operation.
     /// </summary>
     public void CancelWiring()
     {
@@ -256,9 +228,29 @@ public class HomeViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Determines if two connections can be wired together
+    /// Finds a connection point near the given coordinates.
     /// </summary>
-    private bool CanConnect(Connection from, Connection to)
+    public Connection? FindConnectionAt(double x, double y, double tolerance = 10)
+    {
+        foreach (var gate in PlacedGates)
+        {
+            foreach (var connection in gate.Connections)
+            {
+                double distance = Math.Sqrt(Math.Pow(connection.X - x, 2) + Math.Pow(connection.Y - y, 2));
+                if (distance <= tolerance)
+                {
+                    return connection;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Determines if two connections can be wired together.
+    /// </summary>
+    private static bool CanConnect(Connection from, Connection to)
     {
         // Can connect output to input, input to output, or input to input (for fan-out)
         // Same-gate connections are explicitly allowed for feedback loops (FR-3.7)
@@ -267,8 +259,42 @@ public class HomeViewModel : ViewModelBase
                (from.Type == ConnectionType.Input && to.Type == ConnectionType.Input);
     }
 
+    private void CreateConnectionsForGate(PlacedGate gate)
+    {
+        switch (gate.Type)
+        {
+            case "OR":
+                // OR gate has 2 inputs and 1 output
+                gate.Connections.Add(new Connection
+                {
+                    Id = Guid.NewGuid(),
+                    GateId = gate.Id,
+                    Type = ConnectionType.Input,
+                    Index = 0
+                });
+                gate.Connections.Add(new Connection
+                {
+                    Id = Guid.NewGuid(),
+                    GateId = gate.Id,
+                    Type = ConnectionType.Input,
+                    Index = 1
+                });
+                gate.Connections.Add(new Connection
+                {
+                    Id = Guid.NewGuid(),
+                    GateId = gate.Id,
+                    Type = ConnectionType.Output,
+                    Index = 0
+                });
+                break;
+        }
+
+        // Update connection positions based on gate position
+        gate.UpdateConnectionPositions();
+    }
+
     /// <summary>
-    /// Generates orthogonal wire segments between two connection points
+    /// Generates orthogonal wire segments between two connection points.
     /// </summary>
     private List<WireSegment> GenerateWireSegments(Connection from, Connection to)
     {
@@ -290,7 +316,8 @@ public class HomeViewModel : ViewModelBase
         Console.WriteLine($"  Using midX: {midX} for routing");
 
         // Create three-segment route: horizontal -> vertical -> horizontal
-        if (Math.Abs(midX - startX) > 1) // Only add segment if there's meaningful distance
+        // Only add segment if there's meaningful distance
+        if (Math.Abs(midX - startX) > 1)
         {
             var horizontalSegment1 = new WireSegment
             {
@@ -304,7 +331,8 @@ public class HomeViewModel : ViewModelBase
             Console.WriteLine($"  Added horizontal segment 1: ({horizontalSegment1.StartX}, {horizontalSegment1.StartY}) -> ({horizontalSegment1.EndX}, {horizontalSegment1.EndY})");
         }
 
-        if (Math.Abs(endY - startY) > 1) // Only add segment if there's meaningful distance
+        // Only add segment if there's meaningful distance
+        if (Math.Abs(endY - startY) > 1)
         {
             var verticalSegment = new WireSegment
             {
@@ -318,7 +346,8 @@ public class HomeViewModel : ViewModelBase
             Console.WriteLine($"  Added vertical segment: ({verticalSegment.StartX}, {verticalSegment.StartY}) -> ({verticalSegment.EndX}, {verticalSegment.EndY})");
         }
 
-        if (Math.Abs(endX - midX) > 1) // Only add segment if there's meaningful distance
+        // Only add segment if there's meaningful distance
+        if (Math.Abs(endX - midX) > 1)
         {
             var horizontalSegment2 = new WireSegment
             {
@@ -337,7 +366,7 @@ public class HomeViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Finds a safe X position for wire routing that avoids gates
+    /// Finds a safe X position for wire routing that avoids gates.
     /// </summary>
     private double FindSafeXPosition(double startX, double endX, double startY, double endY)
     {
@@ -404,6 +433,7 @@ public class HomeViewModel : ViewModelBase
                     midX = rightRoute;
                     Console.WriteLine($"    Chose RIGHT route: {midX}");
                 }
+
                 break; // Only avoid the first conflicting gate for simplicity
             }
             else
@@ -414,24 +444,5 @@ public class HomeViewModel : ViewModelBase
 
         Console.WriteLine($"  Final midX: {midX}");
         return midX;
-    }
-
-    /// <summary>
-    /// Finds a connection point near the given coordinates
-    /// </summary>
-    public Connection? FindConnectionAt(double x, double y, double tolerance = 10)
-    {
-        foreach (var gate in PlacedGates)
-        {
-            foreach (var connection in gate.Connections)
-            {
-                double distance = Math.Sqrt(Math.Pow(connection.X - x, 2) + Math.Pow(connection.Y - y, 2));
-                if (distance <= tolerance)
-                {
-                    return connection;
-                }
-            }
-        }
-        return null;
     }
 }

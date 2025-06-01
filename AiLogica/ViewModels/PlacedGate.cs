@@ -9,7 +9,7 @@ public class PlacedGate
     public List<Connection> Connections { get; set; } = new();
 
     /// <summary>
-    /// Updates the absolute positions of all connection points based on gate position
+    /// Updates the absolute positions of all connection points based on gate position.
     /// </summary>
     public void UpdateConnectionPositions()
     {
@@ -22,21 +22,9 @@ public class PlacedGate
     }
 
     /// <summary>
-    /// Gets the relative position of a connection point within the gate
+    /// Gets connection positions for OR gates (96x72 pixels).
     /// </summary>
-    private (double X, double Y) GetRelativeConnectionPosition(ConnectionType type, int index)
-    {
-        return Type switch
-        {
-            "OR" => GetOrGateConnectionPosition(type, index),
-            _ => (0, 0) // Default for unsupported gate types
-        };
-    }
-
-    /// <summary>
-    /// Gets connection positions for OR gates (96x72 pixels)
-    /// </summary>
-    private (double X, double Y) GetOrGateConnectionPosition(ConnectionType type, int index)
+    private static (double X, double Y) GetOrGateConnectionPosition(ConnectionType type, int index)
     {
         return type switch
         {
@@ -48,6 +36,18 @@ public class PlacedGate
             },
             ConnectionType.Output => (88, 36), // Output (matching SVG coordinates)
             _ => (0, 0)
+        };
+    }
+
+    /// <summary>
+    /// Gets the relative position of a connection point within the gate.
+    /// </summary>
+    private (double X, double Y) GetRelativeConnectionPosition(ConnectionType type, int index)
+    {
+        return Type switch
+        {
+            "OR" => GetOrGateConnectionPosition(type, index),
+            _ => (0, 0) // Default for unsupported gate types
         };
     }
 }
