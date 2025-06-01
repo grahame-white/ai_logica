@@ -186,6 +186,136 @@ For detailed information about the project structure and technical architecture,
 - Ensure all new code includes appropriate tests
 - Follow the architectural patterns established in ARCHITECTURE.md
 
+## AI Developer Incremental Development Guide
+
+### ⚠️ Critical: Prevent Lost Work Through Incremental Development
+
+**Problem**: AI developers often attempt to complete entire features in 1-2 commits, which can consume the entire context window before task completion, resulting in lost uncommitted work.
+
+**Solution**: Adopt an incremental development approach with frequent commits and progress reporting.
+
+### 🎯 Incremental Development Principles
+
+#### 1. **Early and Frequent Commits**
+- **Commit every meaningful milestone**, no matter how small
+- **Never let more than 15-20 minutes pass** without committing progress
+- **Use `report_progress` tool frequently** to push changes and update the PR
+
+#### 2. **Break Down Large Tasks**
+- **Identify 3-5 smaller sub-tasks** from any feature request
+- **Implement one sub-task completely** before moving to the next
+- **Test and commit each sub-task** independently
+
+#### 3. **Incremental Implementation Pattern**
+```bash
+# For each sub-task:
+1. Plan the specific change (use think tool if needed)
+2. Make the minimal change needed
+3. Run: script/test (verify no regressions)
+4. Run: script/format (ensure formatting)
+5. Commit with report_progress tool
+6. Move to next sub-task
+```
+
+### 📋 Recommended Commit Cadence
+
+#### **After Setup (First Commit)**
+```bash
+# Always commit after initial setup
+script/setup-git-hooks
+script/setup
+# Use report_progress to commit setup completion
+```
+
+#### **During Development (Every 15-20 minutes)**
+- ✅ Added new test case
+- ✅ Implemented basic method stub
+- ✅ Added validation logic
+- ✅ Updated UI component
+- ✅ Fixed failing test
+- ✅ Added error handling
+
+#### **Before Major Changes**
+- ✅ Before refactoring existing code
+- ✅ Before changing multiple files
+- ✅ Before implementing complex logic
+
+### 🛡️ Context Window Management
+
+#### **Warning Signs You're Doing Too Much**
+- Making changes to more than 3-4 files simultaneously
+- Adding more than 50-100 lines of code before committing
+- Spending more than 20 minutes without a successful test run
+- Implementing multiple requirements in one commit
+
+#### **Recovery Actions**
+- **Stop and commit** what works immediately
+- **Use report_progress** to save current state
+- **Break remaining work** into smaller pieces
+- **Continue with incremental approach**
+
+### 🔄 Recommended Workflow for Large Features
+
+#### **Phase 1: Planning and Setup (First commit)**
+1. Install git hooks: `script/setup-git-hooks`
+2. Run setup: `script/setup`
+3. Create initial plan with sub-tasks
+4. **Commit**: "Setup environment and create implementation plan"
+
+#### **Phase 2: Test Infrastructure (Second commit)**
+1. Add failing tests for the first sub-task
+2. Ensure tests compile and fail as expected
+3. **Commit**: "Add failing tests for [sub-task]"
+
+#### **Phase 3: Incremental Implementation (Multiple commits)**
+1. Implement minimal code to make one test pass
+2. Run `script/test` and `script/format`
+3. **Commit**: "Implement [specific functionality]"
+4. Repeat for each test/requirement
+
+#### **Phase 4: Integration and Polish (Final commits)**
+1. Verify all tests pass
+2. Test manually with `script/server`
+3. **Commit**: "Complete [feature] implementation"
+
+### 📊 Progress Reporting Best Practices
+
+#### **Use report_progress Tool Frequently**
+- **After setup** (initial commit)
+- **After each sub-task completion**
+- **After fixing any test failures**
+- **Before making major architectural changes**
+
+#### **Progress Update Content**
+- ✅ Completed items in checklist format
+- 🚧 Current work in progress
+- 📋 Remaining tasks with clear next steps
+- 🔧 Any technical decisions or blockers
+
+### 🚨 Emergency Procedures
+
+#### **If Context Window Is Getting Full**
+1. **IMMEDIATELY**: Use `report_progress` to commit current state
+2. **Document**: What works and what doesn't in the commit message
+3. **Prioritize**: Save the most important working changes first
+4. **Plan**: Create clear next steps for the next session
+
+#### **If You Must Make Large Changes**
+1. **Commit current working state first**
+2. **Use feature branches** for experimental changes
+3. **Make incremental commits** even within the large change
+4. **Test frequently** with `script/test`
+
+### ✅ Success Metrics
+
+**You're following incremental development correctly if:**
+- You commit working code every 15-20 minutes
+- Each commit has a single, clear purpose
+- Tests pass after every commit
+- You never lose more than 15 minutes of work
+- You use `report_progress` at least 3-4 times per session
+- You can stop work at any commit and have a working system
+
 ## Coding Standards
 
 ### C# Conventions
