@@ -3,6 +3,8 @@
 ## Important Note for AI Developers
 **This requirements documentation must be updated to include any new requirements as they are added to the application. When implementing new functionality, ensure that corresponding functional requirements are documented in this file to maintain traceability and completeness of the specification.**
 
+**Additionally, maintain the requirements traceability matrix (TRACEABILITY_MATRIX.md) to ensure all requirements are properly tracked through implementation and testing. See DEVELOPER_GUIDE.md for detailed traceability guidelines.**
+
 ## 1. Core Functional Requirements
 
 Based on the application outline, AI Logica shall provide the following capabilities:

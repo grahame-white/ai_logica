@@ -456,6 +456,68 @@ dotnet run
 dotnet run -c Release
 ```
 
+## Requirements Traceability
+
+### Overview
+
+This project maintains comprehensive requirements traceability to support robust development methodology. All functional requirements defined in `REQUIREMENTS.md` are tracked through implementation and testing in `TRACEABILITY_MATRIX.md`.
+
+### Developer Responsibilities
+
+**Every developer must maintain requirements traceability by:**
+
+1. **Updating REQUIREMENTS.md** when implementing new functionality that requires new requirements
+2. **Updating TRACEABILITY_MATRIX.md** whenever:
+   - New requirements are added
+   - New functionality is implemented  
+   - Existing functionality is modified
+   - Code files are refactored or moved
+   - Test coverage changes
+
+3. **Adding traceability comments** to source code where they provide value without cluttering the codebase
+
+### Traceability Comment Guidelines
+
+**DO add traceability comments when:**
+- Implementing a core functional requirement (FR-x)
+- The code represents a significant requirement implementation
+- It helps future developers understand requirement coverage
+- The comment is brief and adds value
+
+**DON'T add traceability comments when:**
+- It would clutter code with obvious information
+- The requirement mapping is already clear from context
+- It would interfere with code readability
+
+### Example Traceability Comments
+
+```csharp
+// FR-2.4: Gate placement by clicking on canvas
+public void PlaceGate(double x, double y)
+
+// FR-3.8: Generates orthogonal wire segments
+private List<WireSegment> GenerateWireSegments()
+```
+
+```html
+@* FR-2.1: Gate palette highlighting on selection *@
+<div class="gate-item @(ViewModel.SelectedGate == "OR" ? "selected" : "")">
+```
+
+### Validation
+
+Before submitting any PR that adds or modifies functionality:
+
+1. **Review TRACEABILITY_MATRIX.md** to ensure it reflects your changes
+2. **Run the complete test suite** to verify requirement coverage
+3. **Update documentation** if new requirements were added
+
+The traceability matrix serves as a living document that supports:
+- Development planning and prioritization
+- Quality assurance and testing
+- Requirement coverage analysis
+- Technical debt identification
+
 ## Next Steps for Development
 
 Based on the requirements in REQUIREMENTS.md, the next major development tasks include:
