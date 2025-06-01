@@ -406,6 +406,14 @@ For the best development experience with JetBrains-style analysis:
 - Implement proper disposal patterns where needed
 - Follow the established separation between presentation and business logic
 
+#### Coordinate System and Positioning
+For any code involving graphical positioning, layout, or coordinate calculations:
+- **Use CoordinateHelper utilities** instead of direct coordinate math to avoid left/right confusion
+- **Reference COORDINATE_SYSTEM.md** for understanding the coordinate system rules
+- **Remember**: LEFT = LOWER X coordinates, RIGHT = HIGHER X coordinates
+- **Use explicit methods** like `CoordinateHelper.MoveToTheRight()` instead of ambiguous arithmetic
+- **Test positioning logic** with the coordinate system test patterns for validation
+
 ### Testing Best Practices
 
 #### Unit Testing Guidelines

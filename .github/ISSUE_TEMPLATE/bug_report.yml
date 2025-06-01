@@ -12,6 +12,7 @@ body:
         - [REQUIREMENTS.md](../blob/main/REQUIREMENTS.md) - Current functional requirements
         - [DEVELOPER_GUIDE.md](../blob/main/DEVELOPER_GUIDE.md) - Development guidelines and standards
         - [ARCHITECTURE.md](../blob/main/ARCHITECTURE.md) - Technical architecture overview
+        - [COORDINATE_SYSTEM.md](../blob/main/COORDINATE_SYSTEM.md) - Coordinate system and positioning documentation
 
   - type: textarea
     id: bug-description
@@ -64,6 +65,7 @@ body:
         - "1.3 Simulation Capabilities"
         - "1.4 Hierarchical Design"
         - "1.5 Design Overview"
+        - "Coordinate/Positioning Issues"
         - "UI/UX Issues"
         - "Performance Issues"
         - "Build/Development Issues"
@@ -126,6 +128,7 @@ body:
         - label: "Identify the root cause and affected components"
         - label: "Check if this violates any requirements in REQUIREMENTS.md"
         - label: "Determine if this is a regression from recent changes"
+        - label: "Check COORDINATE_SYSTEM.md if issue involves positioning or left/right confusion"
         - label: "Write unit tests that reproduce the bug"
         - label: "Implement fix following coding standards in DEVELOPER_GUIDE.md"
         - label: "Verify fix doesn't break existing functionality with `script/test`"

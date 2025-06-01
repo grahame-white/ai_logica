@@ -12,6 +12,7 @@ body:
         - [README.md](../blob/main/README.md) - Project overview and getting started guide
         - [DEVELOPER_GUIDE.md](../blob/main/DEVELOPER_GUIDE.md) - Development setup and workflows
         - [REQUIREMENTS.md](../blob/main/REQUIREMENTS.md) - Current feature capabilities
+        - [COORDINATE_SYSTEM.md](../blob/main/COORDINATE_SYSTEM.md) - Coordinate system and positioning documentation
         - [GitHub Discussions](https://github.com/grahame-white/ai_logica/discussions) - Community Q&A
         
         💡 **Consider using GitHub Discussions instead** if your question is:
@@ -31,6 +32,7 @@ body:
         - "Feature Clarification - Understanding how something works"
         - "Architecture Question - Technical implementation details"
         - "Requirements Question - Current or planned functionality"
+        - "Coordinate System Question - Positioning and layout concepts"
         - "Other"
     validations:
       required: true
@@ -176,6 +178,7 @@ body:
         - [DEVELOPER_GUIDE.md](../blob/main/DEVELOPER_GUIDE.md) - Development info
         - [REQUIREMENTS.md](../blob/main/REQUIREMENTS.md) - Feature details
         - [ARCHITECTURE.md](../blob/main/ARCHITECTURE.md) - Technical details
+        - [COORDINATE_SYSTEM.md](../blob/main/COORDINATE_SYSTEM.md) - Positioning and coordinate info
         - [GitHub Discussions](https://github.com/grahame-white/ai_logica/discussions) - Community support
     validations:
       required: false
