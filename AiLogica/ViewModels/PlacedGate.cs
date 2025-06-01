@@ -9,6 +9,11 @@ public class PlacedGate
     public List<Connection> Connections { get; set; } = new();
 
     /// <summary>
+    /// Gets or sets value property for constant gates (0 or 1). Null for non-constant gates.
+    /// </summary>
+    public int? Value { get; set; }
+
+    /// <summary>
     /// Updates the absolute positions of all connection points based on gate position.
     /// </summary>
     public void UpdateConnectionPositions()
