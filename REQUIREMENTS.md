@@ -46,8 +46,7 @@ Based on the application outline, AI Logica shall provide the following capabili
 - **FR-3.13**: Active wiring operations (wire being dragged) shall show a preview line from the source connection to the mouse cursor
 - **FR-3.14**: The end user shall be able to cancel an active wiring operation by clicking on empty canvas space or pressing Escape
 - **FR-3.15**: Connection points shall provide hover feedback to indicate they are interactive
-- **FR-3.16**: Wire routing shall use intelligent pathfinding to avoid passing through gates when possible
-- **FR-3.17**: Wire segments shall only be created when there is meaningful distance between connection points
+- **FR-3.16**: Wire segments shall only be created when there is meaningful distance between connection points
 
 ### 1.3 Simulation Capabilities
 - **FR-4**: The application will be able to simulate the behavior of the connected logic gates
