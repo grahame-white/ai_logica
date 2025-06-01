@@ -6,7 +6,6 @@ namespace AiLogica.Tests.ViewModels;
 
 public class WireConnectionTests
 {
-    private static HomeViewModel CreateTestViewModel() => new(NullLogger<HomeViewModel>.Instance);
     [Fact]
     public void PlaceGate_ShouldCreateConnectionPoints()
     {
@@ -368,4 +367,6 @@ public class WireConnectionTests
         Assert.False(passesThrough); // Wire should not pass through the gate
         Assert.True(wire.Segments.Count >= 2); // Should have multiple segments for proper routing
     }
+
+    private static HomeViewModel CreateTestViewModel() => new(NullLogger<HomeViewModel>.Instance);
 }

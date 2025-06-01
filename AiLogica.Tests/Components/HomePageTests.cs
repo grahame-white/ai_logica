@@ -8,7 +8,6 @@ using AiLogica.Components.Pages;
 namespace AiLogica.Tests.Components;
 public class HomePageTests : TestContext
 {
-    private static HomeViewModel CreateTestViewModel() => new(NullLogger<HomeViewModel>.Instance);
     [Fact]
     public void HomePage_SelectOrGate_ShouldUpdateViewModel()
     {
@@ -122,4 +121,6 @@ public class HomePageTests : TestContext
         var svgElement = placedGateElement.QuerySelector("svg");
         Assert.Null(svgElement);
     }
+
+    private static HomeViewModel CreateTestViewModel() => new(NullLogger<HomeViewModel>.Instance);
 }

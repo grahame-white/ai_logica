@@ -5,7 +5,6 @@ using Xunit;
 namespace AiLogica.Tests.ViewModels;
 public class HomeViewModelTests
 {
-    private static HomeViewModel CreateTestViewModel() => new(NullLogger<HomeViewModel>.Instance);
     [Fact]
     public void WelcomeMessage_ShouldHaveDefaultValue()
     {
@@ -161,4 +160,6 @@ public class HomeViewModelTests
         // Assert
         Assert.True(propertyChangedRaised);
     }
+
+    private static HomeViewModel CreateTestViewModel() => new(NullLogger<HomeViewModel>.Instance);
 }
