@@ -85,6 +85,7 @@ Based on the application outline, AI Logica shall provide the following capabili
 - **FR-10.5**: Issue templates shall exist for each top-level ticket type (bug reports, feature requests, documentation issues, questions/support)
 - **FR-10.6**: Each issue template shall prompt the requester to provide the details most likely to allow the desired outcome
 - **FR-10.7**: Required fields in issue templates shall be carefully considered so that only information that a requester is reasonably likely to have is asked for
+- **FR-10.8**: Issue templates shall include comprehensive and consistent AI developer guidance that ensures all critical development steps are covered, including git hooks installation, requirements documentation updates, code formatting, testing, and development workflow requirements
 
 ## 3. Conflicting Requirements and Trade-offs
 

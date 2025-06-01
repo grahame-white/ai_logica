@@ -121,11 +121,11 @@ body:
       label: "Developer Investigation Checklist"
       description: "For developers investigating this bug (reference DEVELOPER_GUIDE.md)"
       options:
+        - label: "⚠️ CRITICAL: Install git hooks using `script/setup-git-hooks` before starting"
         - label: "Reproduce the issue locally using provided steps"
         - label: "Identify the root cause and affected components"
         - label: "Check if this violates any requirements in REQUIREMENTS.md"
         - label: "Determine if this is a regression from recent changes"
-        - label: "Install git hooks using `script/setup-git-hooks`"
         - label: "Write unit tests that reproduce the bug"
         - label: "Implement fix following coding standards in DEVELOPER_GUIDE.md"
         - label: "Verify fix doesn't break existing functionality with `script/test`"
@@ -133,24 +133,34 @@ body:
         - label: "Test fix in development environment using `script/server`"
         - label: "Update documentation if the fix changes behavior"
 
-  - type: markdown
+  - type: textarea
+    id: ai-developer-guidance
     attributes:
+      label: "🤖 AI Developer Bug Fix Guide"
+      description: "Comprehensive guidance for AI developers fixing this bug"
       value: |
-        ---
+        ## For AI Developers fixing this bug:
         
-        **For AI Developers fixing this bug:**
+        ### ⚠️ CRITICAL SETUP STEPS:
+        1. **CRITICAL FIRST STEP**: Run `script/setup-git-hooks` to install git hooks before any development work
+        2. **Complete setup**: Run `script/setup` to install dependencies and verify environment
+        3. **Review documentation**: Read REQUIREMENTS.md, DEVELOPER_GUIDE.md, and ARCHITECTURE.md
         
-        1. 🔧 **Start with setup**: Run `script/setup` to install dependencies and git hooks
-        2. 📖 **Review documentation**: Read REQUIREMENTS.md, DEVELOPER_GUIDE.md, and ARCHITECTURE.md
-        3. 🔍 **Reproduce locally**: Follow the steps provided to confirm the issue
-        4. 🧪 **Write tests first**: Create failing tests that demonstrate the bug
-        5. 🎯 **Implement fix**: Make minimal changes to resolve the issue
-        6. ✅ **Verify solution**: Ensure tests pass and no regressions occur
-        7. 🎨 **Format code**: Use `script/format` before committing
+        ### 🐛 BUG FIX WORKFLOW:
+        4. **Reproduce locally**: Follow the steps provided to confirm the issue
+        5. **Write tests first**: Create failing tests that demonstrate the bug
+        6. **Implement fix**: Make minimal changes to resolve the issue
+        7. **Verify solution**: Ensure tests pass and no regressions occur
+        8. **Format code**: Use `script/format` before committing
+        9. **Test in development**: Verify fix works using `script/server`
         
-        **Development Scripts:**
+        ### 🛠️ DEVELOPMENT SCRIPTS:
         - `script/setup` - Complete setup for development
+        - `script/setup-git-hooks` - Install git hooks (CRITICAL first step)
         - `script/server` - Start development server for testing
         - `script/test` - Run all tests
         - `script/format` - Format code
+        - `script/check-git-hooks` - Verify git hooks are installed
         - `script/cibuild` - Run CI checks locally
+    validations:
+      required: false

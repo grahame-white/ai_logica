@@ -131,28 +131,51 @@ body:
         - label: "I've checked GitHub Discussions"
         - label: "I've tried basic troubleshooting steps"
 
-  - type: markdown
+  - type: textarea
+    id: ai-developer-guidance
     attributes:
+      label: "🤖 AI Developer Question Response Guide"
+      description: "Comprehensive guidance for AI developers addressing development-related questions"
       value: |
-        ---
+        ## For AI Developers addressing development-related questions:
         
-        **Response Guidelines for Community Members:**
+        ### ⚠️ CRITICAL SETUP STEPS:
+        1. **CRITICAL FIRST STEP**: Run `script/setup-git-hooks` to install git hooks before any development work
+        2. **Complete setup**: Run `script/setup` to install dependencies and verify environment
+        3. **Review documentation**: Read REQUIREMENTS.md, DEVELOPER_GUIDE.md, and ARCHITECTURE.md
         
-        🤝 **For Community Members answering questions:**
+        ### 🎯 QUESTION RESPONSE WORKFLOW:
+        4. **Understand the context**: Analyze the question to identify what guidance or code changes are needed
+        5. **Provide clear guidance**: Use clear, accurate information from official documentation
+        6. **Test recommendations**: If suggesting code changes or procedures, test them first
+        7. **Update documentation**: If the question reveals documentation gaps, consider updating relevant docs
+        8. **Follow standards**: Ensure any code suggestions follow project coding standards
+        
+        ### 🛠️ DEVELOPMENT SCRIPTS FOR TESTING RECOMMENDATIONS:
+        - `script/setup` - Complete setup for development
+        - `script/server` - Start development server for testing
+        - `script/test` - Run all tests
+        - `script/format` - Format code
+        - `script/check-git-hooks` - Verify git hooks are installed
+        - `script/cibuild` - Run CI checks locally
+        
+        ### 🤝 RESPONSE GUIDELINES FOR COMMUNITY MEMBERS:
         - Provide clear, helpful answers
         - Reference official documentation when possible
         - If suggesting code changes, ensure they follow project standards
         - Consider if the question indicates missing documentation
         
-        🔧 **For Developers addressing questions:**
+        ### 🔧 FOR DEVELOPERS ADDRESSING QUESTIONS:
         - Check if the question reveals gaps in documentation
         - Consider if frequently asked questions need better documentation
         - Use questions to improve the user experience
         - Update documentation if the question is common
         
-        📚 **Helpful Resources:**
+        ### 📚 HELPFUL RESOURCES:
         - [README.md](../blob/main/README.md) - Getting started
         - [DEVELOPER_GUIDE.md](../blob/main/DEVELOPER_GUIDE.md) - Development info
         - [REQUIREMENTS.md](../blob/main/REQUIREMENTS.md) - Feature details
         - [ARCHITECTURE.md](../blob/main/ARCHITECTURE.md) - Technical details
         - [GitHub Discussions](https://github.com/grahame-white/ai_logica/discussions) - Community support
+    validations:
+      required: false
