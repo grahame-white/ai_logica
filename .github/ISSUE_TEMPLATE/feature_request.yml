@@ -35,15 +35,18 @@ body:
     id: functional-requirements
     attributes:
       label: "Functional Requirements"
-      description: "List specific functional requirements using the project's FR-X.Y format (see REQUIREMENTS.md for examples)"
+      description: "Describe the specific functional requirements for this feature. The AI developer will assign appropriate requirement IDs and integrate with existing requirements."
       placeholder: |
-        - **FR-X.1**: The system shall [requirement description]
-        - **FR-X.2**: The user shall be able to [user action]
-        - **FR-X.3**: The feature shall [behavior description]
+        Describe what the system must do to implement this feature:
+        - The system must be able to [specific capability]
+        - Users must be able to [specific action]
+        - The feature must support [specific behavior]
+        - The system must validate [specific conditions]
+        - The feature must integrate with [existing functionality]
       value: |
-        - **FR-X.1**: 
-        - **FR-X.2**: 
-        - **FR-X.3**: 
+        - 
+        - 
+        - 
     validations:
       required: true
 
@@ -112,7 +115,8 @@ body:
       description: "For developers implementing this feature (reference DEVELOPER_GUIDE.md)"
       options:
         - label: "Review and understand all functional requirements"
-        - label: "Update REQUIREMENTS.md with new functional requirements"
+        - label: "Analyze functional requirements and assign appropriate FR-X.Y IDs"
+        - label: "Update REQUIREMENTS.md with new functional requirements using assigned IDs"
         - label: "Follow coding standards defined in DEVELOPER_GUIDE.md"
         - label: "Install git hooks using `script/setup-git-hooks`"
         - label: "Implement unit tests following the existing test patterns"
@@ -158,11 +162,12 @@ body:
         
         1. 🔧 **Start with setup**: Run `script/setup` to install dependencies and git hooks
         2. 📖 **Review documentation**: Read REQUIREMENTS.md, DEVELOPER_GUIDE.md, and ARCHITECTURE.md
-        3. 🧪 **Understand testing**: Review E2E_TESTING_STRATEGY.md for testing approach
-        4. 🎯 **Follow the pattern**: Use existing code as examples for implementation patterns
-        5. 📝 **Update requirements**: Add new functional requirements to REQUIREMENTS.md
-        6. ✅ **Test thoroughly**: Run `script/test` frequently during development
-        7. 🎨 **Format code**: Use `script/format` before committing
+        3. 📋 **Analyze requirements**: Review the functional requirements above, assign appropriate FR-X.Y IDs, and identify any conflicts with existing requirements that need resolution
+        4. 🧪 **Understand testing**: Review E2E_TESTING_STRATEGY.md for testing approach
+        5. 🎯 **Follow the pattern**: Use existing code as examples for implementation patterns
+        6. 📝 **Update requirements**: Add new functional requirements to REQUIREMENTS.md with proper IDs
+        7. ✅ **Test thoroughly**: Run `script/test` frequently during development
+        8. 🎨 **Format code**: Use `script/format` before committing
         
         **Development Scripts:**
         - `script/setup` - Complete setup for development
