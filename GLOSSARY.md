@@ -80,6 +80,9 @@ The main visual component of a logic gate symbol that represents its distinctive
 ### Gate Connector Lines
 The straight line segments that extend from the gate body to provide visual pathways for signal connections. These lines connect the gate body to the **Connection Points** where wires can be attached, clearly indicating input and output locations on the gate symbol.
 
+### Gate Inversion Bubble
+A small circular symbol that indicates logical negation or inversion. These bubbles appear on logic gates to show that the output is inverted (e.g., NAND, NOR gates) or that specific inputs are inverted. Commonly positioned at the output of NOT gates or between the **Gate Body** and **Gate Connector Lines** on inverted gates. Also known as a **Negation Circle** in some contexts.
+
 ### Gate Palette
 The UI area containing available gate types that users can select and place onto the canvas. Gates in the palette are smaller (32x24 pixels) than placed gates.
 
