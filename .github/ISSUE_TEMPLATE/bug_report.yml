@@ -149,10 +149,20 @@ body:
         ### 🐛 BUG FIX WORKFLOW:
         4. **Reproduce locally**: Follow the steps provided to confirm the issue
         5. **Write tests first**: Create failing tests that demonstrate the bug
-        6. **Implement fix**: Make minimal changes to resolve the issue
-        7. **Verify solution**: Ensure tests pass and no regressions occur
-        8. **Format code**: Use `script/format` before committing
-        9. **Test in development**: Verify fix works using `script/server`
+        6. **COMMIT TESTS**: Use `report_progress` to commit failing tests
+        7. **Implement fix**: Make minimal changes to resolve the issue
+        8. **COMMIT FIX**: Use `report_progress` to commit working fix
+        9. **Verify solution**: Ensure tests pass and no regressions occur
+        10. **Format code**: Use `script/format` before committing
+        11. **Test in development**: Verify fix works using `script/server`
+        
+        ### ⚠️ CRITICAL: INCREMENTAL DEVELOPMENT
+        **COMMIT FREQUENTLY**: Use `report_progress` every 15-20 minutes to avoid losing work
+        - After reproducing the issue
+        - After writing failing tests  
+        - After implementing basic fix
+        - After fixing any additional issues
+        - Never go more than 20 minutes without committing progress
         
         ### 🛠️ DEVELOPMENT SCRIPTS:
         - `script/setup` - Complete setup for development
