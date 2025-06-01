@@ -57,6 +57,7 @@ public class HomeViewModelTests
 
         // Assert
         Assert.Equal("OR", viewModel.SelectedGate);
+        // IsDragging should be true because selecting a gate automatically initiates the drag-to-place workflow
         Assert.True(viewModel.IsDragging);
     }
 
