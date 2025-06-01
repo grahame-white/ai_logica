@@ -1,3 +1,4 @@
+using AiLogica.Tests.Helpers;
 using AiLogica.ViewModels;
 using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
@@ -5,12 +6,11 @@ using Xunit;
 namespace AiLogica.Tests.ViewModels;
 public class HomeViewModelTests
 {
-    private static HomeViewModel CreateTestViewModel() => new(NullLogger<HomeViewModel>.Instance);
     [Fact]
     public void WelcomeMessage_ShouldHaveDefaultValue()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
 
         // Act & Assert
         Assert.Equal("Logic Gate Design Canvas", viewModel.WelcomeMessage);
@@ -20,7 +20,7 @@ public class HomeViewModelTests
     public void WelcomeMessage_ShouldRaisePropertyChangedEvent()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         var propertyChangedRaised = false;
         viewModel.PropertyChanged += (sender, args) =>
         {
@@ -42,7 +42,7 @@ public class HomeViewModelTests
     public void SelectGate_ShouldSetSelectedGateAndDraggingState()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
 
         // Act
         viewModel.SelectGate("OR");
@@ -56,7 +56,7 @@ public class HomeViewModelTests
     public void UpdateMousePosition_ShouldSetMouseCoordinates()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
 
         // Act
         viewModel.UpdateMousePosition(100, 200);
@@ -70,7 +70,7 @@ public class HomeViewModelTests
     public void PlaceGate_WithSelectedGate_ShouldAddToPlacedGatesAndKeepSelection()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         viewModel.SelectGate("OR");
 
         // Act
@@ -89,7 +89,7 @@ public class HomeViewModelTests
     public void PlaceGate_WithoutSelectedGate_ShouldNotAddToPlacedGates()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
 
         // Act
         viewModel.PlaceGate(150, 250);
@@ -102,7 +102,7 @@ public class HomeViewModelTests
     public void PlaceGate_MultipleGates_ShouldAllowPlacingMultipleGatesWithoutReselection()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         viewModel.SelectGate("OR");
 
         // Act - Place multiple gates
@@ -129,7 +129,7 @@ public class HomeViewModelTests
     public void CancelDrag_ShouldClearSelectionAndDraggingState()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         viewModel.SelectGate("OR");
 
         // Act
@@ -144,7 +144,7 @@ public class HomeViewModelTests
     public void PlacedGates_PropertyChanged_ShouldBeRaisedWhenGateIsPlaced()
     {
         // Arrange
-        var viewModel = CreateTestViewModel();
+        var viewModel = TestHelper.CreateTestViewModel();
         viewModel.SelectGate("OR");
         var propertyChangedRaised = false;
         viewModel.PropertyChanged += (sender, args) =>

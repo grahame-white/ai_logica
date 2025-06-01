@@ -1,7 +1,7 @@
 namespace AiLogica.ViewModels;
 
 /// <summary>
-/// Represents a connection point on a gate (input or output)
+/// Represents a connection point on a gate (input or output).
 /// </summary>
 public class Connection
 {

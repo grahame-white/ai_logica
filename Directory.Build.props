@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup>
+    <!-- Static Analysis Configuration -->
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <WarningsNotAsErrors />
+    
+    <!-- Code Quality Rules -->
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    
+    <!-- Documentation Requirements -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    
+    <!-- JetBrains-aligned Configuration -->
+    <!-- Align with JetBrains ReSharper/Rider preferences -->
+    <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)jetbrains-aligned.ruleset</CodeAnalysisRuleSet>
+    
+    <!-- Disable specific warnings that are acceptable for this project -->
+    <!-- CS1591: Missing XML comment for publicly visible type or member -->
+    <!-- CA1045: Do not pass types by reference (acceptable for ref parameters in modern C#) -->
+    <!-- CA1002: Do not expose generic lists (acceptable for ViewModels) -->
+    <!-- SA1309: Field names should not begin with underscore (JetBrains/modern C# allows this) -->
+    <!-- S1118: Utility classes should not have public constructors (acceptable for entry point classes) -->
+    <!-- S6966: Await RunAsync instead (acceptable for simple scenarios) -->
+    <NoWarn>$(NoWarn);CS1591;CA1045;CA1002;SA1309;S1118;S6966</NoWarn>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <!-- Microsoft .NET Code Analysis -->
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    
+    <!-- JetBrains-style Static Analysis -->
+    <!-- JetBrains analyzers are primarily available through ReSharper/Rider IDEs and command-line tools -->
+    <!-- For MSBuild integration, we use analyzers that complement JetBrains philosophy -->
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    
+    <!-- SonarAnalyzer provides many rules similar to JetBrains analysis -->
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="9.32.0.97167">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    
+    <!-- JetBrains Annotations for better code contracts -->
+    <PackageReference Include="JetBrains.Annotations" Version="2024.3.0">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <!-- Include StyleCop configuration -->
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" />
+  </ItemGroup>
+</Project>

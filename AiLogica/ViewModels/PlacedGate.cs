@@ -9,34 +9,23 @@ public class PlacedGate
     public List<Connection> Connections { get; set; } = new();
 
     /// <summary>
-    /// Updates the absolute positions of all connection points based on gate position
+    /// Updates the absolute positions of all connection points based on gate position.
     /// </summary>
     public void UpdateConnectionPositions()
     {
         foreach (var connection in Connections)
         {
-            var (relativeX, relativeY) = GetRelativeConnectionPosition(connection.Type, connection.Index);
+            var (relativeX, relativeY) = GetGateSpecificConnectionPosition(connection.Type, connection.Index);
             connection.X = X + relativeX;
             connection.Y = Y + relativeY;
         }
     }
 
     /// <summary>
-    /// Gets the relative position of a connection point within the gate
+    /// Defines the fixed connection coordinates for OR gate template (96x72 pixels).
+    /// These are the standard positions within the OR gate SVG shape.
     /// </summary>
-    private (double X, double Y) GetRelativeConnectionPosition(ConnectionType type, int index)
-    {
-        return Type switch
-        {
-            "OR" => GetOrGateConnectionPosition(type, index),
-            _ => (0, 0) // Default for unsupported gate types
-        };
-    }
-
-    /// <summary>
-    /// Gets connection positions for OR gates (96x72 pixels)
-    /// </summary>
-    private (double X, double Y) GetOrGateConnectionPosition(ConnectionType type, int index)
+    private static (double X, double Y) GetOrGateTemplateCoordinates(ConnectionType type, int index)
     {
         return type switch
         {
@@ -48,6 +37,18 @@ public class PlacedGate
             },
             ConnectionType.Output => (88, 36), // Output (matching SVG coordinates)
             _ => (0, 0)
+        };
+    }
+
+    /// <summary>
+    /// Resolves connection position for the specific gate type by delegating to the appropriate template method.
+    /// </summary>
+    private (double X, double Y) GetGateSpecificConnectionPosition(ConnectionType type, int index)
+    {
+        return Type switch
+        {
+            "OR" => GetOrGateTemplateCoordinates(type, index),
+            _ => (0, 0) // Default for unsupported gate types
         };
     }
 }

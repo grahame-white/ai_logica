@@ -1,7 +1,7 @@
 namespace AiLogica.ViewModels;
 
 /// <summary>
-/// Represents a wire connecting two connection points
+/// Represents a wire connecting two connection points.
 /// </summary>
 public class Wire
 {
@@ -13,7 +13,7 @@ public class Wire
 }
 
 /// <summary>
-/// Represents a straight line segment of a wire
+/// Represents a straight line segment of a wire.
 /// </summary>
 public class WireSegment
 {
