@@ -30,7 +30,7 @@ The server-side components of AI Logica, implemented using .NET 8 and ASP.NET Co
 The web framework used for AI Logica's frontend. A server-side rendering technology where UI interactions are handled on the server and updates are sent to the browser via SignalR.
 
 ### Component
-In Blazor context: A reusable UI element that encapsulates HTML, CSS, and C# logic. In simulation context: A reusable logic circuit element that can be saved and reused (see **Logic Component**).
+In Blazor context: A reusable UI element that encapsulates HTML, CSS, and C# logic. In simulation context: A reusable logic circuit element that can be saved and reused (see [Logic Component](#logic-component)).
 
 ### Frontend
 The client-side components of AI Logica, consisting of Blazor Server components, HTML5, and CSS3 rendered in the user's web browser.
@@ -52,7 +52,7 @@ Classes that inherit from ViewModelBase and provide presentation logic, handling
 ## Logic Simulation Terms
 
 ### Canvas
-The main drawing area where users place and arrange logic gates. Also called the **Drawing Area**.
+The main drawing area where users place and arrange logic gates. Also called the [Drawing Area](#drawing-area).
 
 ### Circuit
 A complete collection of interconnected logic gates that forms a functional digital logic design. Can range from simple gate combinations to complex hierarchical designs.
@@ -63,7 +63,7 @@ Specific locations on gates where wires can be attached. There are two types:
 - **Output Connection Point**: Where signals exit a gate (visually marked in green)
 
 ### Drawing Area
-See **Canvas**.
+See [Canvas](#canvas).
 
 ### Fan-out
 The capability to connect one output to multiple inputs, allowing a signal to drive multiple gate inputs simultaneously.
@@ -78,10 +78,10 @@ A fundamental digital logic element that performs a boolean operation on its inp
 The main visual component of a logic gate symbol that represents its distinctive shape and function. For example, the shield-like shape of an OR gate, the curved back of a NAND gate, or the triangular shape of a NOT gate. The gate body contains the core logic function and is standardized according to IEEE conventions.
 
 ### Gate Connector Lines
-The straight line segments that extend from the gate body to provide visual pathways for signal connections. These lines connect the gate body to the **Connection Points** where wires can be attached, clearly indicating input and output locations on the gate symbol.
+The straight line segments that extend from the gate body to provide visual pathways for signal connections. These lines connect the gate body to the [Connection Points](#connection-point) where wires can be attached, clearly indicating input and output locations on the gate symbol.
 
 ### Gate Inversion Bubble
-A small circular symbol that indicates logical negation or inversion. These bubbles appear on logic gates to show that the output is inverted (e.g., NAND, NOR gates) or that specific inputs are inverted. Commonly positioned at the output of NOT gates or between the **Gate Body** and **Gate Connector Lines** on inverted gates. Also known as a **Negation Circle** in some contexts.
+A small circular symbol that indicates logical negation or inversion. These bubbles appear on logic gates to show that the output is inverted (e.g., NAND, NOR gates) or that specific inputs are inverted. Commonly positioned at the output of NOT gates or between the [Gate Body](#gate-body) and [Gate Connector Lines](#gate-connector-lines) on inverted gates. Also known as a **Negation Circle** in some contexts.
 
 ### Gate Palette
 The UI area containing available gate types that users can select and place onto the canvas. Gates in the palette are smaller (32x24 pixels) than placed gates.
@@ -91,7 +91,7 @@ The action of selecting a gate from the palette and positioning it on the canvas
 
 ### Hierarchical Design
 The capability to create complex circuits by:
-- Saving circuit layouts as reusable **Logic Components**
+- Saving circuit layouts as reusable [Logic Components](#logic-component)
 - **Drilling down** into components to view internal structure
 - **Drilling up** to see how components are used in larger designs
 
@@ -210,7 +210,7 @@ Continuous Integration and Continuous Deployment - the automated processes that 
 Automated scripts that run at specific Git events (pre-commit, pre-push) to enforce code formatting and quality standards.
 
 ### GitHub Templates
-See **Issue Template**.
+See [Issue Template](#issue-template).
 
 ### Project Structure
 The organization of files and directories in the AI Logica solution:
