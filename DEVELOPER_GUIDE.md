@@ -200,6 +200,18 @@ For detailed information about the project structure and technical architecture,
 ### Static Analysis and Code Quality
 **All violations from warning level and above must be addressed.** The project is configured to treat warnings as errors to enforce code quality standards.
 
+#### Defect-Driven Rule Enforcement Policy
+**If a defect is identified that a currently suppressed static analysis rule could have caught, then that rule must be enabled and enforced.** This policy ensures that our static analysis configuration evolves and improves based on real-world defects rather than remaining static.
+
+When implementing this policy:
+1. **Investigate defects thoroughly** - Determine if any currently suppressed rule would have detected the issue
+2. **Enable the rule** - Remove the rule from `NoWarn` in `Directory.Build.props` or change from `Action="None"` to `Action="Warning"` or `Action="Error"` in `jetbrains-aligned.ruleset`
+3. **Fix all violations** - Address all instances of the newly enabled rule across the codebase
+4. **Document the change** - Update commit messages and code reviews to explain why the rule was enabled
+5. **Prevent regression** - Ensure the rule remains enabled to prevent similar defects in the future
+
+This approach prioritizes practical code quality improvements over theoretical completeness, ensuring our static analysis rules provide genuine value in preventing real issues.
+
 Static analysis is automatically enabled for all projects via `Directory.Build.props` and includes:
 
 #### Core Analysis Engines
