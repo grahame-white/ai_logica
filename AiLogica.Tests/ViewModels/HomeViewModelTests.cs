@@ -181,7 +181,8 @@ public class HomeViewModelTests
         viewModel.PlaceGate(150, 250);
 
         // Assert
-        Assert.Equal(102, viewModel.PlacedGates[0].X); // 150 - 48 offset (updated for larger gates)
+        // Expected X position: 150 (click position) - 48 (half of 96px gate width to center gate on cursor) = 102
+        Assert.Equal(102, viewModel.PlacedGates[0].X);
     }
 
     [Fact]

@@ -12,6 +12,12 @@ namespace AiLogica.Tests.EndToEnd;
 /// </summary>
 public class EndToEndInfrastructureTests : IClassFixture<WebApplicationFactory<Program>>
 {
+    // CSS class constants for E2E testing infrastructure
+    private const string GateItemClass = "gate-item";
+    private const string PropertiesPanelClass = "properties-panel";
+    private const string StatusBarClass = "status-bar";
+    private const string CanvasContainerClass = "canvas-container";
+
     private readonly WebApplicationFactory<Program> _factory;
 
     public EndToEndInfrastructureTests(WebApplicationFactory<Program> factory)
@@ -95,7 +101,7 @@ public class EndToEndInfrastructureTests : IClassFixture<WebApplicationFactory<P
         var content = await response.Content.ReadAsStringAsync();
 
         // Assert
-        Assert.Contains("gate-item", content); // CSS class needed for E2E tests
+        Assert.Contains(GateItemClass, content);
     }
 
     [Fact]
@@ -109,7 +115,7 @@ public class EndToEndInfrastructureTests : IClassFixture<WebApplicationFactory<P
         var content = await response.Content.ReadAsStringAsync();
 
         // Assert
-        Assert.Contains("properties-panel", content); // CSS class needed for E2E tests
+        Assert.Contains(PropertiesPanelClass, content);
     }
 
     [Fact]
@@ -123,7 +129,7 @@ public class EndToEndInfrastructureTests : IClassFixture<WebApplicationFactory<P
         var content = await response.Content.ReadAsStringAsync();
 
         // Assert
-        Assert.Contains("status-bar", content); // CSS class needed for E2E tests
+        Assert.Contains(StatusBarClass, content);
     }
 
     [Fact]
@@ -137,7 +143,7 @@ public class EndToEndInfrastructureTests : IClassFixture<WebApplicationFactory<P
         var content = await response.Content.ReadAsStringAsync();
 
         // Assert
-        Assert.Contains("canvas-container", content); // CSS class needed for E2E tests
+        Assert.Contains(CanvasContainerClass, content);
     }
 
     [Fact]
