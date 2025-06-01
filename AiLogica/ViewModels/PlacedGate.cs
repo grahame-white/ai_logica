@@ -46,6 +46,21 @@ public class PlacedGate
     }
 
     /// <summary>
+    /// Defines the fixed connection coordinates for constant gate template (32x32 pixels).
+    /// Constants have only one output connection on the right side.
+    /// </summary>
+#pragma warning disable S1172 // Remove this unused method parameter 'index'
+    private static (double X, double Y) GetConstantGateTemplateCoordinates(ConnectionType type, int index)
+#pragma warning restore S1172
+    {
+        return type switch
+        {
+            ConnectionType.Output => (28, 16), // Single output on right side, centered vertically
+            _ => (0, 0) // Constants have no inputs
+        };
+    }
+
+    /// <summary>
     /// Resolves connection position for the specific gate type by delegating to the appropriate template method.
     /// </summary>
     private (double X, double Y) GetGateSpecificConnectionPosition(ConnectionType type, int index)
@@ -53,6 +68,8 @@ public class PlacedGate
         return Type switch
         {
             "OR" => GetOrGateTemplateCoordinates(type, index),
+            "CONSTANT0" => GetConstantGateTemplateCoordinates(type, index),
+            "CONSTANT1" => GetConstantGateTemplateCoordinates(type, index),
             _ => (0, 0) // Default for unsupported gate types
         };
     }
