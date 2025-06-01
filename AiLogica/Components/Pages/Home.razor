@@ -22,6 +22,18 @@
     <div class="interactive-gate-palette">
         <h4>Gate Palette</h4>
         <div class="gate-category">
+            <h5>Constants</h5>
+            <div class="gate-list">
+                <div class="gate-item @(ViewModel.SelectedGate == "CONSTANT0" ? "selected" : "")" data-gate-type="CONSTANT0" @onclick="() => SelectConstant0Gate()" @onclick:stopPropagation="true">
+                    @RenderGateContent("CONSTANT0", ViewModel.SelectedGate == "CONSTANT0")
+                </div>
+                <div class="gate-item @(ViewModel.SelectedGate == "CONSTANT1" ? "selected" : "")" data-gate-type="CONSTANT1" @onclick="() => SelectConstant1Gate()" @onclick:stopPropagation="true">
+                    @RenderGateContent("CONSTANT1", ViewModel.SelectedGate == "CONSTANT1")
+                </div>
+            </div>
+        </div>
+        
+        <div class="gate-category">
             <h5>Basic Gates</h5>
             <div class="gate-list">
                 <div class="gate-item non-functional">
@@ -48,18 +60,6 @@
                 </div>
                 <div class="gate-item non-functional">
                     @RenderGateContent("BUFFER", false)
-                </div>
-            </div>
-        </div>
-        
-        <div class="gate-category">
-            <h5>Constants</h5>
-            <div class="gate-list">
-                <div class="gate-item @(ViewModel.SelectedGate == "CONSTANT0" ? "selected" : "")" data-gate-type="CONSTANT0" @onclick="() => SelectConstant0Gate()" @onclick:stopPropagation="true">
-                    @RenderGateContent("CONSTANT0", ViewModel.SelectedGate == "CONSTANT0")
-                </div>
-                <div class="gate-item @(ViewModel.SelectedGate == "CONSTANT1" ? "selected" : "")" data-gate-type="CONSTANT1" @onclick="() => SelectConstant1Gate()" @onclick:stopPropagation="true">
-                    @RenderGateContent("CONSTANT1", ViewModel.SelectedGate == "CONSTANT1")
                 </div>
             </div>
         </div>
@@ -256,18 +256,18 @@
         }
         else
         {
-            // Palette version: 12x12 square + 12px line = 24x12 total (proportionally scaled)
-            return @<svg width="24" height="12" viewBox="0 0 24 12" style="display: block;">
-                <!-- 12x12 square (3/4 scale of 16x16) -->
-                <rect x="0" y="0" width="12" height="12" 
+            // Palette version: same size as OR gate palette (32x24) for consistent margins
+            return @<svg width="32" height="24" viewBox="0 0 32 24" style="display: block;">
+                <!-- 12x12 square centered in 32x24 area -->
+                <rect x="4" y="6" width="12" height="12" 
                       stroke="currentColor" 
                       fill="none" 
                       stroke-width="@strokeWidth"/>
                 <!-- Value centered in the 12x12 square -->
-                <text x="6" y="6" text-anchor="middle" dominant-baseline="central" 
+                <text x="10" y="12" text-anchor="middle" dominant-baseline="central" 
                       fill="currentColor" font-family="Arial, sans-serif" font-size="8" font-weight="bold">@value</text>
-                <!-- Connector line: starts at right edge of square, extends 12px -->
-                <line x1="12" y1="6" x2="24" y2="6" stroke="currentColor" stroke-width="@strokeWidth"/>
+                <!-- Connector line: starts at right edge of square, extends to right -->
+                <line x1="16" y1="12" x2="28" y2="12" stroke="currentColor" stroke-width="@strokeWidth"/>
             </svg>;
         }
     }
