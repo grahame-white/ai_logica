@@ -244,7 +244,7 @@ script/setup
 
 #### **Warning Signs You're Doing Too Much**
 - Making changes to more than 3-4 files simultaneously
-- Adding more than 50-100 lines of code before committing
+- Adding more than 50 lines of code before committing
 - Spending more than 10 minutes without a successful test run
 - Implementing multiple requirements in one commit
 
