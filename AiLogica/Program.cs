@@ -1,7 +1,11 @@
 using AiLogica.Components;
 using AiLogica.ViewModels;
+using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure logging levels to reduce debug noise in production
+builder.Logging.AddFilter("AiLogica.ViewModels", LogLevel.Information);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()

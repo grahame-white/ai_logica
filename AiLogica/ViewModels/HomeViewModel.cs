@@ -1,9 +1,11 @@
 using AiLogica.Core.ViewModels;
+using Microsoft.Extensions.Logging;
 
 namespace AiLogica.ViewModels;
 
 public class HomeViewModel : ViewModelBase
 {
+    private readonly ILogger<HomeViewModel> _logger;
     private string _welcomeMessage = "Logic Gate Design Canvas";
     private string? _selectedGate;
     private bool _isDragging;
@@ -13,6 +15,11 @@ public class HomeViewModel : ViewModelBase
     private List<Wire> _wires = new();
     private bool _isWiring;
     private Connection? _activeConnection;
+
+    public HomeViewModel(ILogger<HomeViewModel> logger)
+    {
+        _logger = logger;
+    }
 
     public string WelcomeMessage
     {
@@ -97,10 +104,8 @@ public class HomeViewModel : ViewModelBase
                 Id = Guid.NewGuid()
             };
 
-            Console.WriteLine($"[DEBUG] PlaceGate called:");
-            Console.WriteLine($"  Click position: ({x}, {y})");
-            Console.WriteLine($"  Gate position after offset: ({gate.X}, {gate.Y})");
-            Console.WriteLine($"  Gate type: {gate.Type}");
+            _logger.LogDebug("PlaceGate called: Click position: ({X}, {Y}), Gate position after offset: ({GateX}, {GateY}), Gate type: {GateType}",
+                x, y, gate.X, gate.Y, gate.Type);
 
             // Create connection points for the gate
             CreateConnectionsForGate(gate);
@@ -111,7 +116,8 @@ public class HomeViewModel : ViewModelBase
             // Log connection positions for debugging
             foreach (var connection in gate.Connections)
             {
-                Console.WriteLine($"  Connection: {connection.Type} {connection.Index} at ({connection.X}, {connection.Y})");
+                _logger.LogDebug("Connection created: {Type} {Index} at ({X}, {Y})",
+                    connection.Type, connection.Index, connection.X, connection.Y);
             }
 
             // Intentionally keep gate selected and dragging state active to allow 
@@ -166,9 +172,8 @@ public class HomeViewModel : ViewModelBase
     /// </summary>
     public void StartWiring(Connection connection)
     {
-        Console.WriteLine($"[DEBUG] StartWiring called:");
-        Console.WriteLine($"  Connection: {connection.Type} {connection.Index} at ({connection.X}, {connection.Y})");
-        Console.WriteLine($"  Gate ID: {connection.GateId}");
+        _logger.LogDebug("StartWiring called: Connection: {Type} {Index} at ({X}, {Y}), Gate ID: {GateId}",
+            connection.Type, connection.Index, connection.X, connection.Y, connection.GateId);
 
         ActiveConnection = connection;
         IsWiring = true;
@@ -179,13 +184,13 @@ public class HomeViewModel : ViewModelBase
     /// </summary>
     public void CompleteWiring(Connection toConnection)
     {
-        Console.WriteLine($"[DEBUG] CompleteWiring called:");
-        Console.WriteLine($"  From: {ActiveConnection?.Type} {ActiveConnection?.Index} at ({ActiveConnection?.X}, {ActiveConnection?.Y})");
-        Console.WriteLine($"  To: {toConnection.Type} {toConnection.Index} at ({toConnection.X}, {toConnection.Y})");
+        _logger.LogDebug("CompleteWiring called: From: {FromType} {FromIndex} at ({FromX}, {FromY}), To: {ToType} {ToIndex} at ({ToX}, {ToY})",
+            ActiveConnection?.Type, ActiveConnection?.Index, ActiveConnection?.X, ActiveConnection?.Y,
+            toConnection.Type, toConnection.Index, toConnection.X, toConnection.Y);
 
         if (ActiveConnection != null && CanConnect(ActiveConnection, toConnection))
         {
-            Console.WriteLine($"  Connection allowed: true");
+            _logger.LogDebug("Connection allowed: true");
 
             // Store reference to active connection before clearing wiring state
             var fromConnection = ActiveConnection;
@@ -204,41 +209,33 @@ public class HomeViewModel : ViewModelBase
             // Generate wire segments using orthogonal routing
             wire.Segments = GenerateWireSegments(fromConnection, toConnection);
 
-            // Debug: Log the final wire segments before adding to collection
-            Console.WriteLine($"[DEBUG] Final wire segments before adding to collection:");
+            _logger.LogDebug("Final wire segments before adding to collection: {SegmentCount} segments", wire.Segments.Count);
             for (int i = 0; i < wire.Segments.Count; i++)
             {
                 var seg = wire.Segments[i];
-                Console.WriteLine($"  Segment {i}: ({seg.StartX}, {seg.StartY}) -> ({seg.EndX}, {seg.EndY}) [{seg.Orientation}]");
+                _logger.LogTrace("Segment {Index}: ({StartX}, {StartY}) -> ({EndX}, {EndY}) [{Orientation}]",
+                    i, seg.StartX, seg.StartY, seg.EndX, seg.EndY, seg.Orientation);
             }
 
             Wires.Add(wire);
 
-            // Debug: Log each segment being added to the wire collection
-            Console.WriteLine($"[DEBUG] Wire added to collection. Logging stored segments:");
-            for (int i = 0; i < wire.Segments.Count; i++)
-            {
-                var seg = wire.Segments[i];
-                Console.WriteLine($"  Stored segment {i}: ({seg.StartX}, {seg.StartY}) -> ({seg.EndX}, {seg.EndY}) [{seg.Orientation}]");
-            }
-
-            // Debug: Verify segments in the Wires collection after adding
-            Console.WriteLine($"[DEBUG] Verifying wire segments in collection after adding:");
+            _logger.LogTrace("Wire added to collection. Verifying segments in collection after adding:");
             var addedWire = Wires.Last();
             for (int i = 0; i < addedWire.Segments.Count; i++)
             {
                 var seg = addedWire.Segments[i];
-                Console.WriteLine($"  Collection segment {i}: ({seg.StartX}, {seg.StartY}) -> ({seg.EndX}, {seg.EndY}) [{seg.Orientation}]");
+                _logger.LogTrace("Collection segment {Index}: ({StartX}, {StartY}) -> ({EndX}, {EndY}) [{Orientation}]",
+                    i, seg.StartX, seg.StartY, seg.EndX, seg.EndY, seg.Orientation);
             }
 
             OnPropertyChanged(nameof(Wires));
 
-            Console.WriteLine($"  Wire created with {wire.Segments.Count} segments");
-            Console.WriteLine($"  Total wires in collection: {Wires.Count}");
+            _logger.LogDebug("Wire created with {SegmentCount} segments. Total wires in collection: {TotalWires}",
+                wire.Segments.Count, Wires.Count);
         }
         else
         {
-            Console.WriteLine($"  Connection not allowed");
+            _logger.LogDebug("Connection not allowed");
             CancelWiring();
         }
     }
@@ -248,7 +245,7 @@ public class HomeViewModel : ViewModelBase
     /// </summary>
     public void CancelWiring()
     {
-        Console.WriteLine($"[DEBUG] CancelWiring called - clearing active connection and wiring state");
+        _logger.LogDebug("CancelWiring called - clearing active connection and wiring state");
         ActiveConnection = null;
         IsWiring = false;
         OnPropertyChanged(nameof(IsWiring));
@@ -280,14 +277,13 @@ public class HomeViewModel : ViewModelBase
         double endX = to.X;
         double endY = to.Y;
 
-        Console.WriteLine($"[DEBUG] GenerateWireSegments called:");
-        Console.WriteLine($"  From connection: ({startX}, {startY}) - Type: {from.Type}");
-        Console.WriteLine($"  To connection: ({endX}, {endY}) - Type: {to.Type}");
+        _logger.LogDebug("GenerateWireSegments called: From connection: ({StartX}, {StartY}) - Type: {FromType}, To connection: ({EndX}, {EndY}) - Type: {ToType}",
+            startX, startY, from.Type, endX, endY, to.Type);
 
         // Find a safe intermediate X position that avoids gates
         double midX = FindSafeXPosition(startX, endX, startY, endY);
 
-        Console.WriteLine($"  Using midX: {midX} for routing");
+        _logger.LogDebug("Using midX: {MidX} for routing", midX);
 
         // Create three-segment route: horizontal -> vertical -> horizontal
         if (Math.Abs(midX - startX) > 1) // Only add segment if there's meaningful distance
@@ -301,7 +297,8 @@ public class HomeViewModel : ViewModelBase
                 Orientation = WireOrientation.Horizontal
             };
             segments.Add(horizontalSegment1);
-            Console.WriteLine($"  Added horizontal segment 1: ({horizontalSegment1.StartX}, {horizontalSegment1.StartY}) -> ({horizontalSegment1.EndX}, {horizontalSegment1.EndY})");
+            _logger.LogTrace("Added horizontal segment 1: ({StartX}, {StartY}) -> ({EndX}, {EndY})",
+                horizontalSegment1.StartX, horizontalSegment1.StartY, horizontalSegment1.EndX, horizontalSegment1.EndY);
         }
 
         if (Math.Abs(endY - startY) > 1) // Only add segment if there's meaningful distance
@@ -315,7 +312,8 @@ public class HomeViewModel : ViewModelBase
                 Orientation = WireOrientation.Vertical
             };
             segments.Add(verticalSegment);
-            Console.WriteLine($"  Added vertical segment: ({verticalSegment.StartX}, {verticalSegment.StartY}) -> ({verticalSegment.EndX}, {verticalSegment.EndY})");
+            _logger.LogTrace("Added vertical segment: ({StartX}, {StartY}) -> ({EndX}, {EndY})",
+                verticalSegment.StartX, verticalSegment.StartY, verticalSegment.EndX, verticalSegment.EndY);
         }
 
         if (Math.Abs(endX - midX) > 1) // Only add segment if there's meaningful distance
@@ -329,10 +327,11 @@ public class HomeViewModel : ViewModelBase
                 Orientation = WireOrientation.Horizontal
             };
             segments.Add(horizontalSegment2);
-            Console.WriteLine($"  Added horizontal segment 2: ({horizontalSegment2.StartX}, {horizontalSegment2.StartY}) -> ({horizontalSegment2.EndX}, {horizontalSegment2.EndY})");
+            _logger.LogTrace("Added horizontal segment 2: ({StartX}, {StartY}) -> ({EndX}, {EndY})",
+                horizontalSegment2.StartX, horizontalSegment2.StartY, horizontalSegment2.EndX, horizontalSegment2.EndY);
         }
 
-        Console.WriteLine($"  Total segments created: {segments.Count}");
+        _logger.LogDebug("Total segments created: {SegmentCount}", segments.Count);
         return segments;
     }
 
@@ -343,17 +342,14 @@ public class HomeViewModel : ViewModelBase
     {
         double midX = (startX + endX) / 2;
 
-        Console.WriteLine($"[DEBUG] FindSafeXPosition called:");
-        Console.WriteLine($"  Start: ({startX}, {startY})");
-        Console.WriteLine($"  End: ({endX}, {endY})");
-        Console.WriteLine($"  Initial midX: {midX}");
-        Console.WriteLine($"  Checking {PlacedGates.Count} gates for collisions...");
+        _logger.LogDebug("FindSafeXPosition called: Start: ({StartX}, {StartY}), End: ({EndX}, {EndY}), Initial midX: {MidX}, Checking {GateCount} gates for collisions",
+            startX, startY, endX, endY, midX, PlacedGates.Count);
 
         // Check if the simple midpoint route would intersect any gates
         for (int i = 0; i < PlacedGates.Count; i++)
         {
             var gate = PlacedGates[i];
-            Console.WriteLine($"  Gate {i}: Type={gate.Type}, Position=({gate.X}, {gate.Y})");
+            _logger.LogTrace("Gate {Index}: Type={Type}, Position=({X}, {Y})", i, gate.Type, gate.X, gate.Y);
 
             // Gate bounding box (with some padding for wire clearance)
             double gateLeft = gate.X - 10;
@@ -361,7 +357,8 @@ public class HomeViewModel : ViewModelBase
             double gateTop = gate.Y - 10;
             double gateBottom = gate.Y + 72 + 10; // Gate height + padding
 
-            Console.WriteLine($"    Gate bounds: Left={gateLeft}, Right={gateRight}, Top={gateTop}, Bottom={gateBottom}");
+            _logger.LogTrace("Gate bounds: Left={Left}, Right={Right}, Top={Top}, Bottom={Bottom}",
+                gateLeft, gateRight, gateTop, gateBottom);
 
             // Check if the vertical segment would pass through this gate
             // A vertical segment from startY to endY intersects the gate if:
@@ -370,49 +367,46 @@ public class HomeViewModel : ViewModelBase
             double segmentMinY = Math.Min(startY, endY);
             double segmentMaxY = Math.Max(startY, endY);
 
-            Console.WriteLine($"    Segment Y range: {segmentMinY} to {segmentMaxY}");
+            _logger.LogTrace("Segment Y range: {MinY} to {MaxY}", segmentMinY, segmentMaxY);
 
             bool xInBounds = midX >= gateLeft && midX <= gateRight;
             bool yOverlaps = segmentMinY <= gateBottom && segmentMaxY >= gateTop;
             bool verticalSegmentIntersects = xInBounds && yOverlaps;
 
-            Console.WriteLine($"    X in bounds ({midX} >= {gateLeft} && {midX} <= {gateRight}): {xInBounds}");
-            Console.WriteLine($"    Y overlaps ({segmentMinY} <= {gateBottom} && {segmentMaxY} >= {gateTop}): {yOverlaps}");
-            Console.WriteLine($"    Vertical segment intersects: {verticalSegmentIntersects}");
+            _logger.LogTrace("X in bounds ({MidX} >= {Left} && {MidX} <= {Right}): {XInBounds}, Y overlaps ({MinY} <= {Bottom} && {MaxY} >= {Top}): {YOverlaps}, Vertical segment intersects: {Intersects}",
+                midX, gateLeft, midX, gateRight, xInBounds, segmentMinY, gateBottom, segmentMaxY, gateTop, yOverlaps, verticalSegmentIntersects);
 
             if (verticalSegmentIntersects)
             {
-                Console.WriteLine($"    COLLISION DETECTED! Rerouting around gate {i}");
+                _logger.LogDebug("COLLISION DETECTED! Rerouting around gate {Index}", i);
 
                 // Try routing around the gate
                 double leftRoute = gateLeft - 15; // Route to the left of the gate
                 double rightRoute = gateRight + 15; // Route to the right of the gate
 
-                Console.WriteLine($"    Left route option: {leftRoute}");
-                Console.WriteLine($"    Right route option: {rightRoute}");
-                Console.WriteLine($"    Distance to left: {Math.Abs(leftRoute - midX)}");
-                Console.WriteLine($"    Distance to right: {Math.Abs(rightRoute - midX)}");
+                _logger.LogTrace("Left route option: {LeftRoute}, Right route option: {RightRoute}, Distance to left: {LeftDistance}, Distance to right: {RightDistance}",
+                    leftRoute, rightRoute, Math.Abs(leftRoute - midX), Math.Abs(rightRoute - midX));
 
                 // Choose the route that's closer to the original midpoint
                 if (Math.Abs(leftRoute - midX) <= Math.Abs(rightRoute - midX))
                 {
                     midX = leftRoute;
-                    Console.WriteLine($"    Chose LEFT route: {midX}");
+                    _logger.LogTrace("Chose LEFT route: {MidX}", midX);
                 }
                 else
                 {
                     midX = rightRoute;
-                    Console.WriteLine($"    Chose RIGHT route: {midX}");
+                    _logger.LogTrace("Chose RIGHT route: {MidX}", midX);
                 }
                 break; // Only avoid the first conflicting gate for simplicity
             }
             else
             {
-                Console.WriteLine($"    No collision with gate {i}");
+                _logger.LogTrace("No collision with gate {Index}", i);
             }
         }
 
-        Console.WriteLine($"  Final midX: {midX}");
+        _logger.LogDebug("Final midX: {MidX}", midX);
         return midX;
     }
 
