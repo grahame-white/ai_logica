@@ -348,6 +348,30 @@ public class HomeViewModel : ViewModelBase
                     Index = 0
                 });
                 break;
+
+            case "CONSTANT0":
+                // Constant 0 gate has 0 inputs and 1 output
+                gate.Value = 0;
+                gate.Connections.Add(new Connection
+                {
+                    Id = Guid.NewGuid(),
+                    GateId = gate.Id,
+                    Type = ConnectionType.Output,
+                    Index = 0
+                });
+                break;
+
+            case "CONSTANT1":
+                // Constant 1 gate has 0 inputs and 1 output
+                gate.Value = 1;
+                gate.Connections.Add(new Connection
+                {
+                    Id = Guid.NewGuid(),
+                    GateId = gate.Id,
+                    Type = ConnectionType.Output,
+                    Index = 0
+                });
+                break;
         }
 
         // Update connection positions based on gate position
