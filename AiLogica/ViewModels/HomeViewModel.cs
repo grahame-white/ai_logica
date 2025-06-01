@@ -198,10 +198,28 @@ public class HomeViewModel : ViewModelBase
             // Generate wire segments using orthogonal routing
             wire.Segments = GenerateWireSegments(ActiveConnection, toConnection);
 
+            // Debug: Log the final wire segments before adding to collection
+            Console.WriteLine($"[DEBUG] Final wire segments before adding to collection:");
+            for (int i = 0; i < wire.Segments.Count; i++)
+            {
+                var seg = wire.Segments[i];
+                Console.WriteLine($"  Segment {i}: ({seg.StartX}, {seg.StartY}) -> ({seg.EndX}, {seg.EndY}) [{seg.Orientation}]");
+            }
+
             Wires.Add(wire);
+
+            // Debug: Log each segment being added to the wire collection
+            Console.WriteLine($"[DEBUG] Wire added to collection. Logging stored segments:");
+            for (int i = 0; i < wire.Segments.Count; i++)
+            {
+                var seg = wire.Segments[i];
+                Console.WriteLine($"  Stored segment {i}: ({seg.StartX}, {seg.StartY}) -> ({seg.EndX}, {seg.EndY}) [{seg.Orientation}]");
+            }
+
             OnPropertyChanged(nameof(Wires));
 
             Console.WriteLine($"  Wire created with {wire.Segments.Count} segments");
+            Console.WriteLine($"  Total wires in collection: {Wires.Count}");
         }
         else
         {
