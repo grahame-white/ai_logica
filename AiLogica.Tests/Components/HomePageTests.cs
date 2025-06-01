@@ -9,8 +9,42 @@ using AiLogica.Tests.Helpers;
 namespace AiLogica.Tests.Components;
 public class HomePageTests : TestContext
 {
+    [Theory]
+    [InlineData("OR")]
+    [InlineData("AND")]
+    [InlineData("NOT")]
+    public void HomePage_SelectGate_ShouldUpdateSelectedGateForDifferentTypes(string gateType)
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        Services.AddSingleton(viewModel);
+
+        // Act - Test the ViewModel directly since interactive server mode doesn't work in unit tests
+        viewModel.SelectGate(gateType);
+
+        // Assert
+        Assert.Equal(gateType, viewModel.SelectedGate);
+    }
+
+    [Theory]
+    [InlineData("OR")]
+    [InlineData("AND")]
+    [InlineData("NOT")]
+    public void HomePage_SelectGate_ShouldUpdateDraggingStateForDifferentTypes(string gateType)
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        Services.AddSingleton(viewModel);
+
+        // Act - Test the ViewModel directly since interactive server mode doesn't work in unit tests
+        viewModel.SelectGate(gateType);
+
+        // Assert
+        Assert.True(viewModel.IsDragging);
+    }
+
     [Fact]
-    public void HomePage_SelectOrGate_ShouldUpdateViewModel()
+    public void HomePage_SelectOrGate_ShouldUpdateSelectedGate()
     {
         // Arrange
         var viewModel = TestHelper.CreateTestViewModel();
@@ -21,6 +55,19 @@ public class HomePageTests : TestContext
 
         // Assert
         Assert.Equal("OR", viewModel.SelectedGate);
+    }
+
+    [Fact]
+    public void HomePage_SelectOrGate_ShouldUpdateDraggingState()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        Services.AddSingleton(viewModel);
+
+        // Act - Test the ViewModel directly since interactive server mode doesn't work in unit tests
+        viewModel.SelectGate("OR");
+
+        // Assert
         Assert.True(viewModel.IsDragging);
     }
 
@@ -59,7 +106,7 @@ public class HomePageTests : TestContext
     }
 
     [Fact]
-    public void HomePage_OrGate_ShouldDisplaySvgSymbol()
+    public void HomePage_OrGate_ShouldDisplaySvgElement()
     {
         // Arrange
         var viewModel = TestHelper.CreateTestViewModel();
@@ -72,8 +119,39 @@ public class HomePageTests : TestContext
         var orGateElement = component.Find("[data-gate-type='OR']");
         var svgElement = orGateElement.QuerySelector("svg");
         Assert.NotNull(svgElement);
-        Assert.Equal("32", svgElement.GetAttribute("width"));
-        Assert.Equal("24", svgElement.GetAttribute("height"));
+    }
+
+    [Theory]
+    [InlineData("width", "32")]
+    [InlineData("height", "24")]
+    public void HomePage_OrGate_ShouldDisplaySvgWithCorrectDimensions(string attribute, string expectedValue)
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        Services.AddSingleton(viewModel);
+
+        // Act
+        var component = RenderComponent<Home>();
+
+        // Assert - Check that the OR gate contains an SVG symbol with correct dimensions
+        var orGateElement = component.Find("[data-gate-type='OR']");
+        var svgElement = orGateElement.QuerySelector("svg");
+        Assert.NotNull(svgElement);
+        Assert.Equal(expectedValue, svgElement!.GetAttribute(attribute));
+    }
+
+    [Fact]
+    public void HomePage_OrGate_ShouldNotDisplayRawText()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        Services.AddSingleton(viewModel);
+
+        // Act
+        var component = RenderComponent<Home>();
+
+        // Assert - Check that the OR gate contains an SVG symbol instead of text
+        var orGateElement = component.Find("[data-gate-type='OR']");
 
         // Verify that it doesn't contain the raw text "OR"
         Assert.DoesNotContain("OR", orGateElement.TextContent.Trim());
