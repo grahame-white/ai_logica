@@ -362,6 +362,19 @@ public class HomeViewModel : ViewModelBase
         };
     }
 
+    /// <summary>
+    /// Gets the dimensions of a gate based on its type.
+    /// </summary>
+    private static (double width, double height) GetGateDimensions(string gateType)
+    {
+        return gateType switch
+        {
+            "CONSTANT0" or "CONSTANT1" => (32, 16), // Constant gates are 32x16
+            "OR" => (96, 72), // OR gates are 96x72
+            _ => (48, 36) // Default fallback
+        };
+    }
+
     private void CreateConnectionsForGate(PlacedGate gate)
     {
         switch (gate.Type)
@@ -542,10 +555,11 @@ public class HomeViewModel : ViewModelBase
 
             // Gate bounding box (with some padding for wire clearance)
             // Use explicit left/right edge calculations to avoid confusion
+            var (gateWidth, gateHeight) = GetGateDimensions(gate.Type);
             double gateLeft = CoordinateHelper.GetPositionToTheLeftOf(gate.X, 10);  // Left edge with padding (LOWER X)
-            double gateRight = CoordinateHelper.GetPositionToTheRightOf(gate.X, 96, 10); // Right edge with padding (HIGHER X)
+            double gateRight = CoordinateHelper.GetPositionToTheRightOf(gate.X, gateWidth, 10); // Right edge with padding (HIGHER X)
             double gateTop = gate.Y - 10;
-            double gateBottom = gate.Y + 72 + 10; // Gate height + padding
+            double gateBottom = gate.Y + gateHeight + 10; // Gate height + padding
 
             _logger.LogTrace(
                 "Gate bounds: Left={Left}, Right={Right}, Top={Top}, Bottom={Bottom}",
@@ -589,7 +603,7 @@ public class HomeViewModel : ViewModelBase
                 // LEFT route = position to the LEFT of gate (LOWER X coordinate)
                 // RIGHT route = position to the RIGHT of gate (HIGHER X coordinate)
                 double leftRoute = CoordinateHelper.GetPositionToTheLeftOf(gate.X, 15);
-                double rightRoute = CoordinateHelper.GetPositionToTheRightOf(gate.X, 96, 15);
+                double rightRoute = CoordinateHelper.GetPositionToTheRightOf(gate.X, gateWidth, 15);
 
                 _logger.LogTrace(
                     "Left route option: {LeftRoute}, Right route option: {RightRoute}, Distance to left: {LeftDistance}, Distance to right: {RightDistance}",

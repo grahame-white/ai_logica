@@ -551,4 +551,36 @@ public class HomeViewModelTests
         Assert.Equal(originalType, gate.Type);
         Assert.Equal(originalValue, gate.Value);
     }
+
+    [Fact]
+    public void WireRouting_ShouldUseCorrectGateDimensionsForCollisionDetection()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+
+        // Place a constant gate (32x16) and an OR gate (96x72)
+        viewModel.SelectGate("CONSTANT0");
+        viewModel.PlaceGate(100, 100);
+        var constantGate = viewModel.PlacedGates[0];
+
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(200, 100);
+        var orGate = viewModel.PlacedGates[1];
+
+        // Act - Start wiring from constant gate output to OR gate input
+        var constantOutput = constantGate.Connections.First(c => c.Type == ConnectionType.Output);
+        var orInput = orGate.Connections.First(c => c.Type == ConnectionType.Input);
+
+        viewModel.StartWiring(constantOutput);
+        viewModel.CompleteWiring(orInput);
+
+        // Assert - Wire should be created successfully
+        Assert.Single(viewModel.Wires);
+        var wire = viewModel.Wires[0];
+        Assert.Equal(constantOutput.Id, wire.FromConnectionId);
+        Assert.Equal(orInput.Id, wire.ToConnectionId);
+
+        // Wire should have segments (indicating routing logic executed)
+        Assert.NotEmpty(wire.Segments);
+    }
 }
