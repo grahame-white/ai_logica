@@ -81,7 +81,7 @@ public class HomePageTests : TestContext
         // Act
         var component = RenderComponent<Home>();
 
-        // Assert - Check that the component renders the gate palette
+        // Assert - Check that the component renders the Gate Palette
         // Find the OR gate using its specific data attribute
         var orGateElement = component.Find("[data-gate-type='OR']");
         Assert.NotNull(orGateElement);

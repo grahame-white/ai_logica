@@ -83,7 +83,7 @@ For a gate at X=100 with width=96:
 The coordinate system is validated by:
 - `CoordinateSystemTests` - Validates gate positioning and movement
 - `CoordinateHelperTests` - Validates utility method calculations
-- Wire routing tests confirm left/right collision avoidance
+- Wire Routing tests confirm left/right collision avoidance
 
 ## Common Mistakes to Avoid
 1. ❌ Thinking "left" means higher X values
@@ -93,6 +93,6 @@ The coordinate system is validated by:
 
 ## Related Code Files
 - `AiLogica/ViewModels/CoordinateHelper.cs` - Utility methods
-- `AiLogica/ViewModels/HomeViewModel.cs` - Wire routing implementation
+- `AiLogica/ViewModels/HomeViewModel.cs` - Wire Routing implementation
 - `AiLogica.Tests/ViewModels/CoordinateSystemTests.cs` - System validation
 - `AiLogica.Tests/ViewModels/CoordinateHelperTests.cs` - Utility validation

@@ -2,7 +2,7 @@ using System;
 
 namespace AiLogica.Tests.EndToEnd;
 /// <summary>
-/// Documentation for end-to-end test coverage strategy
+/// Documentation for End-to-End test coverage strategy
 /// 
 /// Browser automation has been removed in favor of comprehensive test coverage through:
 /// - Unit tests: Validate core business logic and algorithms
