@@ -35,7 +35,7 @@ public class EndToEndInfrastructureTests : IClassFixture<WebApplicationFactory<P
     [Fact]
     public async Task EndToEndTestInfrastructure_ShouldReturnSuccessStatusCode()
     {
-        // This test verifies that the end-to-end testing infrastructure is set up correctly
+        // This test verifies that the End-to-End testing infrastructure is set up correctly
         // It doesn't require browser installation but validates the web application factory setup
 
         // Arrange

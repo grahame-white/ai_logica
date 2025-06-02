@@ -123,7 +123,7 @@ public class HomeViewModel : ViewModelBase
                 gate.Y,
                 gate.Type);
 
-            // Create connection points for the gate
+            // Create Connection Points for the gate
             CreateConnectionsForGate(gate);
 
             PlacedGates.Add(gate);
@@ -154,7 +154,7 @@ public class HomeViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// FR-3.4: Starts a wiring operation from a connection point.
+    /// FR-3.4: Starts a wiring operation from a Connection Point.
     /// </summary>
     public void StartWiring(Connection connection)
     {
@@ -174,7 +174,7 @@ public class HomeViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// FR-3.4: Completes a wiring operation by connecting to another connection point.
+    /// FR-3.4: Completes a wiring operation by connecting to another Connection Point.
     /// </summary>
     public void CompleteWiring(Connection toConnection)
     {
@@ -286,7 +286,7 @@ public class HomeViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Finds a connection point near the given coordinates.
+    /// Finds a Connection Point near the given coordinates.
     /// </summary>
     public Connection? FindConnectionAt(double x, double y, double tolerance = 10)
     {

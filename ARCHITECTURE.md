@@ -17,7 +17,7 @@ ai_logica/
 │   ├── Components/        # Blazor components
 │   │   ├── Layout/       # Standard layout components
 │   │   └── Pages/        # Standard template pages (Home, Counter, Weather)
-│   ├── ViewModels/       # (Future) Presentation layer view models
+│   ├── ViewModels/       # (Future) Presentation layer ViewModels
 │   ├── wwwroot/          # Static web assets
 │   └── Program.cs        # Application entry point
 ├── AiLogica.Core/        # Core business logic library

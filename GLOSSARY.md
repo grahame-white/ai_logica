@@ -169,7 +169,7 @@ User interactions with the main drawing area, including gate placement, selectio
 Visual indication when the user's cursor is positioned over an interactive element, such as connection points changing appearance when ready for wire attachment.
 
 ### Palette Selection
-The process of choosing a gate type from the gate palette, which highlights the selected gate and prepares it for placement.
+The process of choosing a gate type from the Gate Palette, which highlights the selected gate and prepares it for placement.
 
 ### Visual Feedback
 Any visual indication that helps users understand the current state of their actions, such as:
@@ -191,7 +191,7 @@ The Blazor component testing framework used for testing Blazor components in iso
 Testing that verifies complete user workflows from start to finish, implemented using Playwright.
 
 ### Playwright
-The browser automation framework used for end-to-end testing of the web application.
+The browser automation framework used for End-to-End testing of the web application.
 
 ### Unit Testing
 Testing individual components or methods in isolation, implemented using xUnit.

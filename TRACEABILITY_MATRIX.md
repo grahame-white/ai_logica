@@ -17,7 +17,7 @@ This document provides traceability between functional requirements and their im
 | Requirement ID | Description | Implementation Status | Source Files | Test Coverage | Notes |
 |---|---|---|---|---|---|
 | **FR-1** | Graphical gate layout capability | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (lines 11-114), `AiLogica/ViewModels/HomeViewModel.cs` (lines 78-137) | ✅ Covered | Gate placement functionality |
-| **FR-2** | Easy gate selection from palette | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (lines 12-44) | ✅ Covered | Interactive gate palette |
+| **FR-2** | Easy gate selection from palette | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (lines 12-44) | ✅ Covered | Interactive Gate Palette |
 | **FR-2.1** | Gate palette highlighting on selection | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (line 21) | ✅ Covered | CSS class `selected` applied |
 | **FR-2.2** | Previous selection clearing | ✅ Implemented | `AiLogica/ViewModels/HomeViewModel.cs` (lines 78-85) | ✅ Covered | SetProperty handles state change |
 | **FR-2.3** | Gate follows mouse cursor | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (lines 107-113), `AiLogica/ViewModels/HomeViewModel.cs` (lines 87-91) | ✅ Covered | Dragging gate visual feedback |
@@ -34,8 +34,8 @@ This document provides traceability between functional requirements and their im
 | **FR-2.14** | No background shading or borders | 🔍 Implementation Unclear | Need to verify CSS | ⚠️ Not explicitly tested | Requires CSS review |
 | **FR-3** | Gate input/output wiring | ✅ Implemented | `AiLogica/ViewModels/HomeViewModel.cs` (lines 146-276) | ✅ Covered | Comprehensive wiring system |
 | **FR-3.1** | Larger placed gates for easier wiring | ✅ Implemented | `AiLogica/ViewModels/HomeViewModel.cs` (lines 98-103) | ✅ Covered | 96x72 vs 32x24 sizing |
-| **FR-3.2** | Visible connection points | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (lines 66-75) | ✅ Covered | Connection point rendering |
-| **FR-3.3** | Color-coded connection points | 🔍 Implementation Unclear | Need to verify CSS | ⚠️ Not explicitly tested | CSS class applied but colors need verification |
+| **FR-3.2** | Visible Connection Points | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (lines 66-75) | ✅ Covered | Connection Point rendering |
+| **FR-3.3** | Color-coded Connection Points | 🔍 Implementation Unclear | Need to verify CSS | ⚠️ Not explicitly tested | CSS class applied but colors need verification |
 | **FR-3.4** | Drag wire between connections | ✅ Implemented | `AiLogica/ViewModels/HomeViewModel.cs` (lines 146-276) | ✅ Covered | StartWiring/CompleteWiring methods |
 | **FR-3.5** | Output to input connections | ✅ Implemented | `AiLogica/ViewModels/HomeViewModel.cs` (lines 300-307) | ✅ Covered | CanConnect method |
 | **FR-3.6** | Input to input connections (fan-out) | ✅ Implemented | `AiLogica/ViewModels/HomeViewModel.cs` (lines 300-307) | ✅ Covered | CanConnect method |

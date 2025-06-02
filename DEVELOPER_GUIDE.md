@@ -182,7 +182,7 @@ For detailed information about the project structure and technical architecture,
 
 ### For Human Developers
 - Follow standard .NET and Blazor development practices
-- Use the existing ViewModelBase for any new view models
+- Use the existing ViewModelBase for any new ViewModels
 - Write tests for new functionality
 - Follow the established project structure
 
@@ -565,16 +565,16 @@ dotnet test --collect:"XPlat Code Coverage"
 # Run specific test project
 dotnet test AiLogica.Tests
 
-# Run tests excluding end-to-end tests (faster for development)
+# Run tests excluding End-to-End tests (faster for development)
 dotnet test --filter "Category!=EndToEnd"
 
-# Run only end-to-end tests
+# Run only End-to-End tests
 dotnet test --filter "Category=EndToEnd"
 ```
 
 ### End-to-End Testing
 
-The project includes comprehensive end-to-end tests using Playwright for browser automation. These tests validate complete user workflows and ensure the application works correctly from the user's perspective.
+The project includes comprehensive End-to-End tests using Playwright for browser automation. These tests validate complete user workflows and ensure the application works correctly from the user's perspective.
 
 ```bash
 # Set up and run E2E tests (automated script)
@@ -586,7 +586,7 @@ pwsh ./AiLogica.Tests/bin/Release/net8.0/playwright.ps1 install firefox
 dotnet test --filter "Category=EndToEnd" --configuration Release
 ```
 
-For detailed information about end-to-end testing, see [E2E_TESTING_GUIDE.md](E2E_TESTING_GUIDE.md).
+For detailed information about End-to-End testing, see [E2E_TESTING_GUIDE.md](E2E_TESTING_GUIDE.md).
 
 ### Running the Application
 ```bash
@@ -671,6 +671,6 @@ Based on the requirements in REQUIREMENTS.md, the next major development tasks i
 1. **Gate Models**: Implement basic logic gate representations
 2. **Canvas Component**: Create interactive drawing area for gate placement
 3. **Simulation Engine**: Build logic evaluation and state management
-4. **UI Components**: Develop gate palette and property panels
+4. **UI Components**: Develop Gate Palette and property panels
 5. **Hierarchical Design**: Implement component abstraction and navigation
 
