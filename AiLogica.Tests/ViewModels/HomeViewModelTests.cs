@@ -449,4 +449,138 @@ public class HomeViewModelTests
         // Assert
         Assert.True(propertyChangedRaised);
     }
+
+    [Fact]
+    public void PlaceGate_ShouldCreateConstant0Gate_WithCorrectValue()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("CONSTANT0");
+
+        // Act
+        viewModel.PlaceGate(100, 100);
+
+        // Assert
+        var placedGate = Assert.Single(viewModel.PlacedGates);
+        Assert.Equal("CONSTANT0", placedGate.Type);
+        Assert.Equal(0, placedGate.Value);
+    }
+
+    [Fact]
+    public void PlaceGate_ShouldCreateConstant1Gate_WithCorrectValue()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("CONSTANT1");
+
+        // Act
+        viewModel.PlaceGate(100, 100);
+
+        // Assert
+        var placedGate = Assert.Single(viewModel.PlacedGates);
+        Assert.Equal("CONSTANT1", placedGate.Type);
+        Assert.Equal(1, placedGate.Value);
+    }
+
+    [Fact]
+    public void PlaceGate_ShouldCreateConstantGate_WithOnlyOutputConnection()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("CONSTANT0");
+
+        // Act
+        viewModel.PlaceGate(100, 100);
+
+        // Assert
+        var placedGate = Assert.Single(viewModel.PlacedGates);
+        var outputConnection = Assert.Single(placedGate.Connections);
+        Assert.Equal(ConnectionType.Output, outputConnection.Type);
+        Assert.Equal(0, outputConnection.Index);
+    }
+
+    [Fact]
+    public void ToggleConstantValue_ShouldToggleConstant0To1()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("CONSTANT0");
+        viewModel.PlaceGate(100, 100);
+        var gate = viewModel.PlacedGates[0];
+
+        // Act
+        viewModel.ToggleConstantValue(gate);
+
+        // Assert
+        Assert.Equal(1, gate.Value);
+        Assert.Equal("CONSTANT1", gate.Type);
+    }
+
+    [Fact]
+    public void ToggleConstantValue_ShouldToggleConstant1To0()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("CONSTANT1");
+        viewModel.PlaceGate(100, 100);
+        var gate = viewModel.PlacedGates[0];
+
+        // Act
+        viewModel.ToggleConstantValue(gate);
+
+        // Assert
+        Assert.Equal(0, gate.Value);
+        Assert.Equal("CONSTANT0", gate.Type);
+    }
+
+    [Fact]
+    public void ToggleConstantValue_ShouldNotAffectNonConstantGates()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(100, 100);
+        var gate = viewModel.PlacedGates[0];
+        var originalType = gate.Type;
+        var originalValue = gate.Value;
+
+        // Act
+        viewModel.ToggleConstantValue(gate);
+
+        // Assert
+        Assert.Equal(originalType, gate.Type);
+        Assert.Equal(originalValue, gate.Value);
+    }
+
+    [Fact]
+    public void WireRouting_ShouldUseCorrectGateDimensionsForCollisionDetection()
+    {
+        // Arrange
+        var viewModel = TestHelper.CreateTestViewModel();
+
+        // Place a constant gate (32x16) and an OR gate (96x72)
+        viewModel.SelectGate("CONSTANT0");
+        viewModel.PlaceGate(100, 100);
+        var constantGate = viewModel.PlacedGates[0];
+
+        viewModel.SelectGate("OR");
+        viewModel.PlaceGate(200, 100);
+        var orGate = viewModel.PlacedGates[1];
+
+        // Act - Start wiring from constant gate output to OR gate input
+        var constantOutput = constantGate.Connections.First(c => c.Type == ConnectionType.Output);
+        var orInput = orGate.Connections.First(c => c.Type == ConnectionType.Input);
+
+        viewModel.StartWiring(constantOutput);
+        viewModel.CompleteWiring(orInput);
+
+        // Assert - Wire should be created successfully
+        Assert.Single(viewModel.Wires);
+        var wire = viewModel.Wires[0];
+        Assert.Equal(constantOutput.Id, wire.FromConnectionId);
+        Assert.Equal(orInput.Id, wire.ToConnectionId);
+
+        // Wire should have segments (indicating routing logic executed)
+        Assert.NotEmpty(wire.Segments);
+    }
 }

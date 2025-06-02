@@ -106,12 +106,13 @@ public class HomeViewModel : ViewModelBase
         if (SelectedGate != null)
         {
             // Apply the same offset used during dragging to center the gate on cursor
-            // FR-3.1: Updated offsets for larger gate size (96x72 instead of 48x36)
+            // Different gate types have different sizes
+            var (offsetX, offsetY) = GetGateOffsets(SelectedGate);
             var gate = new PlacedGate
             {
                 Type = SelectedGate,
-                X = x - 48, // Same offset as dragging-gate positioning (half of 96px width)
-                Y = y - 36, // Same offset as dragging-gate positioning (half of 72px height)
+                X = x - offsetX,
+                Y = y - offsetY,
                 Id = Guid.NewGuid()
             };
 
@@ -151,6 +152,34 @@ public class HomeViewModel : ViewModelBase
     {
         SelectedGate = null;
         IsDragging = false;
+    }
+
+    /// <summary>
+    /// Toggles the value of a constant gate between 0 and 1.
+    /// Also updates the gate type to match the new value.
+    /// </summary>
+    public void ToggleConstantValue(PlacedGate gate)
+    {
+        if (gate == null) return;
+
+        // Only toggle constant gates
+        if (gate.Type == "CONSTANT0" || gate.Type == "CONSTANT1")
+        {
+            // Toggle the value
+            gate.Value = gate.Value == 0 ? 1 : 0;
+
+            // Update the gate type to match the new value
+            gate.Type = gate.Value == 0 ? "CONSTANT0" : "CONSTANT1";
+
+            _logger.LogDebug(
+                "Toggled constant gate {GateId} to value {Value}, type {Type}",
+                gate.Id,
+                gate.Value,
+                gate.Type);
+
+            // Notify that the gates collection has changed
+            OnPropertyChanged(nameof(PlacedGates));
+        }
     }
 
     /// <summary>
@@ -320,6 +349,32 @@ public class HomeViewModel : ViewModelBase
                (from.Type == ConnectionType.Input && to.Type == ConnectionType.Input);
     }
 
+    /// <summary>
+    /// Gets the offset values for centering gates during dragging and placement.
+    /// </summary>
+    private static (double offsetX, double offsetY) GetGateOffsets(string gateType)
+    {
+        return gateType switch
+        {
+            "CONSTANT0" or "CONSTANT1" => (16, 8), // Half of 32x16
+            "OR" => (48, 36), // Half of 96x72
+            _ => (24, 18) // Default fallback
+        };
+    }
+
+    /// <summary>
+    /// Gets the dimensions of a gate based on its type.
+    /// </summary>
+    private static (double width, double height) GetGateDimensions(string gateType)
+    {
+        return gateType switch
+        {
+            "CONSTANT0" or "CONSTANT1" => (32, 16), // Constant gates are 32x16
+            "OR" => (96, 72), // OR gates are 96x72
+            _ => (48, 36) // Default fallback
+        };
+    }
+
     private void CreateConnectionsForGate(PlacedGate gate)
     {
         switch (gate.Type)
@@ -340,6 +395,30 @@ public class HomeViewModel : ViewModelBase
                     Type = ConnectionType.Input,
                     Index = 1
                 });
+                gate.Connections.Add(new Connection
+                {
+                    Id = Guid.NewGuid(),
+                    GateId = gate.Id,
+                    Type = ConnectionType.Output,
+                    Index = 0
+                });
+                break;
+
+            case "CONSTANT0":
+                // Constant 0 gate has 0 inputs and 1 output
+                gate.Value = 0;
+                gate.Connections.Add(new Connection
+                {
+                    Id = Guid.NewGuid(),
+                    GateId = gate.Id,
+                    Type = ConnectionType.Output,
+                    Index = 0
+                });
+                break;
+
+            case "CONSTANT1":
+                // Constant 1 gate has 0 inputs and 1 output
+                gate.Value = 1;
                 gate.Connections.Add(new Connection
                 {
                     Id = Guid.NewGuid(),
@@ -476,10 +555,11 @@ public class HomeViewModel : ViewModelBase
 
             // Gate bounding box (with some padding for wire clearance)
             // Use explicit left/right edge calculations to avoid confusion
+            var (gateWidth, gateHeight) = GetGateDimensions(gate.Type);
             double gateLeft = CoordinateHelper.GetPositionToTheLeftOf(gate.X, 10);  // Left edge with padding (LOWER X)
-            double gateRight = CoordinateHelper.GetPositionToTheRightOf(gate.X, 96, 10); // Right edge with padding (HIGHER X)
+            double gateRight = CoordinateHelper.GetPositionToTheRightOf(gate.X, gateWidth, 10); // Right edge with padding (HIGHER X)
             double gateTop = gate.Y - 10;
-            double gateBottom = gate.Y + 72 + 10; // Gate height + padding
+            double gateBottom = gate.Y + gateHeight + 10; // Gate height + padding
 
             _logger.LogTrace(
                 "Gate bounds: Left={Left}, Right={Right}, Top={Top}, Bottom={Bottom}",
@@ -523,7 +603,7 @@ public class HomeViewModel : ViewModelBase
                 // LEFT route = position to the LEFT of gate (LOWER X coordinate)
                 // RIGHT route = position to the RIGHT of gate (HIGHER X coordinate)
                 double leftRoute = CoordinateHelper.GetPositionToTheLeftOf(gate.X, 15);
-                double rightRoute = CoordinateHelper.GetPositionToTheRightOf(gate.X, 96, 15);
+                double rightRoute = CoordinateHelper.GetPositionToTheRightOf(gate.X, gateWidth, 15);
 
                 _logger.LogTrace(
                     "Left route option: {LeftRoute}, Right route option: {RightRoute}, Distance to left: {LeftDistance}, Distance to right: {RightDistance}",
