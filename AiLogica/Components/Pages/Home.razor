@@ -2,6 +2,7 @@
 @implements IDisposable
 @using AiLogica.ViewModels
 @using Microsoft.JSInterop
+@using System.IO
 @inject HomeViewModel ViewModel
 @inject IJSRuntime JSRuntime
 @rendermode InteractiveServer
@@ -91,12 +92,12 @@
             {
                 @if (gate.Type == "CONSTANT0" || gate.Type == "CONSTANT1")
                 {
-                    Console.WriteLine($"Constant Gate Connection Debug:");
-                    Console.WriteLine($"  Gate Position: ({gate.X}, {gate.Y})");
-                    Console.WriteLine($"  Connection Absolute: ({connection.X}, {connection.Y})");
-                    Console.WriteLine($"  Connection Relative: ({connection.X - gate.X}, {connection.Y - gate.Y})");
-                    Console.WriteLine($"  UI Offset Applied: ({connection.X - gate.X - 4}, {connection.Y - gate.Y - 4})");
-                    Console.WriteLine($"  Expected SVG Line End: x=32 (right end of connector line)");
+                    LogToFile($"Constant Gate Connection Debug:");
+                    LogToFile($"  Gate Position: ({gate.X}, {gate.Y})");
+                    LogToFile($"  Connection Absolute: ({connection.X}, {connection.Y})");
+                    LogToFile($"  Connection Relative: ({connection.X - gate.X}, {connection.Y - gate.Y})");
+                    LogToFile($"  UI Offset Applied: ({connection.X - gate.X - 4}, {connection.Y - gate.Y - 4})");
+                    LogToFile($"  Expected SVG Line End: x=32 (right end of connector line)");
                 }
                 <div class="connection-point @(connection.Type.ToString().ToLower())" 
                      style="left: @(connection.X - gate.X - 4)px; top: @(connection.Y - gate.Y - 4)px;"
@@ -250,9 +251,9 @@
         if (isPlacedGate)
         {
             // Debug logging for coordinate verification
-            Console.WriteLine($"Constant Gate SVG - Gate Body: Square at (0,0) to (16,16)");
-            Console.WriteLine($"Constant Gate SVG - Connector Line: From (16,8) to (32,8)");
-            Console.WriteLine($"Constant Gate SVG - Connection Point should be at SVG coordinate (32,8)");
+            LogToFile($"Constant Gate SVG - Gate Body: Square at (0,0) to (16,16)");
+            LogToFile($"Constant Gate SVG - Connector Line: From (16,8) to (32,8)");
+            LogToFile($"Constant Gate SVG - Connection Point should be at SVG coordinate (32,8)");
             
             // Constant gate: 16x16 grid square + 16px connector line = 32x16 total
             return @<svg width="32" height="16" viewBox="0 0 32 16" style="display: block;">
@@ -423,6 +424,20 @@
         {
             ViewModel.ToggleConstantValue(gate);
             StateHasChanged();
+        }
+    }
+
+    private void LogToFile(string message)
+    {
+        try
+        {
+            var logPath = Path.Combine(Directory.GetCurrentDirectory(), "constant-gate-debug.log");
+            var timestampedMessage = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] {message}";
+            File.AppendAllText(logPath, timestampedMessage + Environment.NewLine);
+        }
+        catch
+        {
+            // Ignore logging errors to prevent breaking the UI
         }
     }
 
