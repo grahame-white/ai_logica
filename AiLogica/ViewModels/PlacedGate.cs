@@ -9,7 +9,7 @@ public class PlacedGate
     public List<Connection> Connections { get; set; } = new();
 
     /// <summary>
-    /// Updates the absolute positions of all connection points based on gate position.
+    /// Updates the absolute positions of all Connection Points based on gate position.
     /// </summary>
     public void UpdateConnectionPositions()
     {

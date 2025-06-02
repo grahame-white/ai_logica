@@ -14,7 +14,7 @@ Based on the application outline, AI Logica shall provide the following capabili
 - **FR-2**: It will be easy for the end user to select which gates to place onto the drawing area
 - **FR-2.1**: When the end user selects a gate from the palette, the gate in the palette shall be highlighted to indicate selection
 - **FR-2.2**: When the end user selects any other gate from the palette after selecting a gate, the previously selected gate in the palette shall not be highlighted
-- **FR-2.3**: The selected gate shall follow the mouse cursor over the canvas area to provide visual feedback during placement
+- **FR-2.3**: The selected gate shall follow the mouse cursor over the canvas area to provide Visual Feedback during placement
 - **FR-2.4**: The end user shall be able to place the selected gate by clicking on the canvas at the desired location
 - **FR-2.5**: The end user shall be able to place multiple gates of the same type without having to reselect the gate from the palette each time
 
@@ -34,30 +34,30 @@ Based on the application outline, AI Logica shall provide the following capabili
 ### 1.2 Gate Wiring
 - **FR-3**: The end user will be able to wire the inputs and outputs of the gates together
 - **FR-3.1**: Placed gates shall be 100% larger than palette gates (96x72 pixels instead of 48x36 pixels) to make wire connections less fiddly
-- **FR-3.2**: Each gate shall have visible connection points for inputs and outputs
-- **FR-3.3**: Connection points shall be visually distinct with different colors for inputs (red) and outputs (green)
-- **FR-3.4**: The end user shall be able to drag a new wire from one connection point to another
+- **FR-3.2**: Each gate shall have visible Connection Points for inputs and outputs
+- **FR-3.3**: Connection Points shall be visually distinct with different colors for inputs (red) and outputs (green)
+- **FR-3.4**: The end user shall be able to drag a new wire from one Connection Point to another
 - **FR-3.5**: It shall be possible to wire an output connection to an input connection
 - **FR-3.6**: It shall be possible to wire an input connection to an input connection (fan-out capability)
 - **FR-3.7**: It shall be possible to wire connections within the same gate to enable feedback loops
 - **FR-3.8**: Wires shall be drawn using as few orthogonal straight line segments as possible
-- **FR-3.9**: Wire routing shall avoid passing through gates when possible
+- **FR-3.9**: Wire Routing shall avoid passing through gates when possible
 - **FR-3.10**: Connected wires shall be visually distinct from disconnected or incomplete wire connections
 - **FR-3.11**: Connected wires shall be displayed in blue (#5eb3f5) color
 - **FR-3.12**: Disconnected or incomplete wires shall be displayed in red (#f44336) color with dashed lines
 - **FR-3.13**: Active wiring operations (wire being dragged) shall show a preview line from the source connection to the mouse cursor
 - **FR-3.14**: The end user shall be able to cancel an active wiring operation by clicking on empty canvas space or pressing Escape
-- **FR-3.15**: Connection points shall provide hover feedback to indicate they are interactive
-- **FR-3.16**: Wire segments shall only be created when there is meaningful distance between connection points
+- **FR-3.15**: Connection Points shall provide Hover Feedback to indicate they are interactive
+- **FR-3.16**: Wire segments shall only be created when there is meaningful distance between Connection Points
 
 ### 1.3 Simulation Capabilities
 - **FR-4**: The application will be able to simulate the behavior of the connected logic gates
 - **FR-5**: The end user will be able to step through updates incrementally
 
 ### 1.4 Hierarchical Design
-- **FR-6**: The end user will be able to save their layouts so that they can be used as a black box component in another layout
-- **FR-7**: The end user will be able to drill down into black box component so that they can see inside it
-- **FR-8**: The end user will be able to drill up from a black box component so that they can see how it is being used
+- **FR-6**: The end user will be able to save their layouts so that they can be used as a Black Box component in another layout
+- **FR-7**: The end user will be able to drill down into Black Box component so that they can see inside it
+- **FR-8**: The end user will be able to drill up from a Black Box component so that they can see how it is being used
 
 ### 1.5 Design Overview
 - **FR-9**: The end user should be able to see an overview of their design from the most abstract level down to the most primitive logic gates
@@ -71,12 +71,12 @@ Based on the application outline, AI Logica shall provide the following capabili
 
 ### 2.2 Performance
 - Real-time simulation updates
-- Smooth user interactions for gate placement and wiring
+- Smooth user interactions for Gate Placement and wiring
 - Efficient rendering of complex circuit layouts
 
 ### 2.3 Usability
 - Intuitive drag-and-drop interface
-- Clear visual feedback for all operations
+- Clear Visual Feedback for all operations
 - Minimal learning curve for new users
 
 ### 2.4 Testing Requirements

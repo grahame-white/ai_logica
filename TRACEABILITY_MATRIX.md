@@ -16,13 +16,13 @@ This document provides traceability between functional requirements and their im
 
 | Requirement ID | Description | Implementation Status | Source Files | Test Coverage | Notes |
 |---|---|---|---|---|---|
-| **FR-1** | Graphical gate layout capability | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (lines 11-114), `AiLogica/ViewModels/HomeViewModel.cs` (lines 78-137) | ✅ Covered | Gate placement functionality |
+| **FR-1** | Graphical gate layout capability | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (lines 11-114), `AiLogica/ViewModels/HomeViewModel.cs` (lines 78-137) | ✅ Covered | Gate Placement functionality |
 | **FR-2** | Easy gate selection from palette | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (lines 12-44) | ✅ Covered | Interactive Gate Palette |
-| **FR-2.1** | Gate palette highlighting on selection | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (line 21) | ✅ Covered | CSS class `selected` applied |
+| **FR-2.1** | Gate Palette highlighting on selection | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (line 21) | ✅ Covered | CSS class `selected` applied |
 | **FR-2.2** | Previous selection clearing | ✅ Implemented | `AiLogica/ViewModels/HomeViewModel.cs` (lines 78-85) | ✅ Covered | SetProperty handles state change |
-| **FR-2.3** | Gate follows mouse cursor | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (lines 107-113), `AiLogica/ViewModels/HomeViewModel.cs` (lines 87-91) | ✅ Covered | Dragging gate visual feedback |
-| **FR-2.4** | Gate placement by clicking | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (lines 221-237), `AiLogica/ViewModels/HomeViewModel.cs` (lines 93-137) | ✅ Covered | PlaceGate method |
-| **FR-2.5** | Multiple gate placement without reselection | ✅ Implemented | `AiLogica/ViewModels/HomeViewModel.cs` (lines 133-136) | ✅ Covered | Maintains selection state |
+| **FR-2.3** | Gate follows mouse cursor | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (lines 107-113), `AiLogica/ViewModels/HomeViewModel.cs` (lines 87-91) | ✅ Covered | Dragging gate Visual Feedback |
+| **FR-2.4** | Gate Placement by clicking | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (lines 221-237), `AiLogica/ViewModels/HomeViewModel.cs` (lines 93-137) | ✅ Covered | PlaceGate method |
+| **FR-2.5** | Multiple Gate Placement without reselection | ✅ Implemented | `AiLogica/ViewModels/HomeViewModel.cs` (lines 133-136) | ✅ Covered | Maintains selection state |
 | **FR-2.6** | IEEE standard SVG gate symbols | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (lines 140-200) | ✅ Covered | OR gate SVG follows IEEE standards |
 | **FR-2.7** | Vector graphics for scalability | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (lines 151-199) | ✅ Covered | SVG implementation |
 | **FR-2.8** | currentColor for theme inheritance | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (lines 154-197) | ✅ Covered | SVG uses currentColor |
@@ -40,18 +40,18 @@ This document provides traceability between functional requirements and their im
 | **FR-3.5** | Output to input connections | ✅ Implemented | `AiLogica/ViewModels/HomeViewModel.cs` (lines 300-307) | ✅ Covered | CanConnect method |
 | **FR-3.6** | Input to input connections (fan-out) | ✅ Implemented | `AiLogica/ViewModels/HomeViewModel.cs` (lines 300-307) | ✅ Covered | CanConnect method |
 | **FR-3.7** | Same-gate connections (feedback) | ✅ Implemented | `AiLogica/ViewModels/HomeViewModel.cs` (lines 300-307) | ✅ Covered | CanConnect allows same-gate |
-| **FR-3.8** | Orthogonal wire routing | ✅ Implemented | `AiLogica/ViewModels/HomeViewModel.cs` (lines 343-433) | ✅ Covered | GenerateWireSegments method |
-| **FR-3.9** | Wire routing avoids gates | ✅ Implemented | `AiLogica/ViewModels/HomeViewModel.cs` (lines 435-539) | ✅ Covered | FindSafeXPosition method |
+| **FR-3.8** | Orthogonal Wire Routing | ✅ Implemented | `AiLogica/ViewModels/HomeViewModel.cs` (lines 343-433) | ✅ Covered | GenerateWireSegments method |
+| **FR-3.9** | Wire Routing avoids gates | ✅ Implemented | `AiLogica/ViewModels/HomeViewModel.cs` (lines 435-539) | ✅ Covered | FindSafeXPosition method |
 | **FR-3.10** | Visual distinction for wire states | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (lines 82-92) | ✅ Covered | Connected vs disconnected styling |
 | **FR-3.11** | Connected wires in blue (#5eb3f5) | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (line 88) | ✅ Covered | Color specification |
 | **FR-3.12** | Disconnected wires in red (#f44336) with dashes | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (line 88) | ✅ Covered | Color specification |
 | **FR-3.13** | Preview line during wiring | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (lines 95-105) | ✅ Covered | Dashed preview line |
 | **FR-3.14** | Cancel wiring with click/Escape | ✅ Implemented | `AiLogica/Components/Pages/Home.razor` (lines 232-236, 267-282) | ✅ Covered | OnCanvasClick and OnKeyDown |
-| **FR-3.15** | Connection hover feedback | 🔍 Implementation Unclear | Need to verify CSS | ⚠️ Not explicitly tested | CSS may handle hover states |
+| **FR-3.15** | Connection Hover Feedback | 🔍 Implementation Unclear | Need to verify CSS | ⚠️ Not explicitly tested | CSS may handle hover states |
 | **FR-3.16** | Meaningful distance wire segments | ✅ Implemented | `AiLogica/ViewModels/HomeViewModel.cs` (lines 372-429) | ✅ Covered | Distance checks in segment generation |
 | **FR-4** | Logic gate simulation | ❌ Not Implemented | Not found | ❌ No coverage | Future implementation needed |
 | **FR-5** | Incremental simulation stepping | ❌ Not Implemented | Not found | ❌ No coverage | Future implementation needed |
-| **FR-6** | Save layouts as black box components | ❌ Not Implemented | Not found | ❌ No coverage | Future implementation needed |
+| **FR-6** | Save layouts as Black Box components | ❌ Not Implemented | Not found | ❌ No coverage | Future implementation needed |
 | **FR-7** | Drill down into components | ❌ Not Implemented | Not found | ❌ No coverage | Future implementation needed |
 | **FR-8** | Drill up from components | ❌ Not Implemented | Not found | ❌ No coverage | Future implementation needed |
 | **FR-9** | Design overview capability | ❌ Not Implemented | Not found | ❌ No coverage | Future implementation needed |
@@ -114,8 +114,8 @@ The following areas need clarification or verification:
 
 1. **FR-2.12**: Internal margins implementation - CSS verification needed
 2. **FR-2.14**: Background/border styling - CSS verification needed  
-3. **FR-3.3**: Connection point colors - CSS verification needed
-4. **FR-3.15**: Connection hover feedback - CSS verification needed
+3. **FR-3.3**: Connection Point colors - CSS verification needed
+4. **FR-3.15**: Connection Hover Feedback - CSS verification needed
 
 ## Next Review Date
 

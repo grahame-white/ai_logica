@@ -11,9 +11,9 @@
 @* Requirements Traceability: This component implements core UI requirements
    FR-1: Graphical gate layout capability
    FR-2: Easy gate selection from palette  
-   FR-2.1: Gate palette highlighting on selection
+   FR-2.1: Gate Palette highlighting on selection
    FR-2.3: Gate follows mouse cursor
-   FR-3.2: Visible connection points
+   FR-3.2: Visible Connection Points
    FR-3.10-3.13: Wire visual states and preview
    See TRACEABILITY_MATRIX.md for complete mapping *@
 
@@ -73,8 +73,8 @@
         <div class="placed-gate" style="left: @(gate.X)px; top: @(gate.Y)px;">
             @RenderGateContent(gate.Type, false, true)
             
-            @* FR-3.2: Visible connection points for gate wiring *@
-            <!-- Connection points -->
+            @* FR-3.2: Visible Connection Points for gate wiring *@
+            <!-- Connection Points -->
             @foreach (var connection in gate.Connections)
             {
                 <div class="connection-point @(connection.Type.ToString().ToLower())" 
@@ -234,7 +234,7 @@
 
     private async void OnCanvasClick(MouseEventArgs e)
     {
-        // FR-2.4: Gate placement by clicking on canvas
+        // FR-2.4: Gate Placement by clicking on canvas
         if (ViewModel.IsDragging && ViewModel.SelectedGate != null)
         {
             // Get canvas-relative coordinates for placement

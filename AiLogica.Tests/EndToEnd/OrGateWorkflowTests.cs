@@ -31,7 +31,7 @@ public class EndToEndWorkflowValidationTests
         // ViewModel Tests cover:
         // - Gate selection (SelectGate_ShouldSetSelectedGateAndDraggingState)
         // - Mouse tracking (UpdateMousePosition_ShouldSetMouseCoordinates)  
-        // - Gate placement (PlaceGate_WithSelectedGate_ShouldAddToPlacedGatesAndKeepSelection)
+        // - Gate Placement (PlaceGate_WithSelectedGate_ShouldAddToPlacedGatesAndKeepSelection)
         // - Multiple placement (PlaceGate_MultipleGates_ShouldAllowPlacingMultipleGatesWithoutReselection)
         // - Drag cancellation (CancelDrag_ShouldClearSelectionAndDraggingState)
 

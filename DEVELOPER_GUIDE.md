@@ -638,7 +638,7 @@ This project maintains comprehensive requirements traceability to support robust
 ### Example Traceability Comments
 
 ```csharp
-// FR-2.4: Gate placement by clicking on canvas
+// FR-2.4: Gate Placement by clicking on canvas
 public void PlaceGate(double x, double y)
 
 // FR-3.8: Generates orthogonal wire segments
@@ -646,7 +646,7 @@ private List<WireSegment> GenerateWireSegments()
 ```
 
 ```html
-@* FR-2.1: Gate palette highlighting on selection *@
+@* FR-2.1: Gate Palette highlighting on selection *@
 <div class="gate-item @(ViewModel.SelectedGate == "OR" ? "selected" : "")">
 ```
 
@@ -669,7 +669,7 @@ The traceability matrix serves as a living document that supports:
 Based on the requirements in REQUIREMENTS.md, the next major development tasks include:
 
 1. **Gate Models**: Implement basic logic gate representations
-2. **Canvas Component**: Create interactive drawing area for gate placement
+2. **Canvas Component**: Create interactive drawing area for Gate Placement
 3. **Simulation Engine**: Build logic evaluation and state management
 4. **UI Components**: Develop Gate Palette and property panels
 5. **Hierarchical Design**: Implement component abstraction and navigation

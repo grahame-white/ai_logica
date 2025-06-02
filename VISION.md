@@ -24,7 +24,7 @@ The envisioned application will provide the following core capabilities:
 
 ### 2. Wiring and Connections
 - Users can wire the inputs and outputs of gates together
-- Visual feedback for wire connections
+- Visual Feedback for wire connections
 - Clear indication of signal flow
 
 ### 3. Simulation Engine
@@ -38,8 +38,8 @@ The envisioned application will provide the following core capabilities:
 - Clear visualization of state changes
 
 ### 5. Hierarchical Design
-- Users can save their layouts as reusable black box components
-- Ability to drill down into black box components to see internal structure
+- Users can save their layouts as reusable Black Box components
+- Ability to drill down into Black Box components to see internal structure
 - Ability to drill up from components to see usage context
 - Overview of design hierarchy from abstract to primitive gates
 

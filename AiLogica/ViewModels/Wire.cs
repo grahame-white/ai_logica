@@ -3,12 +3,12 @@ namespace AiLogica.ViewModels;
 /// <summary>
 /// Requirements Traceability: Wire representation for logic gate connections.
 /// FR-3: Core wire model for connecting gate inputs and outputs.
-/// FR-3.8: Supports orthogonal wire routing via segments.
+/// FR-3.8: Supports orthogonal Wire Routing via segments.
 /// FR-3.10: IsConnected property supports visual distinction.
 /// See TRACEABILITY_MATRIX.md for complete mapping.
 /// </summary>
 /// <summary>
-/// Represents a wire connecting two connection points.
+/// Represents a wire connecting two Connection Points.
 /// </summary>
 public class Wire
 {

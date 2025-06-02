@@ -16,14 +16,14 @@ Our E2E validation is achieved through **comprehensive test coverage** across mu
 
 ## Test Coverage Layers
 
-### 1. Unit Tests (11 tests)
+### 1. Unit Testing (11 tests)
 **Location**: `AiLogica.Tests/ViewModels/HomeViewModelTests.cs`
 
 Validates all core business logic:
 - Gate selection and highlighting
 - Mouse position tracking
-- Gate placement with coordinate offset calculation
-- Multiple gate placement workflows
+- Gate Placement with coordinate offset calculation
+- Multiple Gate Placement workflows
 - Drag cancellation
 - Property change notifications
 
@@ -61,10 +61,10 @@ Validates testing infrastructure:
 The OR gate user workflow is comprehensively tested:
 
 1. **Initial State** → Integration tests verify page loads correctly
-2. **Gate Selection** → Unit tests validate `SelectGate()` sets proper state
+2. **Gate Selection** → Unit Testing validates `SelectGate()` sets proper state
 3. **Visual Highlighting** → Component tests verify CSS classes applied
-4. **Mouse Tracking** → Unit tests validate `UpdateMousePosition()` 
-5. **Gate Placement** → Unit tests verify `PlaceGate()` with offset calculation
+4. **Mouse Tracking** → Unit Testing validates `UpdateMousePosition()` 
+5. **Gate Placement** → Unit Testing verifies `PlaceGate()` with offset calculation
 6. **Multiple Placement** → Unit tests verify persistent selection behavior
 7. **Drag Cancellation** → Unit tests verify `CancelDrag()` state cleanup
 8. **Status Updates** → Component tests verify UI reflects current state

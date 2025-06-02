@@ -6,10 +6,10 @@ namespace AiLogica.ViewModels;
 /// <summary>
 /// Requirements Traceability: Core business logic for gate layout and wiring functionality.
 /// FR-2.2, FR-2.5: Gate selection and dragging state management.
-/// FR-2.4: Gate placement with coordinate calculations.  
+/// FR-2.4: Gate Placement with coordinate calculations.  
 /// FR-3: Complete wiring system implementation.
 /// FR-3.5-3.7: Connection validation and routing logic.
-/// FR-3.8-3.9: Orthogonal wire routing with collision avoidance.
+/// FR-3.8-3.9: Orthogonal Wire Routing with collision avoidance.
 /// See TRACEABILITY_MATRIX.md for complete mapping.
 /// </summary>
 public class HomeViewModel : ViewModelBase
@@ -102,7 +102,7 @@ public class HomeViewModel : ViewModelBase
 
     public void PlaceGate(double x, double y)
     {
-        // FR-2.4: Gate placement by clicking on canvas
+        // FR-2.4: Gate Placement by clicking on canvas
         if (SelectedGate != null)
         {
             // Apply the same offset used during dragging to center the gate on cursor
@@ -142,7 +142,7 @@ public class HomeViewModel : ViewModelBase
 
             // FR-2.5: Intentionally keep gate selected and dragging state active to allow 
             // users to place multiple gates of the same type without re-selecting.
-            // This implements the requirement for continuous gate placement workflow.
+            // This implements the requirement for continuous Gate Placement workflow.
             // To reset selection, users can click elsewhere or select a different gate.
         }
     }
@@ -355,7 +355,7 @@ public class HomeViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// FR-3.8: Generates orthogonal wire segments between two connection points.
+    /// FR-3.8: Generates orthogonal wire segments between two Connection Points.
     /// FR-3.16: Only creates segments when there is meaningful distance between points.
     /// </summary>
     private List<WireSegment> GenerateWireSegments(Connection from, Connection to)
@@ -448,7 +448,7 @@ public class HomeViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// FR-3.9: Finds a safe X position for wire routing that avoids gates.
+    /// FR-3.9: Finds a safe X position for Wire Routing that avoids gates.
     /// </summary>
     private double FindSafeXPosition(double startX, double endX, double startY, double endY)
     {

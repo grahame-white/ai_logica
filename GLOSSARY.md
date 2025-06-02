@@ -163,7 +163,7 @@ A document (TRACEABILITY_MATRIX.md) that maps functional requirements to their i
 ## UI/UX Terms
 
 ### Canvas Interaction
-User interactions with the main drawing area, including gate placement, selection, and wire creation.
+User interactions with the main drawing area, including Gate Placement, selection, and wire creation.
 
 ### Hover Feedback
 Visual indication when the user's cursor is positioned over an interactive element, such as connection points changing appearance when ready for wire attachment.
@@ -197,7 +197,7 @@ The browser automation framework used for End-to-End testing of the web applicat
 Testing individual components or methods in isolation, implemented using xUnit.
 
 ### xUnit
-The .NET testing framework used for unit tests in the AI Logica project.
+The .NET testing framework used for Unit Testing in the AI Logica project.
 
 ---
 
